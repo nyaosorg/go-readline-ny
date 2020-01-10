@@ -1,3 +1,7 @@
+// +build run
+
+// go run sample1.go
+
 package main
 
 import (
@@ -6,7 +10,7 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/go-readline-ny"
 )
 
 func main() {

@@ -1,8 +1,6 @@
-// +build ignore
+// +build run
 
 package main
-
-// Example to use readline
 
 import (
 	"context"
@@ -10,7 +8,7 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/go-readline-ny"
 )
 
 func main() {
