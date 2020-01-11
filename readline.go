@@ -187,11 +187,29 @@ func (this *Buffer) GetKey() (string, error) {
 
 var mu sync.Mutex
 
+func getKeyFunction(session *Editor, key1 string) KeyFuncT {
+	if session.KeyMap != nil {
+		f, ok := session.KeyMap[key1]
+		if ok {
+			return f
+		}
+	}
+	f, ok := keyMap[key1]
+	if ok {
+		return f
+	}
+	return &KeyGoFuncT{
+		Func: func(ctx context.Context, this *Buffer) Result {
+			return keyFuncInsertSelf(ctx, this, key1)
+		},
+		Name: key1,
+	}
+}
+
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
-
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Writer == nil {
 		session.Writer = os.Stdout
@@ -284,15 +302,8 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			return "", err
 		}
 		mu.Lock()
-		f, ok := keyMap[key1]
-		if !ok {
-			f = &KeyGoFuncT{
-				Func: func(ctx context.Context, this *Buffer) Result {
-					return keyFuncInsertSelf(ctx, this, key1)
-				},
-				Name: key1,
-			}
-		}
+
+		f := getKeyFunction(session,key1)
 
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
 			io.WriteString(this.Out, ansiCursorOff)

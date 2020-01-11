@@ -19,6 +19,7 @@ type Editor struct {
 	Default  string
 	Cursor   int
 	LineFeed func(Result)
+	KeyMap   map[string]KeyFuncT
 }
 
 func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
