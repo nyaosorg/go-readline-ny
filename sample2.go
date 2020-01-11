@@ -5,37 +5,44 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/exec"
+	"strings"
 
 	"github.com/mattn/go-colorable"
 
 	"github.com/zetamatta/go-readline-ny"
+	"github.com/zetamatta/go-readline-ny/simplehistory"
 )
 
 func main() {
-	readline1 := readline.Editor{
-		Default: "AHAHA",
-		Cursor:  3,
+	history := simplehistory.New()
+
+	editor := readline.Editor{
+		Prompt:  func() (int, error) { return fmt.Print("$ ") },
 		Writer:  colorable.NewColorableStdout(),
+		History: history,
 	}
+	fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
+	for {
+		text, err := editor.ReadLine(context.Background())
 
-	enter_status := 0
-	readline.BindKeyClosure(readline.K_CTRL_P,
-		func(ctx context.Context, r *readline.Buffer) readline.Result {
-			enter_status = -1
-			return readline.ENTER
-		})
+		if err != nil {
+			fmt.Printf("ERR=%s\n", err.Error())
+			return
+		}
 
-	readline.BindKeyClosure(readline.K_CTRL_N,
-		func(ctx context.Context, r *readline.Buffer) readline.Result {
-			enter_status = +1
-			return readline.ENTER
-		})
+		fields := strings.Fields(text)
+		if len(fields) <= 0 {
+			continue
+		}
+		cmd := exec.Command(fields[0], fields[1:]...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 
-	text, err := readline1.ReadLine(context.Background())
-	fmt.Printf("ENTER_STATUS=%d\n", enter_status)
-	if err != nil {
-		fmt.Printf("ERR=%s\n", err.Error())
-	} else {
-		fmt.Printf("TEXT=%s\n", text)
+		cmd.Run()
+
+		history.Add(text)
 	}
 }
