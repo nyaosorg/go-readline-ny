@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"sync"
 
@@ -193,7 +194,7 @@ var mu sync.Mutex
 
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Writer == nil {
-		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
+		session.Writer = os.Stdout
 	}
 	if session.Out == nil {
 		session.Out = bufio.NewWriter(session.Writer)
