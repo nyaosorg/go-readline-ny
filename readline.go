@@ -106,23 +106,31 @@ func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
-func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
-	keyName_ := normWord(keyName)
-	if charValue, charOk := name2char[keyName_]; charOk {
-		keyMap[charValue] = funcValue
+func (editor *Editor) BindKeyFunc(key string, f KeyFuncT) error {
+	key = normWord(key)
+	if char, ok := name2char[key]; ok {
+		if editor.KeyMap == nil {
+			editor.KeyMap = map[string]KeyFuncT{}
+		}
+		editor.KeyMap[char] = f
 		return nil
 	}
-	return fmt.Errorf("%s: no such keyname", keyName)
+	return fmt.Errorf("%s: no such keyname", key)
 }
 
-func BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
-	return BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
+func (editor *Editor) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
+	return editor.BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
 }
 
-func GetBindKey(keyName string) KeyFuncT {
-	keyName_ := normWord(keyName)
-	if charValue, charOk := name2char[keyName_]; charOk {
-		return keyMap[charValue]
+func (editor *Editor) GetBindKey(key string) KeyFuncT {
+	key = normWord(key)
+	if char, ok := name2char[key]; ok {
+		if editor.KeyMap != nil {
+			if f, ok := editor.KeyMap[char]; ok {
+				return f
+			}
+		}
+		return keyMap[char]
 	} else {
 		return nil
 	}
@@ -137,12 +145,12 @@ func GetFunc(funcName string) (KeyFuncT, error) {
 	}
 }
 
-func BindKeySymbol(keyName, funcName string) error {
+func (editor *Editor) BindKeySymbol(keyName, funcName string) error {
 	funcValue := name2func(normWord(funcName))
 	if funcValue == nil {
 		return fmt.Errorf("%s: no such function.", funcName)
 	}
-	return BindKeyFunc(keyName, funcValue)
+	return editor.BindKeyFunc(keyName, funcValue)
 }
 
 type EmptyHistory struct{}
@@ -303,7 +311,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		mu.Lock()
 
-		f := getKeyFunction(session,key1)
+		f := getKeyFunction(session, key1)
 
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
 			io.WriteString(this.Out, ansiCursorOff)
