@@ -195,9 +195,9 @@ func (this *Buffer) GetKey() (string, error) {
 
 var mu sync.Mutex
 
-func getKeyFunction(session *Editor, key1 string) KeyFuncT {
-	if session.KeyMap != nil {
-		f, ok := session.KeyMap[key1]
+func getKeyFunction(editor *Editor, key1 string) KeyFuncT {
+	if editor.KeyMap != nil {
+		f, ok := editor.KeyMap[key1]
 		if ok {
 			return f
 		}
@@ -218,66 +218,66 @@ func getKeyFunction(session *Editor, key1 string) KeyFuncT {
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
-func (session *Editor) ReadLine(ctx context.Context) (string, error) {
-	if session.Writer == nil {
-		session.Writer = os.Stdout
+func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
+	if editor.Writer == nil {
+		editor.Writer = os.Stdout
 	}
-	if session.Out == nil {
-		session.Out = bufio.NewWriter(session.Writer)
+	if editor.Out == nil {
+		editor.Out = bufio.NewWriter(editor.Writer)
 	}
 	defer func() {
-		session.Out.WriteString(ansiCursorOn)
-		session.Out.Flush()
+		editor.Out.WriteString(ansiCursorOn)
+		editor.Out.Flush()
 	}()
 
-	if session.Prompt == nil {
-		session.Prompt = func() (int, error) {
-			session.Out.WriteString("\n> ")
+	if editor.Prompt == nil {
+		editor.Prompt = func() (int, error) {
+			editor.Out.WriteString("\n> ")
 			return 2, nil
 		}
 	}
-	if session.History == nil {
-		session.History = new(EmptyHistory)
+	if editor.History == nil {
+		editor.History = new(EmptyHistory)
 	}
-	if session.LineFeed == nil {
-		session.LineFeed = func(Result) {
-			session.Out.WriteByte('\n')
+	if editor.LineFeed == nil {
+		editor.LineFeed = func(Result) {
+			editor.Out.WriteByte('\n')
 		}
 	}
-	this := Buffer{
-		Editor:         session,
+	buffer := Buffer{
+		Editor:         editor,
 		Buffer:         make([]rune, 0, 20),
-		HistoryPointer: session.History.Len(),
+		HistoryPointer: editor.History.Len(),
 	}
 
 	tty1, err := tty.Open()
 	if err != nil {
 		return "", fmt.Errorf("go-tty.Open: %s", err.Error())
 	}
-	this.TTY = tty1
+	buffer.TTY = tty1
 	defer tty1.Close()
 
-	this.termWidth, _, err = tty1.Size()
+	buffer.termWidth, _, err = tty1.Size()
 	if err != nil {
 		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
 	}
 
 	var err1 error
-	this.topColumn, err1 = session.Prompt()
+	buffer.topColumn, err1 = editor.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(this.Out, "%s\n$ ", err1.Error())
-		this.topColumn = 2
-	} else if this.topColumn >= this.termWidth-3 {
+		fmt.Fprintf(buffer.Out, "%s\n$ ", err1.Error())
+		buffer.topColumn = 2
+	} else if buffer.topColumn >= buffer.termWidth-3 {
 		// ViewWidth is too narrow to edit.
-		io.WriteString(this.Out, "\n")
-		this.topColumn = 0
+		io.WriteString(buffer.Out, "\n")
+		buffer.topColumn = 0
 	}
-	this.InsertString(0, session.Default)
-	if this.Cursor > len(this.Buffer) {
-		this.Cursor = len(this.Buffer)
+	buffer.InsertString(0, editor.Default)
+	if buffer.Cursor > len(buffer.Buffer) {
+		buffer.Cursor = len(buffer.Buffer)
 	}
-	this.RepaintAfterPrompt()
+	buffer.RepaintAfterPrompt()
 
 	cursorOnSwitch := false
 
@@ -287,46 +287,46 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			w := ws1.W
 			if lastw != w {
 				mu.Lock()
-				this.termWidth = w
-				fmt.Fprintf(this.Out, "\x1B[%dG", this.topColumn+1)
-				this.RepaintAfterPrompt()
+				buffer.termWidth = w
+				fmt.Fprintf(buffer.Out, "\x1B[%dG", buffer.topColumn+1)
+				buffer.RepaintAfterPrompt()
 				mu.Unlock()
 				lastw = w
 			}
 		}
-	}(this.termWidth)
+	}(buffer.termWidth)
 
 	for {
 		mu.Lock()
 		if !cursorOnSwitch {
-			io.WriteString(this.Out, ansiCursorOn)
+			io.WriteString(buffer.Out, ansiCursorOn)
 			cursorOnSwitch = true
 		}
-		this.Out.Flush()
+		buffer.Out.Flush()
 
 		mu.Unlock()
-		key1, err := this.GetKey()
+		key1, err := buffer.GetKey()
 		if err != nil {
 			return "", err
 		}
 		mu.Lock()
 
-		f := getKeyFunction(session, key1)
+		f := getKeyFunction(editor, key1)
 
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
-			io.WriteString(this.Out, ansiCursorOff)
+			io.WriteString(buffer.Out, ansiCursorOff)
 			cursorOnSwitch = false
-			this.Out.Flush()
+			buffer.Out.Flush()
 		}
-		rc := f.Call(ctx, &this)
+		rc := f.Call(ctx, &buffer)
 		if rc != CONTINUE {
-			this.LineFeed(rc)
+			buffer.LineFeed(rc)
 
 			if !cursorOnSwitch {
-				io.WriteString(this.Out, ansiCursorOn)
+				io.WriteString(buffer.Out, ansiCursorOn)
 			}
-			this.Out.Flush()
-			result := this.String()
+			buffer.Out.Flush()
+			result := buffer.String()
 			mu.Unlock()
 			if rc == ENTER {
 				return result, nil
