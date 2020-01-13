@@ -1,6 +1,6 @@
 package readline
 
-import "github.com/mattn/go-runewidth"
+import "github.com/zetamatta/go-readline-ny/runewidth"
 
 type width_t int
 
