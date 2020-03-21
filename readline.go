@@ -59,7 +59,7 @@ func (this KeyGoFuncT) String() string {
 	return this.Name
 }
 
-var keyMap = map[string]KeyFuncT{
+var defaultKeyMap = map[string]KeyFuncT{
 	name2char[K_CTRL_A]:        name2func(F_BEGINNING_OF_LINE),
 	name2char[K_CTRL_B]:        name2func(F_BACKWARD_CHAR),
 	name2char[K_BACKSPACE]:     name2func(F_BACKWARD_DELETE_CHAR),
@@ -106,7 +106,7 @@ func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
-func (editor *Editor) BindKeyFunc(key string, f KeyFuncT) error {
+func (editor *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
 		if editor.KeyMap == nil {
@@ -118,11 +118,13 @@ func (editor *Editor) BindKeyFunc(key string, f KeyFuncT) error {
 	return fmt.Errorf("%s: no such keyname", key)
 }
 
-func (editor *Editor) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
+var GlobalKeyMap KeyMap
+
+func (editor *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
 	return editor.BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
 }
 
-func (editor *Editor) GetBindKey(key string) KeyFuncT {
+func (editor *KeyMap) GetBindKey(key string) KeyFuncT {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
 		if editor.KeyMap != nil {
@@ -130,7 +132,7 @@ func (editor *Editor) GetBindKey(key string) KeyFuncT {
 				return f
 			}
 		}
-		return keyMap[char]
+		return editor.KeyMap[char]
 	} else {
 		return nil
 	}
@@ -145,7 +147,7 @@ func GetFunc(funcName string) (KeyFuncT, error) {
 	}
 }
 
-func (editor *Editor) BindKeySymbol(keyName, funcName string) error {
+func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 	funcValue := name2func(normWord(funcName))
 	if funcValue == nil {
 		return fmt.Errorf("%s: no such function.", funcName)
@@ -196,14 +198,15 @@ func (this *Buffer) GetKey() (string, error) {
 var mu sync.Mutex
 
 func getKeyFunction(editor *Editor, key1 string) KeyFuncT {
-	if editor.KeyMap != nil {
-		f, ok := editor.KeyMap[key1]
-		if ok {
+	if editor.KeyMap.KeyMap != nil {
+		if f, ok := editor.KeyMap.KeyMap[key1]; ok {
 			return f
 		}
 	}
-	f, ok := keyMap[key1]
-	if ok {
+	if f, ok := GlobalKeyMap.KeyMap[key1]; ok {
+		return f
+	}
+	if f, ok := defaultKeyMap[key1]; ok {
 		return f
 	}
 	return &KeyGoFuncT{
