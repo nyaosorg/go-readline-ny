@@ -15,7 +15,7 @@ func SetCharWidth(c rune, width int) {
 }
 
 func lenEscaped(c rune) width_t {
-	w := width_t(3)
+	w := width_t(3) // '<' + 1-digit + '>'
 	for c > 0xF {
 		c >>= 4
 		w++
@@ -25,7 +25,10 @@ func lenEscaped(c rune) width_t {
 
 func GetCharWidth(n rune) width_t {
 	if n < ' ' {
-		return 2
+		return 2 // ^X
+	}
+	if n == 0x7F {
+		return 4 // <7F>
 	}
 	width, ok := widthCache[n]
 	if !ok {
