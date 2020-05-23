@@ -3,11 +3,12 @@ package readline
 import (
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/mattn/go-runewidth"
 )
 
-var SurrogatePairOk = false
+var SurrogatePairOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 func (this *Buffer) putRune(ch rune) {
 	if ch < ' ' {
