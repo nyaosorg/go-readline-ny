@@ -1,6 +1,9 @@
 package readline
 
-import "github.com/zetamatta/go-readline-ny/runewidth"
+import (
+	"github.com/mattn/go-runewidth"
+	"os"
+)
 
 type width_t int
 
@@ -23,6 +26,8 @@ func lenEscaped(c rune) width_t {
 	return w
 }
 
+var wtsession *bool = nil
+
 func GetCharWidth(n rune) width_t {
 	if n < ' ' {
 		return 2 // ^X
@@ -35,9 +40,17 @@ func GetCharWidth(n rune) width_t {
 		if n > 0x10000 && !SurrogatePairOk {
 			width = lenEscaped(n)
 		} else {
-			width = width_t(runewidth.RuneWidth(n))
-			if width == 0 {
-				width = lenEscaped(n)
+			if wtsession == nil {
+				var val = ( os.Getenv("WT_SESSION") != "")
+				wtsession = &val
+			}
+			if *wtsession && runewidth.IsAmbiguousWidth(n) {
+				width = 1
+			} else {
+				width = width_t(runewidth.RuneWidth(n))
+				if width == 0 {
+					width = lenEscaped(n)
+				}
 			}
 		}
 		widthCache[n] = width
