@@ -3,18 +3,15 @@ package readline
 import (
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/mattn/go-runewidth"
 )
-
-var SurrogatePairOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 func (this *Buffer) putRune(ch rune) {
 	if ch < ' ' {
 		this.Out.WriteByte('^')
 		this.Out.WriteByte(byte('A' + (ch - 1)))
-	} else if (ch >= 0x10000 && !SurrogatePairOk) || runewidth.RuneWidth(ch) == 0 {
+	} else if (ch >= 0x10000 && !isWindowsTerminal) || runewidth.RuneWidth(ch) == 0 {
 		fmt.Fprintf(this.Out, "<%X>", ch)
 	} else {
 		this.Out.WriteRune(ch)

@@ -1,8 +1,9 @@
 package readline
 
 import (
-	"github.com/mattn/go-runewidth"
 	"os"
+
+	"github.com/mattn/go-runewidth"
 )
 
 type width_t int
@@ -26,7 +27,8 @@ func lenEscaped(c rune) width_t {
 	return w
 }
 
-var wtsession *bool = nil
+var isWindowsTerminal = (os.Getenv("WT_SESSION") != "" &&
+	os.Getenv("WT_PROFILE_ID") != "")
 
 func GetCharWidth(n rune) width_t {
 	if n < ' ' {
@@ -37,14 +39,10 @@ func GetCharWidth(n rune) width_t {
 	}
 	width, ok := widthCache[n]
 	if !ok {
-		if n > 0x10000 && !SurrogatePairOk {
+		if n > 0x10000 && !isWindowsTerminal {
 			width = lenEscaped(n)
 		} else {
-			if wtsession == nil {
-				var val = ( os.Getenv("WT_SESSION") != "")
-				wtsession = &val
-			}
-			if *wtsession && runewidth.IsAmbiguousWidth(n) {
+			if isWindowsTerminal && runewidth.IsAmbiguousWidth(n) {
 				width = 1
 			} else {
 				width = width_t(runewidth.RuneWidth(n))
