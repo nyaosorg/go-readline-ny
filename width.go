@@ -26,7 +26,7 @@ func lenEscaped(c rune) width_t {
 	return w
 }
 
-var wtsession *bool = nil
+var TreatAmbiguousWidthAsNarrow = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 func GetCharWidth(n rune) width_t {
 	if n < ' ' {
@@ -40,11 +40,7 @@ func GetCharWidth(n rune) width_t {
 		if n > 0x10000 && !SurrogatePairOk {
 			width = lenEscaped(n)
 		} else {
-			if wtsession == nil {
-				var val = ( os.Getenv("WT_SESSION") != "")
-				wtsession = &val
-			}
-			if *wtsession && runewidth.IsAmbiguousWidth(n) {
+			if TreatAmbiguousWidthAsNarrow && runewidth.IsAmbiguousWidth(n) {
 				width = 1
 			} else {
 				width = width_t(runewidth.RuneWidth(n))
