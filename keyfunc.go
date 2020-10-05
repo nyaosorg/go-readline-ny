@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"strings"
-	"unicode"
 
 	"github.com/atotto/clipboard"
 )
@@ -38,7 +37,7 @@ func keyFuncBackward(ctx context.Context, this *Buffer) Result { // Ctrl-B
 		this.ViewStart--
 		this.DrawFromHead()
 	} else {
-		this.backspace(GetCharWidth(this.Buffer[this.Cursor]))
+		this.backspace(this.Buffer[this.Cursor].Width())
 	}
 	return CONTINUE
 }
@@ -51,12 +50,12 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 	} else {
 		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = len(this.Buffer) - 1
-		w := GetCharWidth(this.Buffer[this.ViewStart])
+		w := this.Buffer[this.ViewStart].Width()
 		for {
 			if this.ViewStart <= 0 {
 				break
 			}
-			w_ := w + GetCharWidth(this.Buffer[this.ViewStart-1])
+			w_ := w + this.Buffer[this.ViewStart-1].Width()
 			if w_ >= this.ViewWidth() {
 				break
 			}
@@ -80,7 +79,7 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	} else {
 		// Right Scroll
 		this.GotoHead()
-		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
+		if this.Buffer[this.Cursor].Width() > this.Buffer[this.ViewStart].Width() {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -123,19 +122,27 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
-	this.InsertString(this.Cursor, keys)
+	if ZeroWidthJoinSequenceOk && keys == zeroWidthJoinStr && this.Cursor > 0 {
+		this.pending = []Moji{this.Buffer[this.Cursor-1], CodePoint(zeroWidthJoinRune)}
+		return keyFuncBackSpace(ctx, this)
+	} else if this.pending != nil && len(this.pending) > 0 {
+		keys = moji2string(this.pending) + keys
+		this.pending = nil
+	}
+
+	len_moji := this.InsertString(this.Cursor, keys)
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	w1 := GetStringWidth(keys)
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		this.GotoHead()
-		this.Cursor += len([]rune(keys))
+		this.Cursor += len_moji
 		this.ResetViewStart()
 		this.DrawFromHead()
 	} else {
 		this.Repaint(this.Cursor, -w1)
-		this.Cursor += len([]rune(keys))
+		this.Cursor += len_moji
 	}
 	return CONTINUE
 }
@@ -146,7 +153,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	this.Eraseline()
 	u := &undo_t{
 		pos:  this.Cursor,
-		text: string(this.Buffer[this.Cursor:]),
+		text: moji2string(this.Buffer[this.Cursor:]),
 	}
 	this.undoes = append(this.undoes, u)
 	this.Buffer = this.Buffer[:this.Cursor]
@@ -156,7 +163,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 func keyFuncClear(ctx context.Context, this *Buffer) Result {
 	u := &undo_t{
 		pos:  0,
-		text: string(this.Buffer),
+		text: moji2string(this.Buffer),
 	}
 	this.undoes = append(this.undoes, u)
 	this.GotoHead()
@@ -169,7 +176,7 @@ func keyFuncClear(ctx context.Context, this *Buffer) Result {
 
 func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	org_cursor := this.Cursor
-	for this.Cursor > 0 && unicode.IsSpace(this.Buffer[this.Cursor-1]) {
+	for this.Cursor > 0 && this.Buffer[this.Cursor-1].IsSpace() {
 		this.Cursor--
 	}
 	i := this.CurrentWordTop()
@@ -259,7 +266,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		u := &undo_t{
 			pos:  this.Cursor,
 			del:  2,
-			text: string(this.Buffer[this.Cursor-2 : this.Cursor]),
+			text: moji2string(this.Buffer[this.Cursor-2 : this.Cursor]),
 		}
 		this.undoes = append(this.undoes, u)
 		this.Buffer[this.Cursor-2], this.Buffer[this.Cursor-1] = this.Buffer[this.Cursor-1], this.Buffer[this.Cursor-2]
@@ -274,7 +281,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		u := &undo_t{
 			pos:  this.Cursor - 1,
 			del:  2,
-			text: string(this.Buffer[this.Cursor-1 : this.Cursor+1]),
+			text: moji2string(this.Buffer[this.Cursor-1 : this.Cursor+1]),
 		}
 		this.undoes = append(this.undoes, u)
 
@@ -282,7 +289,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
 		if w >= this.ViewWidth() {
 			// cursor move right and scroll
-			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
+			w_1 := w - this.Buffer[this.Cursor].Width()
 			this.backspace(w_1)
 			this.ViewStart++
 			this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
@@ -299,10 +306,10 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 
 func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos > 0 && this.Buffer[newPos-1] == ' ' {
+	for newPos > 0 && this.Buffer[newPos-1].IsSpace() {
 		newPos--
 	}
-	for newPos > 0 && this.Buffer[newPos-1] != ' ' {
+	for newPos > 0 && !this.Buffer[newPos-1].IsSpace() {
 		newPos--
 	}
 	if newPos >= this.ViewStart {
@@ -320,10 +327,10 @@ func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 
 func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos < len(this.Buffer) && this.Buffer[newPos] != ' ' {
+	for newPos < len(this.Buffer) && !this.Buffer[newPos].IsSpace() {
 		newPos++
 	}
-	for newPos < len(this.Buffer) && this.Buffer[newPos] == ' ' {
+	for newPos < len(this.Buffer) && this.Buffer[newPos].IsSpace() {
 		newPos++
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)
@@ -353,7 +360,7 @@ func keyFuncUndo(ctx context.Context, this *Buffer) Result {
 		this.Buffer = this.Buffer[:len(this.Buffer)-u.del]
 	}
 	if u.text != "" {
-		t := []rune(u.text)
+		t := string2moji(u.text)
 		// widen buffer
 		this.Buffer = append(this.Buffer, t...)
 		// make area

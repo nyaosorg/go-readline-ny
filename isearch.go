@@ -33,8 +33,8 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	for {
 		drawStr := fmt.Sprintf("(i-search)[%s]:%s", searchStr, foundStr)
 		drawWidth := width_t(0)
-		for _, ch := range drawStr {
-			w1 := GetCharWidth(ch)
+		for _, ch := range string2moji(drawStr) {
+			w1 := ch.Width()
 			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
@@ -68,7 +68,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			this.ViewStart = 0
 			u := &undo_t{
 				pos:  0,
-				text: string(this.Buffer),
+				text: moji2string(this.Buffer),
 			}
 			this.undoes = append(this.undoes, u)
 			this.Buffer = this.Buffer[:0]

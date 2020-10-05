@@ -257,7 +257,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	buffer := Buffer{
 		Editor:         editor,
-		Buffer:         make([]rune, 0, 20),
+		Buffer:         make([]Moji, 0, 20),
 		HistoryPointer: editor.History.Len(),
 	}
 

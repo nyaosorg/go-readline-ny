@@ -2,7 +2,6 @@ package readline
 
 import (
 	"github.com/mattn/go-runewidth"
-	"os"
 )
 
 type width_t int
@@ -25,8 +24,6 @@ func lenEscaped(c rune) width_t {
 	}
 	return w
 }
-
-var TreatAmbiguousWidthAsNarrow = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 func GetCharWidth(n rune) width_t {
 	if n < ' ' {
