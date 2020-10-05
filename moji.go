@@ -27,7 +27,7 @@ func (c CodePoint) Width() width_t {
 }
 
 func writeRune(w io.Writer, r rune) (int, error) {
-	var b [8]byte
+	var b [utf8.UTFMax]byte
 	n := utf8.EncodeRune(b[:], r)
 	return w.Write(b[:n])
 }
