@@ -13,8 +13,6 @@ import (
 	"github.com/mattn/go-tty"
 )
 
-var FlushBeforeReadline = false
-
 type Result int
 
 const (
