@@ -66,7 +66,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			update()
 		case "\r":
 			this.ViewStart = 0
-			u := &undo_t{
+			u := &undoT{
 				pos:  0,
 				text: moji2string(this.Buffer),
 			}
