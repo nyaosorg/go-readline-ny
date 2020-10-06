@@ -13,6 +13,7 @@ import (
 	"github.com/mattn/go-tty"
 )
 
+// Result is the type for readline's result.
 type Result int
 
 const (
@@ -22,6 +23,7 @@ const (
 	INTR     Result = iota
 )
 
+// String makes Result to fmt.Stringer
 func (this Result) String() string {
 	switch this {
 	case CONTINUE:
@@ -155,7 +157,10 @@ func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 
 type EmptyHistory struct{}
 
-func (*EmptyHistory) Len() int      { return 0 }
+// Len always returns zero because the receiver is dummy.
+func (*EmptyHistory) Len() int { return 0 }
+
+// At always returns empty-string because the receiver is dummy.
 func (*EmptyHistory) At(int) string { return "" }
 
 const (
@@ -165,6 +170,7 @@ const (
 
 var CtrlC = errors.New("^C")
 
+// GetKey reads one-key from tty.
 func (this *Buffer) GetKey() (string, error) {
 	return GetKey(this.TTY)
 }

@@ -23,6 +23,7 @@ func (buf *Buffer) DrawFromHead() {
 	buf.backspace(right.Width())
 }
 
+// ReplaceAndRepaint replaces the string between `pos` and cursor's position to `str`
 func (buf *Buffer) ReplaceAndRepaint(pos int, str string) {
 	buf.GotoHead()
 
@@ -56,6 +57,7 @@ func (buf *Buffer) Repaint(pos int, del WidthT) {
 	}
 }
 
+// RepaintAfterPrompt repaints the all characters in the editline except for prompt.
 func (buf *Buffer) RepaintAfterPrompt() {
 	buf.ResetViewStart()
 	buf.puts(buf.Buffer[buf.ViewStart:buf.Cursor])
