@@ -168,7 +168,11 @@ const (
 var CtrlC = errors.New("^C")
 
 func (this *Buffer) GetKey() (string, error) {
-	tty1 := this.TTY
+	return GetKey(this.TTY)
+}
+
+// GetKey reads one-key from tty.
+func GetKey(tty1 *tty.TTY) (string, error) {
 	clean, err := tty1.Raw()
 	if err != nil {
 		return "", err
