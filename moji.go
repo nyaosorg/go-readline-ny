@@ -14,7 +14,7 @@ import (
 var ZeroWidthJoinSequenceOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 type Moji interface {
-	Width() width_t
+	Width() WidthT
 	WriteTo(io.Writer) (int64, error)
 	Put(io.Writer)
 	IsSpace() bool
@@ -22,7 +22,7 @@ type Moji interface {
 
 type CodePoint rune
 
-func (c CodePoint) Width() width_t {
+func (c CodePoint) Width() WidthT {
 	return GetCharWidth(rune(c))
 }
 
@@ -54,8 +54,8 @@ func (c CodePoint) IsSpace() bool {
 
 type ZeroWidthJoinSequence string
 
-func (s ZeroWidthJoinSequence) Width() width_t {
-	return width_t(runewidth.StringWidth(string(s))) + 1
+func (s ZeroWidthJoinSequence) Width() WidthT {
+	return WidthT(runewidth.StringWidth(string(s))) + 1
 }
 
 func (s ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {

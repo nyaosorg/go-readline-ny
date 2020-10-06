@@ -7,7 +7,7 @@ import (
 	"github.com/mattn/go-tty"
 )
 
-const forbiddenWidth width_t = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
+const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type undo_t struct {
 	pos  int
@@ -27,14 +27,14 @@ type Buffer struct {
 	pending        []Moji
 }
 
-func (this *Buffer) ViewWidth() width_t {
-	return width_t(this.termWidth) - width_t(this.topColumn) - forbiddenWidth
+func (this *Buffer) ViewWidth() WidthT {
+	return WidthT(this.termWidth) - WidthT(this.topColumn) - forbiddenWidth
 }
 
 func (this *Buffer) view() Range {
 	view := this.Buffer[this.ViewStart:]
 	width := this.ViewWidth()
-	w := width_t(0)
+	w := WidthT(0)
 	for i, c := range view {
 		w += c.Width()
 		if w >= width {
@@ -79,7 +79,7 @@ func (this *Buffer) InsertString(pos int, s string) int {
 // Delete remove Buffer[pos:pos+n].
 // It returns the width to clear the end of line.
 // It does not update screen.
-func (this *Buffer) Delete(pos int, n int) width_t {
+func (this *Buffer) Delete(pos int, n int) WidthT {
 	if n <= 0 || len(this.Buffer) < pos+n {
 		return 0
 	}
@@ -99,7 +99,7 @@ func (this *Buffer) Delete(pos int, n int) width_t {
 // It does not update screen.
 func (this *Buffer) ResetViewStart() {
 	this.ViewStart = 0
-	w := width_t(0)
+	w := WidthT(0)
 	for i := 0; i <= this.Cursor && i < len(this.Buffer); i++ {
 		w += this.Buffer[i].Width()
 		for w >= this.ViewWidth() {
@@ -113,7 +113,7 @@ func (this *Buffer) ResetViewStart() {
 	}
 }
 
-func (this *Buffer) GetWidthBetween(from int, to int) width_t {
+func (this *Buffer) GetWidthBetween(from int, to int) WidthT {
 	return Range(this.Buffer[from:to]).Width()
 }
 

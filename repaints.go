@@ -39,7 +39,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 }
 
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
-func (this *Buffer) Repaint(pos int, del width_t) {
+func (this *Buffer) Repaint(pos int, del WidthT) {
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
 	view := this.view()

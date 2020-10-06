@@ -12,17 +12,17 @@ func (this *Buffer) putRune(m Moji) {
 	m.Put(this.Out)
 }
 
-func (this *Buffer) putRunes(ch Moji, n width_t) {
+func (this *Buffer) putRunes(ch Moji, n WidthT) {
 	if n <= 0 {
 		return
 	}
 	this.putRune(ch)
-	for i := width_t(1); i < n; i++ {
+	for i := WidthT(1); i < n; i++ {
 		this.putRune(ch)
 	}
 }
 
-func (this *Buffer) backspace(n width_t) {
+func (this *Buffer) backspace(n WidthT) {
 	if n > 1 {
 		fmt.Fprintf(this.Out, "\x1B[%dD", n)
 	} else if n == 1 {
@@ -43,7 +43,7 @@ func (this *Buffer) puts(s []Moji) Range {
 	return Range(s)
 }
 
-func (s Range) Width() (w width_t) {
+func (s Range) Width() (w WidthT) {
 	for _, ch := range s {
 		w += ch.Width()
 	}

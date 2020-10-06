@@ -4,20 +4,21 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-type width_t int
+// WidthT means the width type
+type WidthT int
 
-var widthCache = map[rune]width_t{}
+var widthCache = map[rune]WidthT{}
 
 func ResetCharWidth() {
-	widthCache = map[rune]width_t{}
+	widthCache = map[rune]WidthT{}
 }
 
 func SetCharWidth(c rune, width int) {
-	widthCache[c] = width_t(width)
+	widthCache[c] = WidthT(width)
 }
 
-func lenEscaped(c rune) width_t {
-	w := width_t(3) // '<' + 1-digit + '>'
+func lenEscaped(c rune) WidthT {
+	w := WidthT(3) // '<' + 1-digit + '>'
 	for c > 0xF {
 		c >>= 4
 		w++
@@ -25,7 +26,7 @@ func lenEscaped(c rune) width_t {
 	return w
 }
 
-func GetCharWidth(n rune) width_t {
+func GetCharWidth(n rune) WidthT {
 	if n < ' ' {
 		return 2 // ^X
 	}
@@ -40,7 +41,7 @@ func GetCharWidth(n rune) width_t {
 			if TreatAmbiguousWidthAsNarrow && runewidth.IsAmbiguousWidth(n) {
 				width = 1
 			} else {
-				width = width_t(runewidth.RuneWidth(n))
+				width = WidthT(runewidth.RuneWidth(n))
 				if width == 0 {
 					width = lenEscaped(n)
 				}
@@ -51,8 +52,8 @@ func GetCharWidth(n rune) width_t {
 	return width
 }
 
-func GetStringWidth(s string) width_t {
-	width := width_t(0)
+func GetStringWidth(s string) WidthT {
+	width := WidthT(0)
 	for _, ch := range s {
 		width += GetCharWidth(ch)
 	}
