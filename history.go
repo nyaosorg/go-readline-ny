@@ -33,7 +33,7 @@ func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 	if this.HistoryPointer <= 0 {
 		this.HistoryPointer = this.History.Len()
 	}
-	this.HistoryPointer -= 1
+	this.HistoryPointer--
 	keyFuncClear(ctx, this)
 	if this.HistoryPointer >= 0 {
 		this.InsertString(0, this.History.At(this.HistoryPointer))
@@ -51,7 +51,7 @@ func keyFuncHistoryDown(ctx context.Context, this *Buffer) Result {
 	if this.HistoryPointer+1 > this.History.Len() {
 		return CONTINUE
 	}
-	this.HistoryPointer += 1
+	this.HistoryPointer++
 	keyFuncClear(ctx, this)
 	if this.HistoryPointer < this.History.Len() {
 		this.InsertString(0, this.History.At(this.HistoryPointer))

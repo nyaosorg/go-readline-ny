@@ -157,8 +157,8 @@ func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 
 type EmptyHistory struct{}
 
-func (this *EmptyHistory) Len() int      { return 0 }
-func (this *EmptyHistory) At(int) string { return "" }
+func (*EmptyHistory) Len() int      { return 0 }
+func (*EmptyHistory) At(int) string { return "" }
 
 const (
 	ansiCursorOff = "\x1B[?25l"

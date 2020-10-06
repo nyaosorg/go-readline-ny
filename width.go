@@ -9,10 +9,12 @@ type WidthT int
 
 var widthCache = map[rune]WidthT{}
 
+// ResetCharWidth resets the cache for the width of characters.
 func ResetCharWidth() {
 	widthCache = map[rune]WidthT{}
 }
 
+// SetCharWidth sets the width of the character into the cache.
 func SetCharWidth(c rune, width int) {
 	widthCache[c] = WidthT(width)
 }
@@ -26,6 +28,7 @@ func lenEscaped(c rune) WidthT {
 	return w
 }
 
+// GetCharWidth returns the width of the character.
 func GetCharWidth(n rune) WidthT {
 	if n < ' ' {
 		return 2 // ^X
@@ -52,6 +55,7 @@ func GetCharWidth(n rune) WidthT {
 	return width
 }
 
+// GetStringWidth returns the width of the string.
 func GetStringWidth(s string) WidthT {
 	width := WidthT(0)
 	for _, ch := range s {
