@@ -28,6 +28,16 @@ func lenEscaped(c rune) WidthT {
 	return w
 }
 
+func isVariationSelector(ch rune) bool {
+	return '\uFE00' <= ch && ch <= '\uFE0F'
+}
+
+func isToBeEscaped(ch rune) bool {
+	return isVariationSelector(ch) ||
+		(ch >= 0x10000 && !SurrogatePairOk) ||
+		runewidth.RuneWidth(ch) == 0
+}
+
 // GetCharWidth returns the width of the character.
 func GetCharWidth(n rune) WidthT {
 	if n < ' ' {
@@ -38,7 +48,7 @@ func GetCharWidth(n rune) WidthT {
 	}
 	width, ok := widthCache[n]
 	if !ok {
-		if n > 0x10000 && !SurrogatePairOk {
+		if isToBeEscaped(n) {
 			width = lenEscaped(n)
 		} else {
 			if TreatAmbiguousWidthAsNarrow && runewidth.IsAmbiguousWidth(n) {

@@ -3,10 +3,7 @@ package readline
 import (
 	"fmt"
 	"io"
-	"os"
 )
-
-var SurrogatePairOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 func (this *Buffer) putRune(m Moji) {
 	m.Put(this.Out)

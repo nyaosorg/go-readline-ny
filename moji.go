@@ -11,7 +11,10 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-var ZeroWidthJoinSequenceOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+var (
+	SurrogatePairOk         = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+	ZeroWidthJoinSequenceOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+)
 
 type Moji interface {
 	Width() WidthT
@@ -41,7 +44,7 @@ func (c CodePoint) Put(w io.Writer) {
 	ch := rune(c)
 	if ch < ' ' {
 		w.Write([]byte{'^', byte('A' + (ch - 1))})
-	} else if (ch >= 0x10000 && !SurrogatePairOk) || runewidth.RuneWidth(ch) == 0 {
+	} else if isToBeEscaped(ch) {
 		fmt.Fprintf(w, "<%X>", ch)
 	} else {
 		writeRune(w, rune(ch))
@@ -55,7 +58,15 @@ func (c CodePoint) IsSpace() bool {
 type ZeroWidthJoinSequence string
 
 func (s ZeroWidthJoinSequence) Width() WidthT {
-	return WidthT(runewidth.StringWidth(string(s))) + 1
+	w := WidthT(1)
+	for _, c := range string(s) {
+		if TreatAmbiguousWidthAsNarrow && runewidth.IsAmbiguousWidth(c) {
+			w++
+		} else {
+			w += WidthT(runewidth.RuneWidth(c))
+		}
+	}
+	return w
 }
 
 func (s ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
