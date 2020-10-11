@@ -3,7 +3,15 @@ go-readline-ny
 
 go-readline-ny is the readline library used in the command line shell [NYAGOS](https://github.com/zetamatta/nyagos).
 
-sample1.go
+- Emacs-like key-bindings
+- On Windows Terminal
+    - Surrogate-pair
+    - Emoji (via clipboard)
+    - Zero-Width-Joiner (via clipboard)
+
+[![Zero-Width-Joiner sample on Windows-Terminal](./emoji.png)]
+
+example1.go
 ----------
 
 The most simple sample
