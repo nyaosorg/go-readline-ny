@@ -9,12 +9,12 @@ go-readline-ny is the readline library used in the command line shell [NYAGOS](h
     - Emoji (via clipboard)
     - Zero-Width-Joiner (via clipboard)
 
-[![Zero-Width-Joiner sample on Windows-Terminal](./emoji.png)]
+![Zero-Width-Joiner sample on Windows-Terminal](./emoji.png)
 
 example1.go
 ----------
 
-The most simple sample
+The most simple sample.
 
 ```go
 package main
@@ -36,6 +36,8 @@ func main() {
     }
 }
 ```
+
+If the target platform includes Windows, you have to import and use [go-colorable](https://github.com/mattn/go-colorable) like example2.go .
 
 example2.go
 -----------
