@@ -10,12 +10,7 @@ import (
 )
 
 func main() {
-	editor := readline.Editor{
-		Prompt: func() (int, error) {
-			print("  0123456789ABCDEF\n$ ")
-			return 2, nil
-		},
-	}
+	editor := readline.Editor{}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {
 		fmt.Printf("ERR=%s\n", err.Error())
