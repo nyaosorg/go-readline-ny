@@ -9,6 +9,10 @@ import (
 	"unicode/utf8"
 )
 
+func caseInsensitiveStringContains(s, t string) bool {
+	return strings.Contains(strings.ToUpper(s), strings.ToUpper(t))
+}
+
 func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	var searchBuf strings.Builder
 	foundStr := ""
@@ -23,7 +27,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 				break
 			}
 			line := this.History.At(i)
-			if strings.Contains(line, searchStr) {
+			if caseInsensitiveStringContains(line, searchStr) {
 				foundStr = line
 				lastFoundPos = i
 				break
@@ -90,7 +94,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 					break
 				}
 				line := this.History.At(i)
-				if strings.Contains(line, searchStr) && foundStr != line {
+				if caseInsensitiveStringContains(line, searchStr) && foundStr != line {
 					foundStr = line
 					lastFoundPos = i
 					break
@@ -105,7 +109,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 					break
 				}
 				line := this.History.At(i)
-				if strings.Contains(line, searchStr) && foundStr != line {
+				if caseInsensitiveStringContains(line, searchStr) && foundStr != line {
 					foundStr = line
 					lastFoundPos = i
 					break
