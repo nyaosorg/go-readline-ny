@@ -231,6 +231,7 @@ func keyFuncPaste(ctx context.Context, this *Buffer) Result {
 	if err != nil {
 		return CONTINUE
 	}
+	text = strings.TrimRight(text, "\r\n\000")
 	this.InsertAndRepaint(text)
 	return CONTINUE
 }
