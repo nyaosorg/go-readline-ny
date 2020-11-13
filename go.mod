@@ -7,5 +7,5 @@ require (
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-runewidth v0.0.9
 	github.com/mattn/go-tty v0.0.4-0.20201006155210-6cb398a5c845
-	golang.org/x/sys v0.0.0-20201022201747-fb209a7c41cd // indirect
+	golang.org/x/sys v0.0.0-20201113135734-0a15ea8d9b02 // indirect
 )
