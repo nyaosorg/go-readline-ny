@@ -265,19 +265,13 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	cursorOnSwitch := false
 
 	ws := tty1.SIGWINCH()
-	go func(lastw int) {
-		for ws1 := range ws {
-			w := ws1.W
-			if lastw != w {
-				mu.Lock()
-				buffer.termWidth = w
-				fmt.Fprintf(buffer.Out, "\x1B[%dG", buffer.topColumn+1)
-				buffer.RepaintAfterPrompt()
-				mu.Unlock()
-				lastw = w
-			}
+	buffer.startChangeWidthEventLoop(buffer.termWidth, func() int {
+		ws1, ok := <-ws
+		if !ok {
+			return -1
 		}
-	}(buffer.termWidth)
+		return ws1.W
+	})
 
 	for {
 		mu.Lock()

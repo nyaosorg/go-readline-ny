@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"fmt"
 	"strings"
 	"unicode"
 )
@@ -179,4 +180,23 @@ func (this *Buffer) joinUndo() {
 		u1.del = u2.del
 	}
 	this.undoes = this.undoes[:len(this.undoes)-1]
+}
+
+func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getChangedWidth func() int) {
+	go func(lastw int) {
+		for {
+			w := getChangedWidth()
+			if w < 0 {
+				break
+			}
+			if lastw != w {
+				mu.Lock()
+				b.termWidth = w
+				fmt.Fprintf(b.Out, "\x1B[%dG", b.topColumn+1)
+				b.RepaintAfterPrompt()
+				mu.Unlock()
+				lastw = w
+			}
+		}
+	}(lastw_)
 }
