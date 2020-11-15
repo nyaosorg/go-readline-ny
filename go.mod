@@ -10,4 +10,4 @@ require (
 	golang.org/x/sys v0.0.0-20201113233024-12cec1faf1ba // indirect
 )
 
-replace github.com/mattn/go-tty v0.0.3 => github.com/zetamatta/go-tty v0.0.4-0.20201115114849-abed59c1ff15
+replace github.com/mattn/go-tty v0.0.3 => github.com/zetamatta/go-tty v0.0.4-0.20201115142503-064ebac83dcf
