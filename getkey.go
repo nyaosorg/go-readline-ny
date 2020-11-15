@@ -8,6 +8,9 @@ type KeyGetter interface {
 	Raw() (func() error, error)
 	ReadRune() (rune, error)
 	Buffered() bool
+	GetChangeWidthEvent() func() int
+	Close() error
+	Size() (int, int, error)
 }
 
 // GetKey reads one-key from tty.

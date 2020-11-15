@@ -17,13 +17,14 @@ type KeyMap struct {
 
 type Editor struct {
 	KeyMap
-	History  IHistory
-	Writer   io.Writer
-	Out      *bufio.Writer
-	Prompt   func() (int, error)
-	Default  string
-	Cursor   int
-	LineFeed func(Result)
+	History       IHistory
+	Writer        io.Writer
+	Out           *bufio.Writer
+	Prompt        func() (int, error)
+	Default       string
+	Cursor        int
+	LineFeed      func(Result)
+	OpenKeyGetter func() (KeyGetter, error)
 }
 
 func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
