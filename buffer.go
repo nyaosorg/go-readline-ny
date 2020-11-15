@@ -3,8 +3,6 @@ package readline
 import (
 	"strings"
 	"unicode"
-
-	"github.com/mattn/go-tty"
 )
 
 const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
@@ -18,7 +16,7 @@ type undoT struct {
 type Buffer struct {
 	*Editor
 	Buffer         []Moji
-	TTY            *tty.TTY
+	TTY            KeyGetter
 	ViewStart      int
 	termWidth      int // == topColumn + termWidth + forbiddenWidth
 	topColumn      int // == width of Prompt
