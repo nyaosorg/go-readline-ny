@@ -186,6 +186,7 @@ func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 		this.backspace(keta)
 	} else {
 		this.backspace(this.GetWidthBetween(this.ViewStart, org_cursor))
+		this.ViewStart = i
 	}
 	this.Cursor = i
 	this.Repaint(i, keta)
