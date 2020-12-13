@@ -175,21 +175,21 @@ func keyFuncClear(ctx context.Context, this *Buffer) Result {
 }
 
 func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
-	org_cursor := this.Cursor
+	orgCursorPos := this.Cursor
 	for this.Cursor > 0 && this.Buffer[this.Cursor-1].IsSpace() {
 		this.Cursor--
 	}
-	i := this.CurrentWordTop()
-	clipboard.WriteAll(this.SubString(i, org_cursor))
-	keta := this.Delete(i, org_cursor-i)
-	if i >= this.ViewStart {
+	newCursorPos := this.CurrentWordTop()
+	clipboard.WriteAll(this.SubString(newCursorPos, orgCursorPos))
+	keta := this.Delete(newCursorPos, orgCursorPos-newCursorPos)
+	this.Cursor = newCursorPos
+	if newCursorPos-this.ViewStart >= 2 {
 		this.backspace(keta)
+		this.Repaint(newCursorPos, keta)
 	} else {
-		this.backspace(this.GetWidthBetween(this.ViewStart, org_cursor))
-		this.ViewStart = i
+		this.backspace(this.GetWidthBetween(this.ViewStart, orgCursorPos))
+		this.RepaintAfterPrompt()
 	}
-	this.Cursor = i
-	this.Repaint(i, keta)
 	return CONTINUE
 }
 
