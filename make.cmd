@@ -22,3 +22,7 @@ exit /b
     popd
     exit /b
 
+:"get"
+    go get -u
+    go mod tidy
+    exit /b
