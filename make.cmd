@@ -23,6 +23,6 @@ exit /b
     exit /b
 
 :"get"
-    go get -u
+    go get -u all
     go mod tidy
     exit /b
