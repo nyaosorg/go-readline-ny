@@ -9,8 +9,6 @@ import (
 	"os"
 	"strings"
 	"sync"
-
-	"github.com/mattn/go-tty"
 )
 
 // Result is the type for readline's result.
@@ -197,21 +195,6 @@ func getKeyFunction(editor *Editor, key1 string) KeyFuncT {
 	}
 }
 
-type defaultTty struct {
-	*tty.TTY
-}
-
-func (t *defaultTty) GetChangeWidthEvent() func() int {
-	ws := t.TTY.SIGWINCH()
-	return func() int {
-		ws1, ok := <-ws
-		if !ok {
-			return -1
-		}
-		return ws1.W
-	}
-}
-
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
@@ -243,13 +226,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 	}
 	if editor.OpenKeyGetter == nil {
-		editor.OpenKeyGetter = func() (KeyGetter, error) {
-			tty1, err := tty.Open()
-			if err != nil {
-				return nil, err
-			}
-			return &defaultTty{TTY: tty1}, nil
-		}
+		editor.OpenKeyGetter = NewDefaultTty
 	}
 	buffer := Buffer{
 		Editor:         editor,
