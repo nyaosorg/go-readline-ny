@@ -265,7 +265,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 
 	cursorOnSwitch := false
 
-	buffer.startChangeWidthEventLoop(buffer.termWidth, tty1.GetChangeWidthEvent())
+	buffer.startChangeWidthEventLoop(buffer.termWidth, tty1.GetResizeNotifier())
 
 	for {
 		mu.Lock()

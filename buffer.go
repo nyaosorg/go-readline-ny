@@ -182,11 +182,11 @@ func (this *Buffer) joinUndo() {
 	this.undoes = this.undoes[:len(this.undoes)-1]
 }
 
-func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getChangedWidth func() int) {
+func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (int, int, bool)) {
 	go func(lastw int) {
 		for {
-			w := getChangedWidth()
-			if w < 0 {
+			w, _, ok := getResizeEvent()
+			if !ok {
 				break
 			}
 			if lastw != w {

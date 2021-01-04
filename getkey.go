@@ -13,7 +13,7 @@ type KeyGetter interface {
 	Close() error
 	Size() (int, int, error)
 
-	GetChangeWidthEvent() func() int
+	GetResizeNotifier() func() (int, int, bool)
 }
 
 // GetKey reads one-key from tty.
@@ -64,18 +64,15 @@ func NewDefaultTty() (KeyGetter, error) {
 	return &DefaultTty{TTY: tty1}, nil
 }
 
-// GetChangeWidthEvent is the wrapper for the channel for resize-event.
-// It returns the function to get the new width on resized.
-// When the channel is closed, it returns -1.
+// GetResizeNotifier is the wrapper for the channel for resize-event.
+// It returns the function to get the new screen-size on resized.
+// When the channel is closed, it returns false as the third value.
 // The reason to need the wrapper is to remove the dependency
-// on "mattn/go-tty".WINSIZE.
-func (t *DefaultTty) GetChangeWidthEvent() func() int {
+// on "mattn/go-tty".WINSIZE .
+func (t *DefaultTty) GetResizeNotifier() func() (int, int, bool) {
 	ws := t.TTY.SIGWINCH()
-	return func() int {
+	return func() (int, int, bool) {
 		ws1, ok := <-ws
-		if !ok {
-			return -1
-		}
-		return ws1.W
+		return ws1.W, ws1.H, ok
 	}
 }
