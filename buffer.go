@@ -200,3 +200,8 @@ func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (in
 		}
 	}(lastw_)
 }
+
+// GetKey reads one-key from tty.
+func (this *Buffer) GetKey() (string, error) {
+	return GetKey(this.TTY)
+}

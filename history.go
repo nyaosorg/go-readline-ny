@@ -11,6 +11,14 @@ type IHistory interface {
 	At(int) string
 }
 
+type EmptyHistory struct{}
+
+// Len always returns zero because the receiver is dummy.
+func (*EmptyHistory) Len() int { return 0 }
+
+// At always returns empty-string because the receiver is dummy.
+func (*EmptyHistory) At(int) string { return "" }
+
 type KeyMap struct {
 	KeyMap map[string]KeyFuncT
 }

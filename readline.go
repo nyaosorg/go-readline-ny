@@ -153,25 +153,12 @@ func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 	return editor.BindKeyFunc(keyName, funcValue)
 }
 
-type EmptyHistory struct{}
-
-// Len always returns zero because the receiver is dummy.
-func (*EmptyHistory) Len() int { return 0 }
-
-// At always returns empty-string because the receiver is dummy.
-func (*EmptyHistory) At(int) string { return "" }
-
 const (
 	ansiCursorOff = "\x1B[?25l"
 	ansiCursorOn  = "\x1B[?25h\x1B[s\x1B[u"
 )
 
 var CtrlC = errors.New("^C")
-
-// GetKey reads one-key from tty.
-func (this *Buffer) GetKey() (string, error) {
-	return GetKey(this.TTY)
-}
 
 var mu sync.Mutex
 
