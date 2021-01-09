@@ -9,16 +9,6 @@ func (this *Buffer) putRune(m Moji) {
 	m.Put(this.Out)
 }
 
-func (this *Buffer) putRunes(ch Moji, n WidthT) {
-	if n <= 0 {
-		return
-	}
-	this.putRune(ch)
-	for i := WidthT(1); i < n; i++ {
-		this.putRune(ch)
-	}
-}
-
 func (this *Buffer) backspace(n WidthT) {
 	if n > 1 {
 		fmt.Fprintf(this.Out, "\x1B[%dD", n)
