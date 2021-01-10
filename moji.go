@@ -14,6 +14,7 @@ import (
 var (
 	SurrogatePairOk         = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 	ZeroWidthJoinSequenceOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+	VariationSequenceOk     = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 )
 
 type Moji interface {
@@ -82,6 +83,25 @@ func (s ZeroWidthJoinSequence) IsSpace() bool {
 	return false
 }
 
+type VariationSequence string
+
+func (s VariationSequence) Width() WidthT {
+	return 4
+}
+
+func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
+	n, err := io.WriteString(w, string(s))
+	return int64(n), err
+}
+
+func (s VariationSequence) Put(w io.Writer) {
+	fmt.Fprintf(w, "    \x1B7\b\b\b\b%s\x1B8", string(s))
+}
+
+func (s VariationSequence) IsSpace() bool {
+	return false
+}
+
 const (
 	zeroWidthJoinRune = '\u200D'
 	zeroWidthJoinStr  = "\u200D"
@@ -94,6 +114,9 @@ func string2moji(s string) []Moji {
 		if ZeroWidthJoinSequenceOk && runes[i] == zeroWidthJoinRune && i > 0 && i+1 < len(runes) {
 			mojis[len(mojis)-1] = ZeroWidthJoinSequence(string(runes[i-1 : i+2]))
 			i++
+		} else if _, ok := variationSelector[runes[i]]; VariationSequenceOk && ok && i > 0 {
+			mojis[len(mojis)-1] = VariationSequence(string(runes[i-1 : i+1]))
+
 		} else {
 			mojis = append(mojis, CodePoint(runes[i]))
 		}
