@@ -8,6 +8,7 @@ go-readline-ny is the readline library used in the command line shell [NYAGOS](h
     - Surrogate-pair
     - Emoji (via clipboard)
     - Zero-Width-Joiner (via clipboard)
+    - Variation Selector (via clipboard pasted by Ctrl-Y)
 
 ![Zero-Width-Joiner sample on Windows-Terminal](./emoji.png)
 
