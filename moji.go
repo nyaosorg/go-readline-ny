@@ -116,7 +116,7 @@ func string2moji(s string) []Moji {
 		if ZeroWidthJoinSequenceOk && runes[i] == zeroWidthJoinRune && i > 0 && i+1 < len(runes) {
 			mojis[len(mojis)-1] = ZeroWidthJoinSequence(string(runes[i-1 : i+2]))
 			i++
-		} else if _, ok := variationSelector[runes[i]]; VariationSequenceOk && ok && i > 0 {
+		} else if VariationSequenceOk && isVariationSelector(runes[i]) && i > 0 {
 			mojis[len(mojis)-1] = VariationSequence(string(runes[i-1 : i+1]))
 
 		} else {

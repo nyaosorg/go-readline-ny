@@ -2,6 +2,7 @@ package readline
 
 import (
 	"github.com/mattn/go-runewidth"
+	"unicode"
 )
 
 // WidthT means the width type
@@ -30,50 +31,8 @@ func lenEscaped(c rune) WidthT {
 
 var x = struct{}{}
 
-var variationSelector = map[rune]struct{}{
-	// FVS: Mongolian Free Variation Selector
-	'\u180B': x,
-	'\u180C': x,
-	'\u180D': x,
-	// SVS: Standardized Variation Sequence
-	'\uFE00': x,
-	'\uFE01': x,
-	'\uFE02': x,
-	'\uFE03': x,
-	'\uFE04': x,
-	'\uFE05': x,
-	'\uFE06': x,
-	'\uFE07': x,
-	'\uFE08': x,
-	'\uFE09': x,
-	'\uFE0A': x,
-	'\uFE0B': x,
-	'\uFE0C': x,
-	'\uFE0D': x,
-	'\uFE0E': x,
-	'\uFE0F': x,
-	// IVS: Ideographic Variation Sequence
-	'\U000E0100': x,
-	'\U000E0101': x,
-	'\U000E0102': x,
-	'\U000E0103': x,
-	'\U000E0104': x,
-	'\U000E0105': x,
-	'\U000E0106': x,
-	'\U000E0107': x,
-	'\U000E0108': x,
-	'\U000E0109': x,
-	'\U000E010A': x,
-	'\U000E010B': x,
-	'\U000E010C': x,
-	'\U000E010D': x,
-	'\U000E010E': x,
-	'\U000E01EF': x,
-}
-
 func isVariationSelector(ch rune) bool {
-	_, ok := variationSelector[ch]
-	return ok
+	return unicode.Is(unicode.Variation_Selector, ch)
 }
 
 func isToBeEscaped(ch rune) bool {
