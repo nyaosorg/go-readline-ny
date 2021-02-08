@@ -11,10 +11,12 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
+var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+
 var (
-	SurrogatePairOk         = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
-	ZeroWidthJoinSequenceOk = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
-	VariationSequenceOk     = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+	SurrogatePairOk         = isWindowsTerminal
+	ZeroWidthJoinSequenceOk = isWindowsTerminal
+	VariationSequenceOk     = isWindowsTerminal
 )
 
 type Moji interface {
