@@ -205,6 +205,7 @@ var name2char = map[string]string{
 	K_ALT_X:         "\x1Bx",
 	K_ALT_Y:         "\x1By",
 	K_ALT_Z:         "\x1Bz",
+	K_ALT_OEM_2:     "\x1B/",
 	K_CLEAR:         "0x0C",
 	K_CTRL:          "0x11",
 	K_CTRL_BREAK:    "0x03",
