@@ -10,3 +10,5 @@ require (
 	github.com/rivo/uniseg v0.2.0 // indirect
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
 )
+
+replace github.com/mattn/go-tty v0.0.4-0.20201120140209-72ed86c4554d => github.com/zetamatta/go-tty v0.0.4-0.20210209130453-4b5c2f32acf1
