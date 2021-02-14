@@ -3,7 +3,7 @@ package readline
 import (
 	"strings"
 
-	"github.com/zetamatta/go-tty"
+	"github.com/zetamatta/go-readline-ny/internal/github.com/mattn/go-tty"
 )
 
 type KeyGetter interface {
