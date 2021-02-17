@@ -62,12 +62,6 @@ var (
 	procScrollConsoleScreenBuffer   = kernel32.NewProc("ScrollConsoleScreenBufferW")
 )
 
-const (
-	bitAltPressed       = 1
-	bitNumPadPressed    = 2
-	bitAltNumPadPressed = bitAltPressed | bitNumPadPressed
-)
-
 type wchar uint16
 type short int16
 type dword uint32
@@ -137,7 +131,7 @@ type TTY struct {
 	ws                chan WINSIZE
 	sigwinchCtx       context.Context
 	sigwinchCtxCancel context.CancelFunc
-	withAltNumPad     int
+	readNextKeyUp     bool
 }
 
 func readConsoleInput(fd uintptr, record *inputRecord) (err error) {
@@ -239,8 +233,8 @@ func (tty *TTY) readRune() (rune, error) {
 	case keyEvent:
 		kr := (*keyEventRecord)(unsafe.Pointer(&ir.event))
 		if kr.keyDown == 0 {
-			if kr.unicodeChar != 0 && tty.withAltNumPad == bitAltNumPadPressed {
-				tty.withAltNumPad = 0
+			if kr.unicodeChar != 0 && tty.readNextKeyUp {
+				tty.readNextKeyUp = false
 				return rune(kr.unicodeChar), nil
 			}
 		} else {
@@ -293,12 +287,7 @@ func (tty *TTY) readRune() (rune, error) {
 			switch vk {
 			case 0x12: // menu
 				if kr.controlKeyState&leftAltPressed != 0 {
-					tty.withAltNumPad = bitAltPressed
-				}
-				return 0, nil
-			case 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69: // numpad
-				if kr.controlKeyState&leftAltPressed != 0 {
-					tty.withAltNumPad |= bitNumPadPressed
+					tty.readNextKeyUp = true
 				}
 				return 0, nil
 			case 0x21: // page-up
