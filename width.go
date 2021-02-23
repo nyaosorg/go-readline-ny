@@ -29,8 +29,6 @@ func lenEscaped(c rune) WidthT {
 	return w
 }
 
-var x = struct{}{}
-
 func isVariationSelector(ch rune) bool {
 	return unicode.Is(unicode.Variation_Selector, ch)
 }
