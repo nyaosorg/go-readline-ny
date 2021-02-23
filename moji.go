@@ -19,6 +19,15 @@ var (
 	VariationSequenceOk     = isWindowsTerminal
 )
 
+var wtRuneWidth *runewidth.Condition
+
+func init() {
+	wtRuneWidth = runewidth.NewCondition()
+	if isWindowsTerminal {
+		wtRuneWidth.EastAsianWidth = false
+	}
+}
+
 type Moji interface {
 	Width() WidthT
 	WriteTo(io.Writer) (int64, error)
@@ -61,13 +70,11 @@ func (c CodePoint) IsSpace() bool {
 type ZeroWidthJoinSequence string
 
 func (s ZeroWidthJoinSequence) Width() WidthT {
+	// runewidth.StringWidth should be used because the width that it gives
+	// has no compatible with WindowsTerminal's.
 	w := WidthT(1)
 	for _, c := range string(s) {
-		if TreatAmbiguousWidthAsNarrow && runewidth.IsAmbiguousWidth(c) {
-			w++
-		} else {
-			w += WidthT(runewidth.RuneWidth(c))
-		}
+		w += WidthT(wtRuneWidth.RuneWidth(c))
 	}
 	return w
 }

@@ -52,13 +52,9 @@ func GetCharWidth(n rune) WidthT {
 		if isToBeEscaped(n) {
 			width = lenEscaped(n)
 		} else {
-			if TreatAmbiguousWidthAsNarrow && runewidth.IsAmbiguousWidth(n) {
-				width = 1
-			} else {
-				width = WidthT(runewidth.RuneWidth(n))
-				if width == 0 {
-					width = lenEscaped(n)
-				}
+			width = WidthT(wtRuneWidth.RuneWidth(n))
+			if width == 0 {
+				width = lenEscaped(n)
 			}
 		}
 		widthCache[n] = width
