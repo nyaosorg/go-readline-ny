@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"syscall"
-	"unicode"
 	"unsafe"
 
 	"github.com/mattn/go-isatty"
@@ -238,7 +237,8 @@ func (tty *TTY) readRune() (rune, error) {
 			if kr.unicodeChar != 0 {
 				if _, ok := tty.pressKey[kr.unicodeChar]; ok {
 					delete(tty.pressKey, kr.unicodeChar)
-				} else if kr.unicodeChar > unicode.MaxASCII {
+				} else if kr.unicodeChar > ' ' {
+					// to remove Enter-key etc. pressed before program started
 					return rune(kr.unicodeChar), nil
 				}
 			}
