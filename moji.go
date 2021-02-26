@@ -36,7 +36,7 @@ type Moji interface {
 type ZeroWidthJoinSequence string
 
 func (s ZeroWidthJoinSequence) Width() WidthT {
-	// runewidth.StringWidth should be used because the width that it gives
+	// runewidth.StringWidth should not be used because the width that it gives
 	// has no compatible with WindowsTerminal's.
 	w := WidthT(1)
 	for _, c := range string(s) {
