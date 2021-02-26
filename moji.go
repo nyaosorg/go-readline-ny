@@ -5,8 +5,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"unicode"
-	"unicode/utf8"
 
 	"github.com/mattn/go-runewidth"
 )
@@ -33,38 +31,6 @@ type Moji interface {
 	WriteTo(io.Writer) (int64, error)
 	Put(io.Writer)
 	IsSpace() bool
-}
-
-type CodePoint rune
-
-func (c CodePoint) Width() WidthT {
-	return GetCharWidth(rune(c))
-}
-
-func writeRune(w io.Writer, r rune) (int, error) {
-	var b [utf8.UTFMax]byte
-	n := utf8.EncodeRune(b[:], r)
-	return w.Write(b[:n])
-}
-
-func (c CodePoint) WriteTo(w io.Writer) (int64, error) {
-	n, err := writeRune(w, rune(c))
-	return int64(n), err
-}
-
-func (c CodePoint) Put(w io.Writer) {
-	ch := rune(c)
-	if ch < ' ' {
-		w.Write([]byte{'^', byte('A' + (ch - 1))})
-	} else if isToBeEscaped(ch) {
-		fmt.Fprintf(w, "<%X>", ch)
-	} else {
-		writeRune(w, rune(ch))
-	}
-}
-
-func (c CodePoint) IsSpace() bool {
-	return unicode.IsSpace(rune(c))
 }
 
 type ZeroWidthJoinSequence string
@@ -127,7 +93,7 @@ func string2moji(s string) []Moji {
 			mojis[len(mojis)-1] = VariationSequence(string(runes[i-1 : i+1]))
 
 		} else {
-			mojis = append(mojis, CodePoint(runes[i]))
+			mojis = append(mojis, rune2moji(runes[i]))
 		}
 	}
 	return mojis

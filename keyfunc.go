@@ -123,7 +123,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		keys = keys[1:]
 	}
 	if ZeroWidthJoinSequenceOk && keys == zeroWidthJoinStr && this.Cursor > 0 {
-		this.pending = []Moji{this.Buffer[this.Cursor-1], CodePoint(zeroWidthJoinRune)}
+		this.pending = []Moji{this.Buffer[this.Cursor-1], rune2moji(zeroWidthJoinRune)}
 		return keyFuncBackSpace(ctx, this)
 	} else if this.pending != nil && len(this.pending) > 0 {
 		keys = moji2string(this.pending) + keys
