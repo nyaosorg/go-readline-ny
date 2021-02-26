@@ -5,7 +5,9 @@ import (
 	"testing"
 )
 
-const emojiManFarmer = "\U0001F468\u200D\U0001F33E"
+const emojiMan = '\U0001F468'
+const emojiRice = '\U0001F33E'
+const emojiManFarmer = string(emojiMan) + zeroWidthJoinStr + string(emojiRice)
 
 func TestZeroWidthJoinSequenceWidth(t *testing.T) {
 	manFarmer := string2moji(emojiManFarmer)
