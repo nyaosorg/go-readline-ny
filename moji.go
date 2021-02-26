@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -64,19 +63,33 @@ func (s ZeroWidthJoinSequence) IsSpace() bool {
 	return false
 }
 
-type VariationSequence string
+type VariationSequence [2]Moji
 
 func (s VariationSequence) Width() WidthT {
 	return 4
 }
 
 func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
-	n, err := io.WriteString(w, string(s))
-	return int64(n), err
+	n1, err := s[0].WriteTo(w)
+	if err != nil {
+		return n1, err
+	}
+	n2, err := s[1].WriteTo(w)
+	return n1 + n2, err
 }
 
 func (s VariationSequence) Put(w io.Writer) {
-	fmt.Fprintf(w, "    \x1B7\b\b\b\b%s\x1B8", string(s))
+	width := s.Width()
+	for i := WidthT(0); i < width; i++ {
+		w.Write([]byte{' '})
+	}
+	w.Write([]byte{'\x1B', '7'})
+	for i := WidthT(0); i < width; i++ {
+		w.Write([]byte{'\b'})
+	}
+	s[0].Put(w)
+	s[1].Put(w)
+	w.Write([]byte{'\x1B', '8'})
 }
 
 func (s VariationSequence) IsSpace() bool {
@@ -98,7 +111,9 @@ func string2moji(s string) []Moji {
 					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i+1])})
 			i++
 		} else if VariationSequenceOk && isVariationSelector(runes[i]) && i > 0 {
-			mojis[len(mojis)-1] = VariationSequence(string(runes[i-1 : i+1]))
+			mojis[len(mojis)-1] =
+				VariationSequence(
+					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i])})
 
 		} else {
 			mojis = append(mojis, rune2moji(runes[i]))
