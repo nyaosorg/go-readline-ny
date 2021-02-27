@@ -1,8 +1,10 @@
 package readline
 
 import (
-	"github.com/mattn/go-runewidth"
 	"unicode"
+	"unicode/utf8"
+
+	"github.com/mattn/go-runewidth"
 )
 
 // WidthT means the width type
@@ -30,6 +32,11 @@ func lenEscaped(c rune) WidthT {
 }
 
 func isVariationSelector(ch rune) bool {
+	return unicode.Is(unicode.Variation_Selector, ch)
+}
+
+func isVariationSelectorStr(s string) bool {
+	ch, _ := utf8.DecodeRuneInString(s)
 	return unicode.Is(unicode.Variation_Selector, ch)
 }
 

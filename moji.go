@@ -66,7 +66,7 @@ func (s ZeroWidthJoinSequence) IsSpace() bool {
 type VariationSequence [2]Moji
 
 func (s VariationSequence) Width() WidthT {
-	return 4
+	return s[0].Width() + 1
 }
 
 func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
