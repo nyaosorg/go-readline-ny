@@ -125,7 +125,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if ZeroWidthJoinSequenceOk && keys == zeroWidthJoinStr && this.Cursor > 0 {
 		this.pending = []Moji{this.Buffer[this.Cursor-1], rune2moji(zeroWidthJoinRune)}
 		return keyFuncBackSpace(ctx, this)
-	} else if VariationSequenceOk && isVariationSelectorStr(keys) && this.Cursor > 0 {
+	} else if VariationSequenceOk && isVariationSelectorLikeStr(keys) && this.Cursor > 0 {
 		baseMoji := this.Buffer[this.Cursor-1]
 		keyFuncBackSpace(ctx, this)
 

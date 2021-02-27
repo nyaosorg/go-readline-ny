@@ -61,3 +61,19 @@ func TestWomanFacepalming(t *testing.T) {
 		t.Fatalf("Width(WOMAN FACEPALMING)) == %d (expect %d)", result, 4)
 	}
 }
+
+func TestEnclosedNumberSign(t *testing.T) {
+	SurrogatePairOk = true
+	ZeroWidthJoinSequenceOk = true
+	VariationSequenceOk = true
+
+	source := "#\uFE0F\u20E3"
+	mojis := string2moji(source)
+
+	if result := len(mojis); result != 1 {
+		t.Fatalf("len(string2moji(EnclosedNumberSign))==%d (expect %d)", result, 1)
+	}
+	if result := mojis[0].Width(); result != 3 {
+		t.Fatalf("Width(EnclosedNumberSign)==%d (expect %d)", result, 3)
+	}
+}

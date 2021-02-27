@@ -87,8 +87,11 @@ func (s VariationSequence) Put(w io.Writer) {
 	for i := WidthT(0); i < width; i++ {
 		w.Write([]byte{'\b'})
 	}
-	s[0].Put(w)
-	s[1].Put(w)
+	// The sequence 'ESC 7' can not remember the cursor position more than one.
+	// When VariationSequence contains another VariationSequence
+	// s[0].Put(w) does not work as we expect.
+	s[0].WriteTo(w)
+	s[1].WriteTo(w)
 	w.Write([]byte{'\x1B', '8'})
 }
 
@@ -110,7 +113,7 @@ func string2moji(s string) []Moji {
 				ZeroWidthJoinSequence(
 					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i+1])})
 			i++
-		} else if VariationSequenceOk && isVariationSelector(runes[i]) && i > 0 {
+		} else if VariationSequenceOk && isVariationSelectorLikeRune(runes[i]) && i > 0 {
 			mojis[len(mojis)-1] =
 				VariationSequence(
 					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i])})
