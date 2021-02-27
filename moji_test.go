@@ -45,3 +45,19 @@ func TestCodePointPut(t *testing.T) {
 		t.Fatalf("string2moji(%v).WriteTo()='%s' (expect '%s')", source, result, source)
 	}
 }
+
+func TestWomanFacepalming(t *testing.T) {
+	SurrogatePairOk = true
+	ZeroWidthJoinSequenceOk = true
+	VariationSequenceOk = true
+
+	source := "\U0001F926\u200D\u2640\uFE0F"
+	mojis := string2moji(source)
+
+	if result := len(mojis); result != 1 {
+		t.Fatalf("len(string2moji(WOMAN FACEPALMING)) == %d (expect %d)", result, 1)
+	}
+	if result := mojis[0].Width(); result != 5 {
+		t.Fatalf("Width(WOMAN FACEPALMING)) == %d (expect %d)", result, 4)
+	}
+}
