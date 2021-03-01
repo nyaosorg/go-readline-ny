@@ -4,7 +4,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"unicode"
 
 	"github.com/mattn/go-runewidth"
 )
@@ -30,26 +29,6 @@ type Moji interface {
 	Width() WidthT
 	WriteTo(io.Writer) (int64, error)
 	Put(io.Writer)
-}
-
-func toCodePoint(m Moji) (rune, bool) {
-	if r, ok := m.(RawCodePoint); ok {
-		return rune(r), true
-	}
-	if r, ok := m.(CtrlCodePoint); ok {
-		return rune(r), true
-	}
-	if r, ok := m.(EscCodePoint); ok {
-		return rune(r), true
-	}
-	return 0, false
-}
-
-func isSpaceMoji(m Moji) bool {
-	if r, ok := toCodePoint(m); ok {
-		return unicode.IsSpace(r)
-	}
-	return false
 }
 
 type ZeroWidthJoinSequence [2]Moji

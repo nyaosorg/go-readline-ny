@@ -3,6 +3,7 @@ package readline
 import (
 	"fmt"
 	"io"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -48,7 +49,21 @@ func (c EscCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
-// EscCodePoint is for the charactor to print as ^X
+type RegionalIndicator rune
+
+func (r RegionalIndicator) Width() WidthT {
+	return 2
+}
+
+func (r RegionalIndicator) Put(w io.Writer) {
+	writeRune(w, rune(r))
+}
+
+func (r RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
+	return writeRune(w, rune(r))
+}
+
+// CtrlCodePoint is for the charactor to print as ^X
 type CtrlCodePoint rune
 
 func (c CtrlCodePoint) Width() WidthT {
@@ -68,7 +83,31 @@ func rune2moji(ch rune) Moji {
 		return CtrlCodePoint(ch)
 	} else if isToBeEscaped(ch) {
 		return EscCodePoint(ch)
+	} else if 0x1F1E6 <= ch && ch <= 0x1F1FF {
+		return RegionalIndicator(ch)
 	} else {
 		return RawCodePoint(ch)
 	}
+}
+
+func moji2rune(m Moji) (rune, bool) {
+	switch r := m.(type) {
+	case RawCodePoint:
+		return rune(r), true
+	case CtrlCodePoint:
+		return rune(r), true
+	case EscCodePoint:
+		return rune(r), true
+	case RegionalIndicator:
+		return rune(r), true
+	default:
+		return 0, false
+	}
+}
+
+func isSpaceMoji(m Moji) bool {
+	if r, ok := moji2rune(m); ok {
+		return unicode.IsSpace(r)
+	}
+	return false
 }

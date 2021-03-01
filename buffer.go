@@ -130,7 +130,7 @@ func (this *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
 	for i, moji := range this.Buffer[:this.Cursor] {
-		if ch, ok := toCodePoint(moji); ok {
+		if ch, ok := moji2rune(moji); ok {
 			if quotedchar == '\000' {
 				if strings.ContainsRune(Delimiters, ch) {
 					quotedchar = ch
