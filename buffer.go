@@ -66,13 +66,17 @@ func (this *Buffer) insert(csrPos int, insStr []Moji) {
 	this.undoes = append(this.undoes, u)
 }
 
+func (this *Buffer) insertString(pos int, s string) Range {
+	list := string2moji(s)
+	this.insert(pos, list)
+	return Range(list)
+}
+
 // Insert String :s at :pos (Do not update screen)
 // returns
 //    count of rune
 func (this *Buffer) InsertString(pos int, s string) int {
-	list := string2moji(s)
-	this.insert(pos, list)
-	return len(list)
+	return len(this.insertString(pos, s))
 }
 
 // Delete remove Buffer[pos:pos+n].

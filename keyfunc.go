@@ -138,10 +138,11 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		this.pending = nil
 	}
 
-	len_moji := this.InsertString(this.Cursor, keys)
+	mojis := this.insertString(this.Cursor, keys)
+	len_moji := len(mojis)
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := GetStringWidth(keys)
+	w1 := mojis.Width()
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		this.GotoHead()
