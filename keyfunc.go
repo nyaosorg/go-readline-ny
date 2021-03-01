@@ -184,7 +184,7 @@ func keyFuncClear(ctx context.Context, this *Buffer) Result {
 
 func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	orgCursorPos := this.Cursor
-	for this.Cursor > 0 && this.Buffer[this.Cursor-1].IsSpace() {
+	for this.Cursor > 0 && isSpaceMoji(this.Buffer[this.Cursor-1]) {
 		this.Cursor--
 	}
 	newCursorPos := this.CurrentWordTop()
@@ -316,10 +316,10 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 
 func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos > 0 && this.Buffer[newPos-1].IsSpace() {
+	for newPos > 0 && isSpaceMoji(this.Buffer[newPos-1]) {
 		newPos--
 	}
-	for newPos > 0 && !this.Buffer[newPos-1].IsSpace() {
+	for newPos > 0 && !isSpaceMoji(this.Buffer[newPos-1]) {
 		newPos--
 	}
 	if newPos >= this.ViewStart {
@@ -337,10 +337,10 @@ func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 
 func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos < len(this.Buffer) && !this.Buffer[newPos].IsSpace() {
+	for newPos < len(this.Buffer) && !isSpaceMoji(this.Buffer[newPos]) {
 		newPos++
 	}
-	for newPos < len(this.Buffer) && this.Buffer[newPos].IsSpace() {
+	for newPos < len(this.Buffer) && isSpaceMoji(this.Buffer[newPos]) {
 		newPos++
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)

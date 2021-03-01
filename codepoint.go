@@ -3,7 +3,6 @@ package readline
 import (
 	"fmt"
 	"io"
-	"unicode"
 	"unicode/utf8"
 )
 
@@ -34,10 +33,6 @@ func (c RawCodePoint) Put(w io.Writer) {
 	writeRune(w, rune(c))
 }
 
-func (c RawCodePoint) IsSpace() bool {
-	return unicode.IsSpace(rune(c))
-}
-
 // EscCodePoint is for the charactor to print as <XXXXX>
 type EscCodePoint rune
 
@@ -53,10 +48,6 @@ func (c EscCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
-func (c EscCodePoint) IsSpace() bool {
-	return false
-}
-
 // EscCodePoint is for the charactor to print as ^X
 type CtrlCodePoint rune
 
@@ -70,10 +61,6 @@ func (c CtrlCodePoint) Put(w io.Writer) {
 
 func (c CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
-}
-
-func (c CtrlCodePoint) IsSpace() bool {
-	return unicode.IsSpace(rune(c))
 }
 
 func rune2moji(ch rune) Moji {
