@@ -78,6 +78,27 @@ func (c CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
+// WavingWhiteFlagCodePoint is for U+1F3F3 (WAVING WHITE FLAG)
+// In WindowsTerminal:
+// - "\U0001F3F3"       needs 2cells-width (It should needs 1cell-width)
+// - "\U0001F3F3\uFE0F" needs 2cells-width,too.
+// (\uFE0F is the variation selector-15)
+type WavingWhiteFlagCodePoint rune
+
+func (s WavingWhiteFlagCodePoint) Width() WidthT {
+	return 2
+}
+
+func (s WavingWhiteFlagCodePoint) Put(w io.Writer) {
+	saveCursorAfterN(w, s.Width())
+	writeRune(w, rune(s))
+	restoreCursor(w)
+}
+
+func (s WavingWhiteFlagCodePoint) WriteTo(w io.Writer) (int64, error) {
+	return writeRune(w, rune(s))
+}
+
 func rune2moji(ch rune) Moji {
 	if ch < ' ' {
 		return CtrlCodePoint(ch)
@@ -85,6 +106,8 @@ func rune2moji(ch rune) Moji {
 		return EscCodePoint(ch)
 	} else if 0x1F1E6 <= ch && ch <= 0x1F1FF {
 		return RegionalIndicator(ch)
+	} else if ch == 0x1F3F3 {
+		return WavingWhiteFlagCodePoint(ch)
 	} else {
 		return RawCodePoint(ch)
 	}

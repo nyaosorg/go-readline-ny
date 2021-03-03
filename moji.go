@@ -61,7 +61,12 @@ func (s ZeroWidthJoinSequence) Put(w io.Writer) {
 type VariationSequence [2]Moji
 
 func (s VariationSequence) Width() WidthT {
-	return s[0].Width() + 1
+	switch s0 := s[0].(type) {
+	case WavingWhiteFlagCodePoint:
+		return s0.Width()
+	default:
+		return s0.Width() + 1
+	}
 }
 
 func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
@@ -73,21 +78,28 @@ func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
 	return n1 + n2, err
 }
 
-func (s VariationSequence) Put(w io.Writer) {
-	width := s.Width()
-	for i := WidthT(0); i < width; i++ {
+func saveCursorAfterN(w io.Writer, n WidthT) {
+	for i := WidthT(0); i < n; i++ {
 		w.Write([]byte{' '})
 	}
 	w.Write([]byte{'\x1B', '7'})
-	for i := WidthT(0); i < width; i++ {
+	for i := WidthT(0); i < n; i++ {
 		w.Write([]byte{'\b'})
 	}
+}
+
+func restoreCursor(w io.Writer) {
+	w.Write([]byte{'\x1B', '8'})
+}
+
+func (s VariationSequence) Put(w io.Writer) {
+	saveCursorAfterN(w, s.Width())
 	// The sequence 'ESC 7' can not remember the cursor position more than one.
 	// When VariationSequence contains another VariationSequence
 	// s[0].Put(w) does not work as we expect.
 	s[0].WriteTo(w)
 	s[1].WriteTo(w)
-	w.Write([]byte{'\x1B', '8'})
+	restoreCursor(w)
 }
 
 const (
