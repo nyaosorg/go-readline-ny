@@ -6,7 +6,7 @@ import (
 )
 
 func (this *Buffer) putRune(m Moji) {
-	m.Put(this.Out)
+	m.PrintTo(this.Out)
 }
 
 func (this *Buffer) backspace(n WidthT) {

@@ -30,7 +30,7 @@ func (c RawCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
-func (c RawCodePoint) Put(w io.Writer) {
+func (c RawCodePoint) PrintTo(w io.Writer) {
 	writeRune(w, rune(c))
 }
 
@@ -41,7 +41,7 @@ func (c EscCodePoint) Width() WidthT {
 	return lenEscaped(rune(c))
 }
 
-func (c EscCodePoint) Put(w io.Writer) {
+func (c EscCodePoint) PrintTo(w io.Writer) {
 	fmt.Fprintf(w, "<%X>", c)
 }
 
@@ -55,7 +55,7 @@ func (r RegionalIndicator) Width() WidthT {
 	return 2
 }
 
-func (r RegionalIndicator) Put(w io.Writer) {
+func (r RegionalIndicator) PrintTo(w io.Writer) {
 	writeRune(w, rune(r))
 }
 
@@ -70,7 +70,7 @@ func (c CtrlCodePoint) Width() WidthT {
 	return 2
 }
 
-func (c CtrlCodePoint) Put(w io.Writer) {
+func (c CtrlCodePoint) PrintTo(w io.Writer) {
 	w.Write([]byte{'^', byte('A' + (byte(c) - 1))})
 }
 
@@ -89,7 +89,7 @@ func (s WavingWhiteFlagCodePoint) Width() WidthT {
 	return 2
 }
 
-func (s WavingWhiteFlagCodePoint) Put(w io.Writer) {
+func (s WavingWhiteFlagCodePoint) PrintTo(w io.Writer) {
 	saveCursorAfterN(w, s.Width())
 	writeRune(w, rune(s))
 	restoreCursor(w)
