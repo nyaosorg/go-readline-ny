@@ -46,34 +46,41 @@ func TestCodePointPut(t *testing.T) {
 	}
 }
 
-func TestWomanFacepalming(t *testing.T) {
+func TestString2Moji(t *testing.T) {
 	SurrogatePairOk = true
 	ZeroWidthJoinSequenceOk = true
 	VariationSequenceOk = true
 
-	source := "\U0001F926\u200D\u2640\uFE0F"
-	mojis := string2moji(source)
-
-	if result := len(mojis); result != 1 {
-		t.Fatalf("len(string2moji(WOMAN FACEPALMING)) == %d (expect %d)", result, 1)
+	var table = []struct {
+		Source string
+		Title  string
+		Count  int
+		Width  WidthT
+	}{
+		{
+			Source: "\U0001F926\u200D\u2640\uFE0F",
+			Title:  "WOMAN FACEPALMING",
+			Count:  1,
+			Width:  5,
+		},
+		{
+			Source: "#\uFE0F\u20E3",
+			Title:  "EnclosedNumberSign",
+			Count:  1,
+			Width:  3,
+		},
 	}
-	if result := mojis[0].Width(); result != 5 {
-		t.Fatalf("Width(WOMAN FACEPALMING)) == %d (expect %d)", result, 4)
-	}
-}
 
-func TestEnclosedNumberSign(t *testing.T) {
-	SurrogatePairOk = true
-	ZeroWidthJoinSequenceOk = true
-	VariationSequenceOk = true
+	for _, p := range table {
+		mojis := string2moji(p.Source)
 
-	source := "#\uFE0F\u20E3"
-	mojis := string2moji(source)
-
-	if result := len(mojis); result != 1 {
-		t.Fatalf("len(string2moji(EnclosedNumberSign))==%d (expect %d)", result, 1)
-	}
-	if result := mojis[0].Width(); result != 3 {
-		t.Fatalf("Width(EnclosedNumberSign)==%d (expect %d)", result, 3)
+		if result := len(mojis); result != p.Count {
+			t.Fatalf("Count of %s == %d (expect %d)",
+				p.Title, result, p.Count)
+		}
+		if result := mojis[0].Width(); result != p.Width {
+			t.Fatalf("Width of %s == %d (expect %d)",
+				p.Title, result, p.Width)
+		}
 	}
 }
