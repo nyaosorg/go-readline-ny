@@ -53,9 +53,19 @@ func (s ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
 }
 
 func (s ZeroWidthJoinSequence) Put(w io.Writer) {
-	s[0].Put(w)
-	writeRune(w, zeroWidthJoinRune)
-	s[1].Put(w)
+	switch s0 := s[0].(type) {
+	case WavingWhiteFlagCodePoint:
+		saveCursorAfterN(w, s.Width())
+		s0.WriteTo(w)
+		writeRune(w, zeroWidthJoinRune)
+		s[1].WriteTo(w)
+		restoreCursor(w)
+	default:
+		s0.Put(w)
+		writeRune(w, zeroWidthJoinRune)
+		s[1].Put(w)
+	}
+
 }
 
 type VariationSequence [2]Moji
