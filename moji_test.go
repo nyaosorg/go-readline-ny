@@ -69,9 +69,16 @@ func TestString2Moji(t *testing.T) {
 			Count:  1,
 			Width:  3,
 		},
+		{
+			Source: "\U0001F3F3\uFE0F",
+			Title:  "WhiteFlag",
+			Count:  1,
+			Width:  2,
+		},
 	}
 
 	for _, p := range table {
+		t.Logf("try %s", p.Title)
 		mojis := string2moji(p.Source)
 
 		if result := len(mojis); result != p.Count {
