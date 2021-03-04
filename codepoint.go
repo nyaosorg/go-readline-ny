@@ -123,6 +123,8 @@ func moji2rune(m Moji) (rune, bool) {
 		return rune(r), true
 	case RegionalIndicator:
 		return rune(r), true
+	case WavingWhiteFlagCodePoint:
+		return rune(r), true
 	default:
 		return 0, false
 	}
