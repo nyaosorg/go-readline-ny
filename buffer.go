@@ -23,7 +23,7 @@ type Buffer struct {
 	topColumn      int // == width of Prompt
 	HistoryPointer int
 	undoes         []*undoT
-	pending        []Moji
+	pending        string
 }
 
 func (this *Buffer) ViewWidth() WidthT {
