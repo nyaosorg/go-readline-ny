@@ -39,13 +39,13 @@ func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 	if this.History.Len() <= 0 {
 		return CONTINUE
 	}
-	if this.HistoryPointer <= 0 {
-		this.HistoryPointer = this.History.Len()
+	if this.historyPointer <= 0 {
+		this.historyPointer = this.History.Len()
 	}
-	this.HistoryPointer--
+	this.historyPointer--
 	keyFuncClear(ctx, this)
-	if this.HistoryPointer >= 0 {
-		this.InsertString(0, this.History.At(this.HistoryPointer))
+	if this.historyPointer >= 0 {
+		this.InsertString(0, this.History.At(this.historyPointer))
 		this.ViewStart = 0
 		this.Cursor = 0
 		keyFuncTail(ctx, this)
@@ -57,13 +57,13 @@ func keyFuncHistoryDown(ctx context.Context, this *Buffer) Result {
 	if this.History.Len() <= 0 {
 		return CONTINUE
 	}
-	if this.HistoryPointer+1 > this.History.Len() {
+	if this.historyPointer+1 > this.History.Len() {
 		return CONTINUE
 	}
-	this.HistoryPointer++
+	this.historyPointer++
 	keyFuncClear(ctx, this)
-	if this.HistoryPointer < this.History.Len() {
-		this.InsertString(0, this.History.At(this.HistoryPointer))
+	if this.historyPointer < this.History.Len() {
+		this.InsertString(0, this.History.At(this.historyPointer))
 		this.ViewStart = 0
 		this.Cursor = 0
 		keyFuncTail(ctx, this)

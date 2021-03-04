@@ -17,11 +17,11 @@ type undoT struct {
 type Buffer struct {
 	*Editor
 	Buffer         []Moji
-	TTY            KeyGetter
+	tty            KeyGetter
 	ViewStart      int
 	termWidth      int // == topColumn + termWidth + forbiddenWidth
 	topColumn      int // == width of Prompt
-	HistoryPointer int
+	historyPointer int
 	undoes         []*undoT
 	pending        string
 }
@@ -206,5 +206,5 @@ func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (in
 
 // GetKey reads one-key from tty.
 func (this *Buffer) GetKey() (string, error) {
-	return GetKey(this.TTY)
+	return GetKey(this.tty)
 }

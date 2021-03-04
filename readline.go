@@ -218,14 +218,14 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	buffer := Buffer{
 		Editor:         editor,
 		Buffer:         make([]Moji, 0, 20),
-		HistoryPointer: editor.History.Len(),
+		historyPointer: editor.History.Len(),
 	}
 
 	tty1, err := editor.OpenKeyGetter()
 	if err != nil {
 		return "", fmt.Errorf("go-tty.Open: %s", err.Error())
 	}
-	buffer.TTY = tty1
+	buffer.tty = tty1
 	defer tty1.Close()
 
 	buffer.termWidth, _, err = tty1.Size()
