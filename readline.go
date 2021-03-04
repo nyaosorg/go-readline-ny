@@ -22,8 +22,8 @@ const (
 )
 
 // String makes Result to fmt.Stringer
-func (this Result) String() string {
-	switch this {
+func (R Result) String() string {
+	switch R {
 	case CONTINUE:
 		return "CONTINUE"
 	case ENTER:
@@ -46,15 +46,15 @@ type KeyGoFuncT struct {
 	Name string
 }
 
-func (this *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
-	if this.Func == nil {
+func (K *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
+	if K.Func == nil {
 		return CONTINUE
 	}
-	return this.Func(ctx, buffer)
+	return K.Func(ctx, buffer)
 }
 
-func (this KeyGoFuncT) String() string {
-	return this.Name
+func (K KeyGoFuncT) String() string {
+	return K.Name
 }
 
 var defaultKeyMap = map[string]KeyFuncT{

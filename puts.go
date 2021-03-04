@@ -5,23 +5,23 @@ import (
 	"io"
 )
 
-func (this *Buffer) backspace(n WidthT) {
+func (B *Buffer) backspace(n WidthT) {
 	if n > 1 {
-		fmt.Fprintf(this.Out, "\x1B[%dD", n)
+		fmt.Fprintf(B.Out, "\x1B[%dD", n)
 	} else if n == 1 {
-		this.Out.WriteByte('\b')
+		B.Out.WriteByte('\b')
 	}
 }
 
-func (this *Buffer) eraseline() {
-	io.WriteString(this.Out, "\x1B[0K")
+func (B *Buffer) eraseline() {
+	io.WriteString(B.Out, "\x1B[0K")
 }
 
 type _Range []Moji
 
-func (this *Buffer) puts(s []Moji) _Range {
+func (B *Buffer) puts(s []Moji) _Range {
 	for _, ch := range s {
-		ch.PrintTo(this.Out)
+		ch.PrintTo(B.Out)
 	}
 	return _Range(s)
 }

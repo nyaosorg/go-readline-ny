@@ -26,13 +26,13 @@ type Buffer struct {
 	pending        string
 }
 
-func (this *Buffer) ViewWidth() WidthT {
-	return WidthT(this.termWidth) - WidthT(this.topColumn) - forbiddenWidth
+func (B *Buffer) ViewWidth() WidthT {
+	return WidthT(B.termWidth) - WidthT(B.topColumn) - forbiddenWidth
 }
 
-func (this *Buffer) view() _Range {
-	view := this.Buffer[this.ViewStart:]
-	width := this.ViewWidth()
+func (B *Buffer) view() _Range {
+	view := B.Buffer[B.ViewStart:]
+	width := B.ViewWidth()
 	w := WidthT(0)
 	for i, c := range view {
 		w += c.Width()
@@ -43,97 +43,97 @@ func (this *Buffer) view() _Range {
 	return _Range(view)
 }
 
-func (this *Buffer) view3() (_Range, _Range, _Range) {
-	v := this.view()
-	x := this.Cursor - this.ViewStart
+func (B *Buffer) view3() (_Range, _Range, _Range) {
+	v := B.view()
+	x := B.Cursor - B.ViewStart
 	return v, v[:x], v[x:]
 }
 
-func (this *Buffer) insert(csrPos int, insStr []Moji) {
+func (B *Buffer) insert(csrPos int, insStr []Moji) {
 	// expand buffer
-	this.Buffer = append(this.Buffer, insStr...)
+	B.Buffer = append(B.Buffer, insStr...)
 
 	// shift original string to make area
-	copy(this.Buffer[csrPos+len(insStr):], this.Buffer[csrPos:])
+	copy(B.Buffer[csrPos+len(insStr):], B.Buffer[csrPos:])
 
 	// insert insStr
-	copy(this.Buffer[csrPos:csrPos+len(insStr)], insStr)
+	copy(B.Buffer[csrPos:csrPos+len(insStr)], insStr)
 
 	u := &undoT{
 		pos: csrPos,
 		del: len(insStr),
 	}
-	this.undoes = append(this.undoes, u)
+	B.undoes = append(B.undoes, u)
 }
 
-func (this *Buffer) insertString(pos int, s string) _Range {
+func (B *Buffer) insertString(pos int, s string) _Range {
 	list := string2moji(s)
-	this.insert(pos, list)
+	B.insert(pos, list)
 	return _Range(list)
 }
 
 // Insert String :s at :pos (Do not update screen)
 // returns
 //    count of rune
-func (this *Buffer) InsertString(pos int, s string) int {
-	return len(this.insertString(pos, s))
+func (B *Buffer) InsertString(pos int, s string) int {
+	return len(B.insertString(pos, s))
 }
 
 // Delete remove Buffer[pos:pos+n].
 // It returns the width to clear the end of line.
 // It does not update screen.
-func (this *Buffer) Delete(pos int, n int) WidthT {
-	if n <= 0 || len(this.Buffer) < pos+n {
+func (B *Buffer) Delete(pos int, n int) WidthT {
+	if n <= 0 || len(B.Buffer) < pos+n {
 		return 0
 	}
 	u := &undoT{
 		pos:  pos,
-		text: moji2string(this.Buffer[pos : pos+n]),
+		text: moji2string(B.Buffer[pos : pos+n]),
 	}
-	this.undoes = append(this.undoes, u)
+	B.undoes = append(B.undoes, u)
 
-	delw := this.GetWidthBetween(pos, pos+n)
-	copy(this.Buffer[pos:], this.Buffer[pos+n:])
-	this.Buffer = this.Buffer[:len(this.Buffer)-n]
+	delw := B.GetWidthBetween(pos, pos+n)
+	copy(B.Buffer[pos:], B.Buffer[pos+n:])
+	B.Buffer = B.Buffer[:len(B.Buffer)-n]
 	return delw
 }
 
 // ResetViewStart set ViewStart the new value which should be.
 // It does not update screen.
-func (this *Buffer) ResetViewStart() {
-	this.ViewStart = 0
+func (B *Buffer) ResetViewStart() {
+	B.ViewStart = 0
 	w := WidthT(0)
-	for i := 0; i <= this.Cursor && i < len(this.Buffer); i++ {
-		w += this.Buffer[i].Width()
-		for w >= this.ViewWidth() {
-			if this.ViewStart >= len(this.Buffer) {
+	for i := 0; i <= B.Cursor && i < len(B.Buffer); i++ {
+		w += B.Buffer[i].Width()
+		for w >= B.ViewWidth() {
+			if B.ViewStart >= len(B.Buffer) {
 				// When standard output is redirected.
 				return
 			}
-			w -= this.Buffer[this.ViewStart].Width()
-			this.ViewStart++
+			w -= B.Buffer[B.ViewStart].Width()
+			B.ViewStart++
 		}
 	}
 }
 
-func (this *Buffer) GetWidthBetween(from int, to int) WidthT {
-	return _Range(this.Buffer[from:to]).Width()
+func (B *Buffer) GetWidthBetween(from int, to int) WidthT {
+	return _Range(B.Buffer[from:to]).Width()
 }
 
-func (this *Buffer) SubString(start, end int) string {
-	return moji2string(this.Buffer[start:end])
+func (B *Buffer) SubString(start, end int) string {
+	return moji2string(B.Buffer[start:end])
 }
 
-func (this Buffer) String() string {
-	return moji2string(this.Buffer)
+func (B Buffer) String() string {
+	return moji2string(B.Buffer)
 }
 
 var Delimiters = "\"'"
 
-func (this *Buffer) CurrentWordTop() (wordTop int) {
+func (B *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
-	for i, moji := range this.Buffer[:this.Cursor] {
+	for i, moji := range B.Buffer[:B.Cursor] {
 		if ch, ok := moji2rune(moji); ok {
 			if quotedchar == '\000' {
 				if strings.ContainsRune(Delimiters, ch) {
@@ -150,23 +150,23 @@ func (this *Buffer) CurrentWordTop() (wordTop int) {
 		}
 	}
 	if wordTop < 0 {
-		return this.Cursor
+		return B.Cursor
 	} else {
 		return wordTop
 	}
 }
 
-func (this *Buffer) CurrentWord() (string, int) {
-	start := this.CurrentWordTop()
-	return this.SubString(start, this.Cursor), start
+func (B *Buffer) CurrentWord() (string, int) {
+	start := B.CurrentWordTop()
+	return B.SubString(start, B.Cursor), start
 }
 
-func (this *Buffer) joinUndo() {
-	if len(this.undoes) < 2 {
+func (B *Buffer) joinUndo() {
+	if len(B.undoes) < 2 {
 		return
 	}
-	u1 := this.undoes[len(this.undoes)-2]
-	u2 := this.undoes[len(this.undoes)-1]
+	u1 := B.undoes[len(B.undoes)-2]
+	u2 := B.undoes[len(B.undoes)-1]
 	if u1.pos != u2.pos {
 		return
 	}
@@ -182,10 +182,10 @@ func (this *Buffer) joinUndo() {
 	if u1.del == 0 {
 		u1.del = u2.del
 	}
-	this.undoes = this.undoes[:len(this.undoes)-1]
+	B.undoes = B.undoes[:len(B.undoes)-1]
 }
 
-func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (int, int, bool)) {
+func (B *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (int, int, bool)) {
 	go func(lastw int) {
 		for {
 			w, _, ok := getResizeEvent()
@@ -194,9 +194,9 @@ func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (in
 			}
 			if lastw != w {
 				mu.Lock()
-				b.termWidth = w
-				fmt.Fprintf(b.Out, "\x1B[%dG", b.topColumn+1)
-				b.RepaintAfterPrompt()
+				B.termWidth = w
+				fmt.Fprintf(B.Out, "\x1B[%dG", B.topColumn+1)
+				B.RepaintAfterPrompt()
 				mu.Unlock()
 				lastw = w
 			}
@@ -205,6 +205,6 @@ func (b *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (in
 }
 
 // GetKey reads one-key from tty.
-func (this *Buffer) GetKey() (string, error) {
-	return GetKey(this.tty)
+func (B *Buffer) GetKey() (string, error) {
+	return GetKey(B.tty)
 }
