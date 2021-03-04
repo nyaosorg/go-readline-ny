@@ -1,6 +1,6 @@
 package readline
 
-// GetCharWidth returns the width of the character.
+// GetCharWidth returns the width of the character. [Deprecated]
 func GetCharWidth(n rune) WidthT {
 	if n < ' ' {
 		return 2 // ^X
@@ -23,7 +23,7 @@ func GetCharWidth(n rune) WidthT {
 	return width
 }
 
-// GetStringWidth returns the width of the string.
+// GetStringWidth returns the width of the string. [Deprecated]
 func GetStringWidth(s string) WidthT {
 	width := WidthT(0)
 	for _, m := range string2moji(s) {
