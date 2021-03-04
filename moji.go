@@ -114,10 +114,7 @@ func (s VariationSequence) PrintTo(w io.Writer) {
 	restoreCursor(w)
 }
 
-const (
-	zeroWidthJoinRune = '\u200D'
-	zeroWidthJoinStr  = "\u200D"
-)
+const zeroWidthJoinRune = '\u200D'
 
 func isZeroWidthJoinRune(r rune) bool {
 	return unicode.Is(unicode.Join_Control, r)
