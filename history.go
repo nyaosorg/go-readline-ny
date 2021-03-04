@@ -6,6 +6,8 @@ import (
 	"io"
 )
 
+// IHistory is the interface ReadLine can use as container for history.
+// It can be set to Editor.History field
 type IHistory interface {
 	Len() int
 	At(int) string
@@ -19,10 +21,12 @@ func (*_EmptyHistory) Len() int { return 0 }
 // At always returns empty-string because the receiver is dummy.
 func (*_EmptyHistory) At(int) string { return "" }
 
+// KeyMap is the class for key-bindings
 type KeyMap struct {
 	KeyMap map[string]KeyFuncT
 }
 
+// Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
 	History       IHistory

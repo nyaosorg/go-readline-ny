@@ -14,6 +14,7 @@ type undoT struct {
 	text string
 }
 
+// Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
 	Buffer         []Moji
@@ -26,6 +27,7 @@ type Buffer struct {
 	pending        string
 }
 
+// ViewWidth returns the cell-width screen can show in the one-line.
 func (B *Buffer) ViewWidth() WidthT {
 	return WidthT(B.termWidth) - WidthT(B.topColumn) - forbiddenWidth
 }
@@ -72,9 +74,8 @@ func (B *Buffer) insertString(pos int, s string) _Range {
 	return _Range(list)
 }
 
-// Insert String :s at :pos (Do not update screen)
-// returns
-//    count of rune
+// InsertString inserts string s at pos (Do not update screen)
+// It returns the count of runes
 func (B *Buffer) InsertString(pos int, s string) int {
 	return len(B.insertString(pos, s))
 }
@@ -116,10 +117,12 @@ func (B *Buffer) ResetViewStart() {
 	}
 }
 
+// GetWidthBetween returns the width between start and end
 func (B *Buffer) GetWidthBetween(from int, to int) WidthT {
 	return _Range(B.Buffer[from:to]).Width()
 }
 
+// SubString returns the readline string between start and end
 func (B *Buffer) SubString(start, end int) string {
 	return moji2string(B.Buffer[start:end])
 }
@@ -128,8 +131,11 @@ func (B Buffer) String() string {
 	return moji2string(B.Buffer)
 }
 
+// Delimiters means the quationmarks. The whitespace enclosed by them
+// are not treat as parameters separator.
 var Delimiters = "\"'"
 
+// CurrentWordTop returns the position of the current word the cursor exists
 func (B *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
@@ -155,6 +161,7 @@ func (B *Buffer) CurrentWordTop() (wordTop int) {
 	return wordTop
 }
 
+// CurrentWord returns the current word the cursor exists and word's position
 func (B *Buffer) CurrentWord() (string, int) {
 	start := B.CurrentWordTop()
 	return B.SubString(start, B.Cursor), start

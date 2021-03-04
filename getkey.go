@@ -6,6 +6,7 @@ import (
 	"github.com/zetamatta/go-readline-ny/internal/github.com/mattn/go-tty"
 )
 
+// KeyGetter is the interface from which the ReadLine can read console input
 type KeyGetter interface {
 	Raw() (func() error, error)
 	ReadRune() (rune, error)
@@ -56,6 +57,8 @@ type _DefaultTty struct {
 	*tty.TTY
 }
 
+// NewDefaultTty returns the instance for KeyGetter, which is the customized
+// version of go-tty.TTY
 func NewDefaultTty() (KeyGetter, error) {
 	tty1, err := tty.Open()
 	if err != nil {
