@@ -151,9 +151,8 @@ func (B *Buffer) CurrentWordTop() (wordTop int) {
 	}
 	if wordTop < 0 {
 		return B.Cursor
-	} else {
-		return wordTop
 	}
+	return wordTop
 }
 
 func (B *Buffer) CurrentWord() (string, int) {
@@ -185,7 +184,7 @@ func (B *Buffer) joinUndo() {
 	B.undoes = B.undoes[:len(B.undoes)-1]
 }
 
-func (B *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (int, int, bool)) {
+func (B *Buffer) startChangeWidthEventLoop(_lastw int, getResizeEvent func() (int, int, bool)) {
 	go func(lastw int) {
 		for {
 			w, _, ok := getResizeEvent()
@@ -201,7 +200,7 @@ func (B *Buffer) startChangeWidthEventLoop(lastw_ int, getResizeEvent func() (in
 				lastw = w
 			}
 		}
-	}(lastw_)
+	}(_lastw)
 }
 
 // GetKey reads one-key from tty.

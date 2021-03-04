@@ -55,11 +55,11 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 			if this.ViewStart <= 0 {
 				break
 			}
-			w_ := w + this.Buffer[this.ViewStart-1].Width()
-			if w_ >= this.ViewWidth() {
+			_w := w + this.Buffer[this.ViewStart-1].Width()
+			if _w >= this.ViewWidth() {
 				break
 			}
-			w = w_
+			w = _w
 			this.ViewStart--
 		}
 		this.puts(this.Buffer[this.ViewStart:])
@@ -113,9 +113,8 @@ func keyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
 func keyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
 	if len(this.Buffer) > 0 {
 		return keyFuncDelete(ctx, this)
-	} else {
-		return ABORT
 	}
+	return ABORT
 }
 
 func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
@@ -142,19 +141,19 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	}
 
 	mojis := this.insertString(this.Cursor, keys)
-	len_moji := len(mojis)
+	lenMoji := len(mojis)
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	w1 := mojis.Width()
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		this.GotoHead()
-		this.Cursor += len_moji
+		this.Cursor += lenMoji
 		this.ResetViewStart()
 		this.DrawFromHead()
 	} else {
 		this.Repaint(this.Cursor, -w1)
-		this.Cursor += len_moji
+		this.Cursor += lenMoji
 	}
 	return CONTINUE
 }
@@ -234,9 +233,8 @@ func keyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
 	this.Out.Flush()
 	if key, err := this.GetKey(); err == nil {
 		return keyFuncInsertSelf(ctx, this, key)
-	} else {
-		return CONTINUE
 	}
+	return CONTINUE
 }
 
 func keyFuncPaste(ctx context.Context, this *Buffer) Result {
@@ -267,9 +265,8 @@ func keyFuncPasteQuote(ctx context.Context, this *Buffer) Result {
 func maxInt(a, b int) int {
 	if a < b {
 		return b
-	} else {
-		return a
 	}
+	return a
 }
 
 func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
@@ -303,8 +300,8 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
 		if w >= this.ViewWidth() {
 			// cursor move right and scroll
-			w_1 := w - this.Buffer[this.Cursor].Width()
-			this.backspace(w_1)
+			_w1 := w - this.Buffer[this.Cursor].Width()
+			this.backspace(_w1)
 			this.ViewStart++
 			this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
 		} else {

@@ -15,10 +15,14 @@ import (
 type Result int
 
 const (
+	// CONTINUE is returned by key-functions to continue the line editor
 	CONTINUE Result = iota
-	ENTER    Result = iota
-	ABORT    Result = iota
-	INTR     Result = iota
+	// ENTER is returned by key-functions when Enter key is pressed
+	ENTER Result = iota
+	// ABORT is returned by key-functions when Ctrl-D is pressed with no command-line
+	ABORT Result = iota
+	// INTR is returned by key-functions when Ctrl-C is pressed
+	INTR Result = iota
 )
 
 // String makes Result to fmt.Stringer
@@ -37,15 +41,18 @@ func (R Result) String() string {
 	}
 }
 
+// KeyFuncT is the interface for object bound to key-mapping
 type KeyFuncT interface {
 	Call(ctx context.Context, buffer *Buffer) Result
 }
 
+// KeyGoFuncT is the implement of KeyFuncT which has a name and a function
 type KeyGoFuncT struct {
 	Func func(ctx context.Context, buffer *Buffer) Result
 	Name string
 }
 
+// Call calls the function the reciever contains
 func (K *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
 	if K.Func == nil {
 		return CONTINUE
@@ -53,6 +60,7 @@ func (K *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
 	return K.Func(ctx, buffer)
 }
 
+// String returns KeyGoFuncT's name
 func (K KeyGoFuncT) String() string {
 	return K.Name
 }
@@ -104,6 +112,7 @@ func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
+// BindKeyFunc binds function to key
 func (editor *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
@@ -116,12 +125,15 @@ func (editor *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
 	return fmt.Errorf("%s: no such keyname", key)
 }
 
+// GlobalKeyMap is the global keymap for users' customizing
 var GlobalKeyMap KeyMap
 
+// BindKeyClosure binds closure to key by name
 func (editor *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
 	return editor.BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
 }
 
+// GetBindKey returns the function assigned to given key
 func (editor *KeyMap) GetBindKey(key string) KeyFuncT {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
@@ -131,24 +143,24 @@ func (editor *KeyMap) GetBindKey(key string) KeyFuncT {
 			}
 		}
 		return editor.KeyMap[char]
-	} else {
-		return nil
 	}
+	return nil
 }
 
+// GetFunc returns KeyFuncT-object by name
 func GetFunc(funcName string) (KeyFuncT, error) {
 	rc := name2func(normWord(funcName))
 	if rc != nil {
 		return rc, nil
-	} else {
-		return nil, fmt.Errorf("%s: not found in the function-list", funcName)
 	}
+	return nil, fmt.Errorf("%s: not found in the function-list", funcName)
 }
 
+// BindKeySymbol assigns function to key by names.
 func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 	funcValue := name2func(normWord(funcName))
 	if funcValue == nil {
-		return fmt.Errorf("%s: no such function.", funcName)
+		return fmt.Errorf("%s: no such function", funcName)
 	}
 	return editor.BindKeyFunc(keyName, funcValue)
 }
@@ -158,6 +170,7 @@ const (
 	ansiCursorOn  = "\x1B[?25h\x1B[s\x1B[u"
 )
 
+// CtrlC is the error when Ctrl-C is pressed.
 var CtrlC = errors.New("^C")
 
 var mu sync.Mutex
@@ -182,7 +195,7 @@ func getKeyFunction(editor *Editor, key1 string) KeyFuncT {
 	}
 }
 
-// Call LineEditor
+// ReadLine calls LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF

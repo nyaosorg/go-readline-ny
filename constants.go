@@ -289,7 +289,6 @@ func name2func(keyName string) KeyFuncT {
 			Func: p,
 			Name: keyName,
 		}
-	} else {
-		return nil
 	}
+	return nil
 }

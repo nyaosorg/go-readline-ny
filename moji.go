@@ -13,9 +13,17 @@ import (
 var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
 var (
-	SurrogatePairOk         = isWindowsTerminal
+	// SurrogatePairOk is true when the surrogated pair unicode is supported
+	// If it is false, <NNNN> is displayed instead.
+	SurrogatePairOk = isWindowsTerminal
+
+	// ZeroWidthJoinSequenceOk is true when ZWJ(U+200D) is supported.
+	// If it is false, <NNNN> is displayed instead.
 	ZeroWidthJoinSequenceOk = isWindowsTerminal
-	VariationSequenceOk     = isWindowsTerminal
+
+	// VariationSequenceOk is true when Variation Sequences are supported.
+	// If it is false, <NNNN> is displayed instead.
+	VariationSequenceOk = isWindowsTerminal
 )
 
 var wtRuneWidth *runewidth.Condition
@@ -27,6 +35,7 @@ func init() {
 	}
 }
 
+// Moji is the interface for minimum unit to edit in readline
 type Moji interface {
 	Width() WidthT
 	WriteTo(io.Writer) (int64, error)
