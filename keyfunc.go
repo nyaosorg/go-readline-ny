@@ -122,7 +122,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
-	if ZeroWidthJoinSequenceOk && keys == zeroWidthJoinStr && this.Cursor > 0 {
+	if ZeroWidthJoinSequenceOk && isZeroWidthJoinStr(keys) && this.Cursor > 0 {
 		this.pending = []Moji{this.Buffer[this.Cursor-1], rune2moji(zeroWidthJoinRune)}
 		return keyFuncBackSpace(ctx, this)
 	} else if VariationSequenceOk && isVariationSelectorLikeStr(keys) && this.Cursor > 0 {

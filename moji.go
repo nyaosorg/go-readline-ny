@@ -4,6 +4,8 @@ import (
 	"io"
 	"os"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/mattn/go-runewidth"
 )
@@ -117,11 +119,20 @@ const (
 	zeroWidthJoinStr  = "\u200D"
 )
 
+func isZeroWidthJoinRune(r rune) bool {
+	return unicode.Is(unicode.Join_Control, r)
+}
+
+func isZeroWidthJoinStr(s string) bool {
+	r, _ := utf8.DecodeRuneInString(s)
+	return isZeroWidthJoinRune(r)
+}
+
 func string2moji(s string) []Moji {
 	runes := []rune(s)
 	mojis := make([]Moji, 0, len(runes))
 	for i := 0; i < len(runes); i++ {
-		if ZeroWidthJoinSequenceOk && runes[i] == zeroWidthJoinRune && i > 0 && i+1 < len(runes) {
+		if ZeroWidthJoinSequenceOk && isZeroWidthJoinRune(runes[i]) && i > 0 && i+1 < len(runes) {
 			mojis[len(mojis)-1] =
 				ZeroWidthJoinSequence(
 					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i+1])})
