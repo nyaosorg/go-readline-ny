@@ -84,7 +84,7 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 		}
 		this.ViewStart++
 		this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
-		this.Eraseline()
+		this.eraseline()
 	}
 	this.Cursor++
 	return CONTINUE
@@ -162,7 +162,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
 
-	this.Eraseline()
+	this.eraseline()
 	u := &undoT{
 		pos:  this.Cursor,
 		text: moji2string(this.Buffer[this.Cursor:]),
@@ -179,7 +179,7 @@ func keyFuncClear(ctx context.Context, this *Buffer) Result {
 	}
 	this.undoes = append(this.undoes, u)
 	this.GotoHead()
-	this.Eraseline()
+	this.eraseline()
 	this.Buffer = this.Buffer[:0]
 	this.Cursor = 0
 	this.ViewStart = 0

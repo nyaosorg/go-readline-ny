@@ -8,7 +8,7 @@ func (buf *Buffer) InsertAndRepaint(str string) {
 // GotoHead move screen-cursor to the top of the viewarea.
 // It should be called before text is changed.
 func (buf *Buffer) GotoHead() {
-	buf.backspace(Range(buf.Buffer[buf.ViewStart:buf.Cursor]).Width())
+	buf.backspace(_Range(buf.Buffer[buf.ViewStart:buf.Cursor]).Width())
 }
 
 // DrawFromHead draw all text in viewarea and
@@ -19,7 +19,7 @@ func (buf *Buffer) DrawFromHead() {
 	buf.puts(view)
 
 	// Move to cursor position
-	buf.Eraseline()
+	buf.eraseline()
 	buf.backspace(right.Width())
 }
 
@@ -48,7 +48,7 @@ func (buf *Buffer) Repaint(pos int, del WidthT) {
 	bs := buf.puts(view[pos-buf.ViewStart:]).Width()
 	vp += bs
 
-	buf.Eraseline()
+	buf.eraseline()
 	if del > 0 {
 		buf.backspace(bs)
 	} else {

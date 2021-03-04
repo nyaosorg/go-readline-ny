@@ -30,7 +30,7 @@ func (this *Buffer) ViewWidth() WidthT {
 	return WidthT(this.termWidth) - WidthT(this.topColumn) - forbiddenWidth
 }
 
-func (this *Buffer) view() Range {
+func (this *Buffer) view() _Range {
 	view := this.Buffer[this.ViewStart:]
 	width := this.ViewWidth()
 	w := WidthT(0)
@@ -40,10 +40,10 @@ func (this *Buffer) view() Range {
 			return view[:i]
 		}
 	}
-	return Range(view)
+	return _Range(view)
 }
 
-func (this *Buffer) view3() (Range, Range, Range) {
+func (this *Buffer) view3() (_Range, _Range, _Range) {
 	v := this.view()
 	x := this.Cursor - this.ViewStart
 	return v, v[:x], v[x:]
@@ -66,10 +66,10 @@ func (this *Buffer) insert(csrPos int, insStr []Moji) {
 	this.undoes = append(this.undoes, u)
 }
 
-func (this *Buffer) insertString(pos int, s string) Range {
+func (this *Buffer) insertString(pos int, s string) _Range {
 	list := string2moji(s)
 	this.insert(pos, list)
-	return Range(list)
+	return _Range(list)
 }
 
 // Insert String :s at :pos (Do not update screen)
@@ -117,7 +117,7 @@ func (this *Buffer) ResetViewStart() {
 }
 
 func (this *Buffer) GetWidthBetween(from int, to int) WidthT {
-	return Range(this.Buffer[from:to]).Width()
+	return _Range(this.Buffer[from:to]).Width()
 }
 
 func (this *Buffer) SubString(start, end int) string {

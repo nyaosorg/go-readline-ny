@@ -52,7 +52,7 @@ func GetKey(tty1 KeyGetter) (string, error) {
 	}
 }
 
-type DefaultTty struct {
+type _DefaultTty struct {
 	*tty.TTY
 }
 
@@ -61,7 +61,7 @@ func NewDefaultTty() (KeyGetter, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &DefaultTty{TTY: tty1}, nil
+	return &_DefaultTty{TTY: tty1}, nil
 }
 
 // GetResizeNotifier is the wrapper for the channel for resize-event.
@@ -69,7 +69,7 @@ func NewDefaultTty() (KeyGetter, error) {
 // When the channel is closed, it returns false as the third value.
 // The reason to need the wrapper is to remove the dependency
 // on "mattn/go-tty".WINSIZE .
-func (t *DefaultTty) GetResizeNotifier() func() (int, int, bool) {
+func (t *_DefaultTty) GetResizeNotifier() func() (int, int, bool) {
 	ws := t.TTY.SIGWINCH()
 	return func() (int, int, bool) {
 		ws1, ok := <-ws

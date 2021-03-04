@@ -33,15 +33,15 @@ type Moji interface {
 	PrintTo(io.Writer)
 }
 
-type ZeroWidthJoinSequence [2]Moji
+type _ZeroWidthJoinSequence [2]Moji
 
-func (s ZeroWidthJoinSequence) Width() WidthT {
+func (s _ZeroWidthJoinSequence) Width() WidthT {
 	// runewidth.StringWidth should not be used because the width that it gives
 	// has no compatible with WindowsTerminal's.
 	return s[0].Width() + 1 + s[1].Width()
 }
 
-func (s ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
+func (s _ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
 	n1, err := s[0].WriteTo(w)
 	if err != nil {
 		return n1, err
@@ -54,9 +54,9 @@ func (s ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
 	return n1 + n2 + n3, err
 }
 
-func (s ZeroWidthJoinSequence) PrintTo(w io.Writer) {
+func (s _ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 	switch s0 := s[0].(type) {
-	case WavingWhiteFlagCodePoint:
+	case _WavingWhiteFlagCodePoint:
 		saveCursorAfterN(w, s.Width())
 		s0.WriteTo(w)
 		writeRune(w, zeroWidthJoinRune)
@@ -70,18 +70,18 @@ func (s ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 
 }
 
-type VariationSequence [2]Moji
+type _VariationSequence [2]Moji
 
-func (s VariationSequence) Width() WidthT {
+func (s _VariationSequence) Width() WidthT {
 	switch s0 := s[0].(type) {
-	case WavingWhiteFlagCodePoint:
+	case _WavingWhiteFlagCodePoint:
 		return s0.Width()
 	default:
 		return s0.Width() + 1
 	}
 }
 
-func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
+func (s _VariationSequence) WriteTo(w io.Writer) (int64, error) {
 	n1, err := s[0].WriteTo(w)
 	if err != nil {
 		return n1, err
@@ -104,10 +104,10 @@ func restoreCursor(w io.Writer) {
 	w.Write([]byte{'\x1B', '8'})
 }
 
-func (s VariationSequence) PrintTo(w io.Writer) {
+func (s _VariationSequence) PrintTo(w io.Writer) {
 	saveCursorAfterN(w, s.Width())
 	// The sequence 'ESC 7' can not remember the cursor position more than one.
-	// When VariationSequence contains another VariationSequence
+	// When _VariationSequence contains another _VariationSequence
 	// s[0].PrintTo(w) does not work as we expect.
 	s[0].WriteTo(w)
 	s[1].WriteTo(w)
@@ -131,13 +131,13 @@ func string2moji(s string) []Moji {
 	for i := 0; i < len(runes); i++ {
 		if ZeroWidthJoinSequenceOk && isZeroWidthJoinRune(runes[i]) && i > 0 && i+1 < len(runes) {
 			mojis[len(mojis)-1] =
-				ZeroWidthJoinSequence(
-					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i+1])})
+				_ZeroWidthJoinSequence(
+					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i+1])})
 			i++
 		} else if VariationSequenceOk && isVariationSelectorLikeRune(runes[i]) && i > 0 {
 			mojis[len(mojis)-1] =
-				VariationSequence(
-					[...]Moji{mojis[len(mojis)-1], RawCodePoint(runes[i])})
+				_VariationSequence(
+					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i])})
 
 		} else {
 			mojis = append(mojis, rune2moji(runes[i]))

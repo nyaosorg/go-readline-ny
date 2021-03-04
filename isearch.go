@@ -45,7 +45,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			ch.PrintTo(this.Out)
 			drawWidth += w1
 		}
-		this.Eraseline()
+		this.eraseline()
 		io.WriteString(this.Out, ansiCursorOn)
 		this.Out.Flush()
 		key, err := this.GetKey()
@@ -82,7 +82,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 		case "\x03", "\x07", "\x1B":
 			all, _, right := this.view3()
 			this.puts(all)
-			this.Eraseline()
+			this.eraseline()
 			this.backspace(right.Width())
 			return CONTINUE
 		case "\x12":

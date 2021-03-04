@@ -13,20 +13,20 @@ func (this *Buffer) backspace(n WidthT) {
 	}
 }
 
-func (this *Buffer) Eraseline() {
+func (this *Buffer) eraseline() {
 	io.WriteString(this.Out, "\x1B[0K")
 }
 
-type Range []Moji
+type _Range []Moji
 
-func (this *Buffer) puts(s []Moji) Range {
+func (this *Buffer) puts(s []Moji) _Range {
 	for _, ch := range s {
 		ch.PrintTo(this.Out)
 	}
-	return Range(s)
+	return _Range(s)
 }
 
-func (s Range) Width() (w WidthT) {
+func (s _Range) Width() (w WidthT) {
 	for _, ch := range s {
 		w += ch.Width()
 	}
