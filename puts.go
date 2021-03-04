@@ -5,10 +5,6 @@ import (
 	"io"
 )
 
-func (this *Buffer) putRune(m Moji) {
-	m.PrintTo(this.Out)
-}
-
 func (this *Buffer) backspace(n WidthT) {
 	if n > 1 {
 		fmt.Fprintf(this.Out, "\x1B[%dD", n)
@@ -25,7 +21,7 @@ type Range []Moji
 
 func (this *Buffer) puts(s []Moji) Range {
 	for _, ch := range s {
-		this.putRune(ch)
+		ch.PrintTo(this.Out)
 	}
 	return Range(s)
 }

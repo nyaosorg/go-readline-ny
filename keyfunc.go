@@ -75,7 +75,7 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 	if w < this.ViewWidth() {
 		// No Scroll
-		this.putRune(this.Buffer[this.Cursor])
+		this.Buffer[this.Cursor].PrintTo(this.Out)
 	} else {
 		// Right Scroll
 		this.GotoHead()

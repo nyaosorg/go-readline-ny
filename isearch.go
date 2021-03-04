@@ -42,7 +42,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
-			this.putRune(ch)
+			ch.PrintTo(this.Out)
 			drawWidth += w1
 		}
 		this.Eraseline()
