@@ -29,7 +29,7 @@ func TestCodePointPut(t *testing.T) {
 
 	var buffer strings.Builder
 	for _, c := range mojis {
-		c.Put(&buffer)
+		c.PrintTo(&buffer)
 	}
 	result := buffer.String()
 	if result != expect {
