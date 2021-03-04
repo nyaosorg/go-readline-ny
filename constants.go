@@ -252,7 +252,7 @@ var name2char = map[string]string{
 // KeyCode from
 // http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 
-var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
+var _name2func = map[string]func(context.Context, *Buffer) Result{
 	F_ACCEPT_LINE:          keyFuncEnter,
 	F_BACKWARD_CHAR:        keyFuncBackward,
 	F_BACKWARD_WORD:        keyFuncBackwardWord,
@@ -284,7 +284,7 @@ var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 }
 
 func name2func(keyName string) KeyFuncT {
-	if p, ok := NAME2FUNC[keyName]; ok {
+	if p, ok := _name2func[keyName]; ok {
 		return &KeyGoFuncT{
 			Func: p,
 			Name: keyName,
