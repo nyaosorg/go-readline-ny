@@ -1,3 +1,6 @@
+[![GoDoc](https://godoc.org/github.com/zetamatta/go-readline-ny?status.svg)](https://godoc.org/github.com/zetamatta/go-readline-ny)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zetamatta/go-readline-ny)](https://goreportcard.com/report/github.com/zetamatta/go-readline-ny)
+
 go-readline-ny
 ==============
 
