@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"syscall"
+	"unicode"
 	"unsafe"
 
 	"github.com/mattn/go-isatty"
@@ -131,7 +132,6 @@ type TTY struct {
 	ws                chan WINSIZE
 	sigwinchCtx       context.Context
 	sigwinchCtxCancel context.CancelFunc
-	pressKey          map[wchar]struct{}
 }
 
 func readConsoleInput(fd uintptr, record *inputRecord) (err error) {
@@ -145,7 +145,6 @@ func readConsoleInput(fd uintptr, record *inputRecord) (err error) {
 
 func open(path string) (*TTY, error) {
 	tty := new(TTY)
-	tty.pressKey = make(map[wchar]struct{})
 	if false && isatty.IsTerminal(os.Stdin.Fd()) {
 		tty.in = os.Stdin
 	} else {
@@ -234,18 +233,10 @@ func (tty *TTY) readRune() (rune, error) {
 	case keyEvent:
 		kr := (*keyEventRecord)(unsafe.Pointer(&ir.event))
 		if kr.keyDown == 0 {
-			if kr.unicodeChar != 0 {
-				if _, ok := tty.pressKey[kr.unicodeChar]; ok {
-					delete(tty.pressKey, kr.unicodeChar)
-				} else if kr.unicodeChar > ' ' {
-					// to remove Enter-key etc. pressed before program started
-					return rune(kr.unicodeChar), nil
-				}
+			if kr.virtualKeyCode == 0x12 && kr.unicodeChar > unicode.MaxASCII {
+				return rune(kr.unicodeChar), nil
 			}
 		} else {
-			if kr.unicodeChar != 0 {
-				tty.pressKey[kr.unicodeChar] = struct{}{}
-			}
 			if kr.controlKeyState&altPressed != 0 && kr.unicodeChar > 0 {
 				tty.rs = []rune{rune(kr.unicodeChar)}
 				return rune(0x1b), nil
