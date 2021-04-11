@@ -117,24 +117,26 @@ func keyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
 	return ABORT
 }
 
+func mojiAndStringToString(m Moji, s string) string {
+	var buffer strings.Builder
+	m.WriteTo(&buffer)
+	buffer.WriteString(s)
+	return buffer.String()
+}
+
 func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
 	if areZeroWidthJoin(keys) && this.Cursor > 0 {
-		var tmp strings.Builder
-		this.Buffer[this.Cursor-1].WriteTo(&tmp)
-		tmp.WriteString(keys)
-		this.pending = tmp.String()
+		this.pending = mojiAndStringToString(
+			this.Buffer[this.Cursor-1],
+			keys)
 		return keyFuncBackSpace(ctx, this)
 	} else if (areVariationSelectorLike(keys) || areEmojiModifier(keys)) && this.Cursor > 0 {
 		baseMoji := this.Buffer[this.Cursor-1]
 		keyFuncBackSpace(ctx, this)
-
-		var tmp strings.Builder
-		baseMoji.WriteTo(&tmp)
-		tmp.WriteString(keys)
-		keys = tmp.String()
+		keys = mojiAndStringToString(baseMoji, keys)
 	} else if len(this.pending) > 0 {
 		keys = this.pending + keys
 		this.pending = ""
