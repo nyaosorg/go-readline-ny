@@ -121,14 +121,13 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
-	if ZeroWidthJoinSequenceOk && isZeroWidthJoinStr(keys) && this.Cursor > 0 {
+	if areZeroWidthJoin(keys) && this.Cursor > 0 {
 		var tmp strings.Builder
 		this.Buffer[this.Cursor-1].WriteTo(&tmp)
 		tmp.WriteString(keys)
 		this.pending = tmp.String()
 		return keyFuncBackSpace(ctx, this)
-	} else if (VariationSequenceOk && isVariationSelectorLikeStr(keys) && this.Cursor > 0) ||
-		(ModifierSequenceOk && areEmojiModifier(keys) && this.Cursor > 0) {
+	} else if (areVariationSelectorLike(keys) || areEmojiModifier(keys)) && this.Cursor > 0 {
 		baseMoji := this.Buffer[this.Cursor-1]
 		keyFuncBackSpace(ctx, this)
 

@@ -31,18 +31,24 @@ func lenEscaped(c rune) WidthT {
 	return w
 }
 
-func isVariationSelectorLikeRune(ch rune) bool {
+func isVariationSelectorLike(ch rune) bool {
+	if !VariationSequenceOk {
+		return false
+	}
 	return unicode.Is(unicode.Variation_Selector, ch) ||
 		unicode.Is(unicode.Me, ch)
 }
 
-func isVariationSelectorLikeStr(s string) bool {
+func areVariationSelectorLike(s string) bool {
+	if !VariationSequenceOk {
+		return false
+	}
 	ch, _ := utf8.DecodeRuneInString(s)
-	return isVariationSelectorLikeRune(ch)
+	return isVariationSelectorLike(ch)
 }
 
 func isToBeEscaped(ch rune) bool {
-	return isVariationSelectorLikeRune(ch) ||
+	return isVariationSelectorLike(ch) ||
 		(ch >= 0x10000 && !SurrogatePairOk) ||
 		runewidth.RuneWidth(ch) == 0
 }

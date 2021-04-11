@@ -89,10 +89,16 @@ func (s _ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 type _ModifierSequence [2]Moji
 
 func isEmojiModifier(ch rune) bool {
+	if !ModifierSequenceOk {
+		return false
+	}
 	return '\U0001F3FB' <= ch && ch <= '\U0001F3FF'
 }
 
 func areEmojiModifier(s string) bool {
+	if !ModifierSequenceOk {
+		return false
+	}
 	u, _ := utf8.DecodeRuneInString(s)
 	return isEmojiModifier(u)
 }
@@ -160,29 +166,32 @@ func (s _VariationSequence) PrintTo(w io.Writer) {
 
 const zeroWidthJoinRune = '\u200D'
 
-func isZeroWidthJoinRune(r rune) bool {
-	return unicode.Is(unicode.Join_Control, r)
+func isZeroWidthJoin(r rune) bool {
+	return ZeroWidthJoinSequenceOk && unicode.Is(unicode.Join_Control, r)
 }
 
-func isZeroWidthJoinStr(s string) bool {
+func areZeroWidthJoin(s string) bool {
+	if !ZeroWidthJoinSequenceOk {
+		return false
+	}
 	r, _ := utf8.DecodeRuneInString(s)
-	return isZeroWidthJoinRune(r)
+	return isZeroWidthJoin(r)
 }
 
 func string2moji(s string) []Moji {
 	runes := []rune(s)
 	mojis := make([]Moji, 0, len(runes))
 	for i := 0; i < len(runes); i++ {
-		if ZeroWidthJoinSequenceOk && isZeroWidthJoinRune(runes[i]) && i > 0 && i+1 < len(runes) {
+		if isZeroWidthJoin(runes[i]) && i > 0 && i+1 < len(runes) {
 			mojis[len(mojis)-1] =
 				_ZeroWidthJoinSequence(
 					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i+1])})
 			i++
-		} else if VariationSequenceOk && isVariationSelectorLikeRune(runes[i]) && i > 0 {
+		} else if isVariationSelectorLike(runes[i]) && i > 0 {
 			mojis[len(mojis)-1] =
 				_VariationSequence(
 					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i])})
-		} else if VariationSequenceOk && isEmojiModifier(runes[i]) && i > 0 {
+		} else if isEmojiModifier(runes[i]) && i > 0 {
 			mojis[len(mojis)-1] =
 				_ModifierSequence(
 					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i])})
