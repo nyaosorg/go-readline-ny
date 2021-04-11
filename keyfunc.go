@@ -127,7 +127,8 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		tmp.WriteString(keys)
 		this.pending = tmp.String()
 		return keyFuncBackSpace(ctx, this)
-	} else if VariationSequenceOk && isVariationSelectorLikeStr(keys) && this.Cursor > 0 {
+	} else if (VariationSequenceOk && isVariationSelectorLikeStr(keys) && this.Cursor > 0) ||
+		(ModifierSequenceOk && areEmojiModifier(keys) && this.Cursor > 0) {
 		baseMoji := this.Buffer[this.Cursor-1]
 		keyFuncBackSpace(ctx, this)
 
