@@ -75,10 +75,16 @@ func TestString2Moji(t *testing.T) {
 			Count:  1,
 			Width:  2,
 		},
+		{
+			Source: "\U0001F647\U0001F3FF",
+			Title:  "PersonBowing: dark skin tone",
+			Count:  1,
+			Width:  4,
+		},
 	}
 
 	for _, p := range table {
-		t.Logf("try %s", p.Title)
+		// t.Logf("try %s", p.Title)
 		mojis := string2moji(p.Source)
 
 		if result := len(mojis); result != p.Count {
