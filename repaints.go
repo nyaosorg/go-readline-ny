@@ -42,11 +42,10 @@ func (buf *Buffer) ReplaceAndRepaint(pos int, str string) {
 
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
 func (buf *Buffer) Repaint(pos int, del WidthT) {
-	vp := buf.GetWidthBetween(buf.ViewStart, pos)
+	buf.GetWidthBetween(buf.ViewStart, pos)
 
 	view := buf.view()
 	bs := buf.puts(view[pos-buf.ViewStart:]).Width()
-	vp += bs
 
 	buf.eraseline()
 	if del > 0 {
