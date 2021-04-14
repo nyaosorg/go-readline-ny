@@ -52,7 +52,7 @@ type KeyGoFuncT struct {
 	Name string
 }
 
-// Call calls the function the reciever contains
+// Call calls the function the receiver contains
 func (K *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
 	if K.Func == nil {
 		return CONTINUE

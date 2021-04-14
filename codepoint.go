@@ -7,7 +7,7 @@ import (
 	"unicode/utf8"
 )
 
-// _RawCodePoint is for the charactor to print as is.
+// _RawCodePoint is for the character to print as is.
 type _RawCodePoint rune
 
 func (c _RawCodePoint) Width() WidthT {
@@ -34,7 +34,7 @@ func (c _RawCodePoint) PrintTo(w io.Writer) {
 	writeRune(w, rune(c))
 }
 
-// _EscCodePoint is for the charactor to print as <XXXXX>
+// _EscCodePoint is for the character to print as <XXXXX>
 type _EscCodePoint rune
 
 func (c _EscCodePoint) Width() WidthT {
@@ -63,7 +63,7 @@ func (r _RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(r))
 }
 
-// _CtrlCodePoint is for the charactor to print as ^X
+// _CtrlCodePoint is for the character to print as ^X
 type _CtrlCodePoint rune
 
 func (c _CtrlCodePoint) Width() WidthT {
