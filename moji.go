@@ -10,7 +10,8 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+var isVsCodeTerminal = os.Getenv("VSCODE_PID") != ""
+var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != "" && !isVsCodeTerminal
 
 var (
 	// SurrogatePairOk is true when the surrogated pair unicode is supported
