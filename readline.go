@@ -171,7 +171,7 @@ const (
 )
 
 // CtrlC is the error when Ctrl-C is pressed.
-var CtrlC = errors.New("^C")
+var CtrlC = (errors.New("^C"))
 
 var mu sync.Mutex
 

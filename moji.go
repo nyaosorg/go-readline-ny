@@ -26,7 +26,7 @@ var (
 	// If it is false, <NNNN> is displayed instead.
 	VariationSequenceOk = isWindowsTerminal
 
-	// When ModifierSequenceOk is false, SkinTone sequence are treated as two
+	// ModifierSequenceOk is false, SkinTone sequence are treated as two
 	// character
 	ModifierSequenceOk = isWindowsTerminal
 )
