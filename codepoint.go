@@ -99,14 +99,24 @@ func (s _WavingWhiteFlagCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(s))
 }
 
+const (
+	regionalIndicatorBegin       = 0x1F1E6
+	regionalIndicatorEnd         = 0x1F1FF
+	mathematicalBoldCapitalBegin = 0x1D400
+	mathematicalBoldCapitalEnd   = 0x1D7FF
+	wavingWhiteFlagCodePoint     = 0x1F3F3
+)
+
 func rune2moji(ch rune) Moji {
 	if ch < ' ' {
 		return _CtrlCodePoint(ch)
 	} else if isToBeEscaped(ch) {
 		return _EscCodePoint(ch)
-	} else if 0x1F1E6 <= ch && ch <= 0x1F1FF {
+	} else if regionalIndicatorBegin <= ch && ch <= regionalIndicatorEnd {
 		return _RegionalIndicator(ch)
-	} else if ch == 0x1F3F3 {
+	} else if mathematicalBoldCapitalBegin <= ch && ch <= mathematicalBoldCapitalEnd {
+		return _WavingWhiteFlagCodePoint(ch)
+	} else if ch == wavingWhiteFlagCodePoint {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else {
 		return _RawCodePoint(ch)
