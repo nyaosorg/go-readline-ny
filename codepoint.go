@@ -105,11 +105,15 @@ const (
 	mathematicalBoldCapitalBegin = 0x1D400
 	mathematicalBoldCapitalEnd   = 0x1D7FF
 	wavingWhiteFlagCodePoint     = 0x1F3F3
+	boxDrawingBegin              = 0x2500
+	boxDrawingEnd                = 0x257F
 )
 
 func rune2moji(ch rune) Moji {
 	if ch < ' ' {
 		return _CtrlCodePoint(ch)
+	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && wtRuneWidth.EastAsianWidth {
+		return _WavingWhiteFlagCodePoint(ch)
 	} else if isToBeEscaped(ch) {
 		return _EscCodePoint(ch)
 	} else if regionalIndicatorBegin <= ch && ch <= regionalIndicatorEnd {
