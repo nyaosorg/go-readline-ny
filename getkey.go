@@ -2,6 +2,7 @@ package readline
 
 import (
 	"strings"
+	"unicode/utf16"
 
 	"github.com/zetamatta/go-readline-ny/internal/github.com/mattn/go-tty"
 )
@@ -37,9 +38,9 @@ func GetKey(tty1 KeyGetter) (string, error) {
 			continue
 		}
 		if surrogated > 0 {
-			r = 0x10000 + (surrogated-0xD800)*0x400 + (r - 0xDC00)
+			r = utf16.DecodeRune(surrogated, r)
 			surrogated = 0
-		} else if 0xD800 <= r && r < 0xE000 { // surrogate pair first word.
+		} else if utf16.IsSurrogate(r) { // surrogate pair first word.
 			surrogated = r
 			continue
 		}
