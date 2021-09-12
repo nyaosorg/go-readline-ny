@@ -1,10 +1,10 @@
-[![GoDoc](https://godoc.org/github.com/zetamatta/go-readline-ny?status.svg)](https://godoc.org/github.com/zetamatta/go-readline-ny)
-[![Go Report Card](https://goreportcard.com/badge/github.com/zetamatta/go-readline-ny)](https://goreportcard.com/report/github.com/zetamatta/go-readline-ny)
+[![GoDoc](https://godoc.org/github.com/nyaosorg/go-readline-ny?status.svg)](https://godoc.org/github.com/nyaosorg/go-readline-ny)
+[![Go Report Card](https://goreportcard.com/badge/github.com/nyaosorg/go-readline-ny)](https://goreportcard.com/report/github.com/nyaosorg/go-readline-ny)
 
 go-readline-ny
 ==============
 
-go-readline-ny is the readline library used in the command line shell [NYAGOS](https://github.com/zetamatta/nyagos).
+go-readline-ny is the readline library used in the command line shell [NYAGOS](https://github.com/nyaosorg/nyagos).
 
 - Emacs-like key-bindings
 - On Windows Terminal
@@ -27,7 +27,7 @@ import (
     "context"
     "fmt"
 
-    "github.com/zetamatta/go-readline-ny"
+    "github.com/nyaosorg/go-readline-ny"
 )
 
 func main() {
@@ -60,8 +60,8 @@ import (
 
     "github.com/mattn/go-colorable"
 
-    "github.com/zetamatta/go-readline-ny"
-    "github.com/zetamatta/go-readline-ny/simplehistory"
+    "github.com/nyaosorg/go-readline-ny"
+    "github.com/nyaosorg/go-readline-ny/simplehistory"
 )
 
 func main() {
