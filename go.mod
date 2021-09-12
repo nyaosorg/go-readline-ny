@@ -1,4 +1,4 @@
-module github.com/zetamatta/go-readline-ny
+module github.com/nyaosorg/go-readline-ny
 
 go 1.14
 
