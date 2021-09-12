@@ -9,7 +9,7 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 )
 
 func main() {

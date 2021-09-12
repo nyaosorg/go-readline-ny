@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/zetamatta/go-readline-ny/internal/github.com/mattn/go-tty"
+	"github.com/nyaosorg/go-readline-ny/internal/github.com/mattn/go-tty"
 )
 
 // KeyGetter is the interface from which the ReadLine can read console input
