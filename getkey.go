@@ -7,11 +7,15 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/github.com/mattn/go-tty"
 )
 
-// KeyGetter is the interface from which the ReadLine can read console input
-type KeyGetter interface {
+type MinimumTty interface {
 	Raw() (func() error, error)
 	ReadRune() (rune, error)
 	Buffered() bool
+}
+
+// KeyGetter is the interface from which the ReadLine can read console input
+type KeyGetter interface {
+	MinimumTty
 	Close() error
 	Size() (int, int, error)
 
@@ -19,7 +23,7 @@ type KeyGetter interface {
 }
 
 // GetKey reads one-key from tty.
-func GetKey(tty1 KeyGetter) (string, error) {
+func GetKey(tty1 MinimumTty) (string, error) {
 	clean, err := tty1.Raw()
 	if err != nil {
 		return "", err
