@@ -13,6 +13,7 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/coloring"
 	"github.com/nyaosorg/go-readline-ny/simplehistory"
 )
 
@@ -20,9 +21,10 @@ func main() {
 	history := simplehistory.New()
 
 	editor := readline.Editor{
-		Prompt:  func() (int, error) { return fmt.Print("$ ") },
-		Writer:  colorable.NewColorableStdout(),
-		History: history,
+		Prompt:   func() (int, error) { return fmt.Print("$ ") },
+		Writer:   colorable.NewColorableStdout(),
+		History:  history,
+		Coloring: &coloring.VimBatch{},
 	}
 	fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
 	for {
