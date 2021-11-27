@@ -230,7 +230,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	buffer := Buffer{
 		Editor:         editor,
-		Buffer:         make([]cellT, 0, 20),
+		Buffer:         make([]_Cell, 0, 20),
 		historyPointer: editor.History.Len(),
 	}
 

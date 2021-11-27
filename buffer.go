@@ -27,7 +27,7 @@ const (
 
 type _PackedColorCode int16
 
-type cellT struct {
+type _Cell struct {
 	Moji     Moji
 	color    _PackedColorCode
 	position int16
@@ -41,7 +41,7 @@ type Coloring interface {
 // Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
-	Buffer         []cellT
+	Buffer         []_Cell
 	tty            KeyGetter
 	ViewStart      int
 	termWidth      int // == topColumn + termWidth + forbiddenWidth
@@ -75,7 +75,7 @@ func (B *Buffer) view3() (_Range, _Range, _Range) {
 	return v, v[:x], v[x:]
 }
 
-func (B *Buffer) insert(csrPos int, insStr []cellT) {
+func (B *Buffer) insert(csrPos int, insStr []_Cell) {
 	// expand buffer
 	B.Buffer = append(B.Buffer, insStr...)
 
@@ -92,10 +92,10 @@ func (B *Buffer) insert(csrPos int, insStr []cellT) {
 	B.undoes = append(B.undoes, u)
 }
 
-func mojis2cells(mojis []Moji) []cellT {
-	cells := make([]cellT, 0, len(mojis))
+func mojis2cells(mojis []Moji) []_Cell {
+	cells := make([]_Cell, 0, len(mojis))
 	for _, m := range mojis {
-		cells = append(cells, cellT{Moji: m})
+		cells = append(cells, _Cell{Moji: m})
 	}
 	return cells
 }

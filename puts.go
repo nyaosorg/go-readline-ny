@@ -17,9 +17,9 @@ func (B *Buffer) eraseline() {
 	io.WriteString(B.Out, "\x1B[0K")
 }
 
-type _Range []cellT
+type _Range []_Cell
 
-func (B *Buffer) puts(s []cellT) _Range {
+func (B *Buffer) puts(s []_Cell) _Range {
 	B.RefreshColor()
 	color := _PackedColorCode(White)
 	for _, ch := range s {
