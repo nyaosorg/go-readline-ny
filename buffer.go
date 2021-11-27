@@ -8,7 +8,7 @@ import (
 
 const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
-type undoT struct {
+type _Undo struct {
 	pos  int
 	del  int
 	text string
@@ -47,7 +47,7 @@ type Buffer struct {
 	termWidth      int // == topColumn + termWidth + forbiddenWidth
 	topColumn      int // == width of Prompt
 	historyPointer int
-	undoes         []*undoT
+	undoes         []*_Undo
 	pending        string
 }
 
@@ -85,7 +85,7 @@ func (B *Buffer) insert(csrPos int, insStr []_Cell) {
 	// insert insStr
 	copy(B.Buffer[csrPos:csrPos+len(insStr)], insStr)
 
-	u := &undoT{
+	u := &_Undo{
 		pos: csrPos,
 		del: len(insStr),
 	}
@@ -119,7 +119,7 @@ func (B *Buffer) Delete(pos int, n int) WidthT {
 	if n <= 0 || len(B.Buffer) < pos+n {
 		return 0
 	}
-	u := &undoT{
+	u := &_Undo{
 		pos:  pos,
 		text: cell2string(B.Buffer[pos : pos+n]),
 	}

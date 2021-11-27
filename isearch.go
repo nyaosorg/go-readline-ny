@@ -70,7 +70,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			update()
 		case "\r":
 			this.ViewStart = 0
-			u := &undoT{
+			u := &_Undo{
 				pos:  0,
 				text: cell2string(this.Buffer),
 			}

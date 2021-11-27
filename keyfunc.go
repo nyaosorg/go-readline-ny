@@ -164,7 +164,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
 
 	this.eraseline()
-	u := &undoT{
+	u := &_Undo{
 		pos:  this.Cursor,
 		text: cell2string(this.Buffer[this.Cursor:]),
 	}
@@ -174,7 +174,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 }
 
 func keyFuncClear(ctx context.Context, this *Buffer) Result {
-	u := &undoT{
+	u := &_Undo{
 		pos:  0,
 		text: cell2string(this.Buffer),
 	}
@@ -276,7 +276,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		if this.Cursor < 2 {
 			return CONTINUE
 		}
-		u := &undoT{
+		u := &_Undo{
 			pos:  this.Cursor,
 			del:  2,
 			text: cell2string(this.Buffer[this.Cursor-2 : this.Cursor]),
@@ -291,7 +291,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		if this.Cursor < 1 {
 			return CONTINUE
 		}
-		u := &undoT{
+		u := &_Undo{
 			pos:  this.Cursor - 1,
 			del:  2,
 			text: cell2string(this.Buffer[this.Cursor-1 : this.Cursor+1]),
