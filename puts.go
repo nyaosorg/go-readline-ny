@@ -27,7 +27,7 @@ func (B *Buffer) puts(s []cellT) _Range {
 			color = ch.color
 			fmt.Fprintf(B.Out, "\x1B[%d;1m", color)
 		}
-		ch.PrintTo(B.Out)
+		ch.Moji.PrintTo(B.Out)
 	}
 	if color != 37 {
 		io.WriteString(B.Out, "\x1B[0;37m")
@@ -37,7 +37,7 @@ func (B *Buffer) puts(s []cellT) _Range {
 
 func (s _Range) Width() (w WidthT) {
 	for _, ch := range s {
-		w += ch.Width()
+		w += ch.Moji.Width()
 	}
 	return
 }

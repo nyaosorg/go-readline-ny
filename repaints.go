@@ -1,6 +1,6 @@
 package readline
 
-type _MonoChrome struct {}
+type _MonoChrome struct{}
 
 func (_MonoChrome) Init() {}
 
@@ -21,7 +21,7 @@ func (buf *Buffer) RefreshColor() {
 		} else {
 			buf.Buffer[i].color = buf.Coloring.Get(' ')
 		}
-		position += int16(cell.Width())
+		position += int16(cell.Moji.Width())
 	}
 }
 

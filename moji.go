@@ -214,7 +214,7 @@ func moji2string(m []Moji) string {
 func cell2string(m []cellT) string {
 	var buffer strings.Builder
 	for _, m1 := range m {
-		m1.WriteTo(&buffer)
+		m1.Moji.WriteTo(&buffer)
 	}
 	return buffer.String()
 }

@@ -17,7 +17,7 @@ type undoT struct {
 type ColorCode int16
 
 type cellT struct {
-	Moji
+	Moji     Moji
 	position int16
 	color    ColorCode
 }
@@ -50,7 +50,7 @@ func (B *Buffer) view() _Range {
 	width := B.ViewWidth()
 	w := WidthT(0)
 	for i, c := range view {
-		w += c.Width()
+		w += c.Moji.Width()
 		if w >= width {
 			return view[:i]
 		}
@@ -126,13 +126,13 @@ func (B *Buffer) ResetViewStart() {
 	B.ViewStart = 0
 	w := WidthT(0)
 	for i := 0; i <= B.Cursor && i < len(B.Buffer); i++ {
-		w += B.Buffer[i].Width()
+		w += B.Buffer[i].Moji.Width()
 		for w >= B.ViewWidth() {
 			if B.ViewStart >= len(B.Buffer) {
 				// When standard output is redirected.
 				return
 			}
-			w -= B.Buffer[B.ViewStart].Width()
+			w -= B.Buffer[B.ViewStart].Moji.Width()
 			B.ViewStart++
 		}
 	}
@@ -161,7 +161,7 @@ func (B *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
 	for i, moji := range B.Buffer[:B.Cursor] {
-		if ch, ok := moji2rune(moji); ok {
+		if ch, ok := moji2rune(moji.Moji); ok {
 			if quotedchar == '\000' {
 				if strings.ContainsRune(Delimiters, ch) {
 					quotedchar = ch
