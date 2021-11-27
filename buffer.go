@@ -14,10 +14,23 @@ type undoT struct {
 	text string
 }
 
+type ColorCode int16
+
+type cellT struct {
+	Moji
+	position int16
+	color    ColorCode
+}
+
+type Coloring interface {
+	Init()
+	Get(rune) ColorCode
+}
+
 // Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
-	Buffer         []Moji
+	Buffer         []cellT
 	tty            KeyGetter
 	ViewStart      int
 	termWidth      int // == topColumn + termWidth + forbiddenWidth
@@ -51,7 +64,7 @@ func (B *Buffer) view3() (_Range, _Range, _Range) {
 	return v, v[:x], v[x:]
 }
 
-func (B *Buffer) insert(csrPos int, insStr []Moji) {
+func (B *Buffer) insert(csrPos int, insStr []cellT) {
 	// expand buffer
 	B.Buffer = append(B.Buffer, insStr...)
 
@@ -68,8 +81,16 @@ func (B *Buffer) insert(csrPos int, insStr []Moji) {
 	B.undoes = append(B.undoes, u)
 }
 
+func mojis2cells(mojis []Moji) []cellT {
+	cells := make([]cellT, 0, len(mojis))
+	for _, m := range mojis {
+		cells = append(cells, cellT{Moji: m})
+	}
+	return cells
+}
+
 func (B *Buffer) insertString(pos int, s string) _Range {
-	list := string2moji(s)
+	list := mojis2cells(string2moji(s))
 	B.insert(pos, list)
 	return _Range(list)
 }
@@ -89,7 +110,7 @@ func (B *Buffer) Delete(pos int, n int) WidthT {
 	}
 	u := &undoT{
 		pos:  pos,
-		text: moji2string(B.Buffer[pos : pos+n]),
+		text: cell2string(B.Buffer[pos : pos+n]),
 	}
 	B.undoes = append(B.undoes, u)
 
@@ -124,11 +145,11 @@ func (B *Buffer) GetWidthBetween(from int, to int) WidthT {
 
 // SubString returns the readline string between start and end
 func (B *Buffer) SubString(start, end int) string {
-	return moji2string(B.Buffer[start:end])
+	return cell2string(B.Buffer[start:end])
 }
 
 func (B Buffer) String() string {
-	return moji2string(B.Buffer)
+	return cell2string(B.Buffer)
 }
 
 // Delimiters means the quationmarks. The whitespace enclosed by them

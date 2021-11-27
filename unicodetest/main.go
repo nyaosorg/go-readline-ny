@@ -13,6 +13,7 @@ func main() {
 			print("  0123456789ABCDEF\n$ ")
 			return 2, nil
 		},
+		Coloring: new(readline.VimBatchColor),
 	}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {

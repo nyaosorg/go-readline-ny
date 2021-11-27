@@ -17,11 +17,20 @@ func (B *Buffer) eraseline() {
 	io.WriteString(B.Out, "\x1B[0K")
 }
 
-type _Range []Moji
+type _Range []cellT
 
-func (B *Buffer) puts(s []Moji) _Range {
+func (B *Buffer) puts(s []cellT) _Range {
+	B.RefreshColor()
+	var color ColorCode
 	for _, ch := range s {
+		if ch.color != color {
+			color = ch.color
+			fmt.Fprintf(B.Out, "\x1B[%d;1m", color)
+		}
 		ch.PrintTo(B.Out)
+	}
+	if color != 37 {
+		io.WriteString(B.Out, "\x1B[0;37m")
 	}
 	return _Range(s)
 }

@@ -75,7 +75,7 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 	if w < this.ViewWidth() {
 		// No Scroll
-		this.Buffer[this.Cursor].PrintTo(this.Out)
+		this.puts(this.Buffer[this.Cursor : this.Cursor+1])
 	} else {
 		// Right Scroll
 		this.GotoHead()
@@ -166,7 +166,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	this.eraseline()
 	u := &undoT{
 		pos:  this.Cursor,
-		text: moji2string(this.Buffer[this.Cursor:]),
+		text: cell2string(this.Buffer[this.Cursor:]),
 	}
 	this.undoes = append(this.undoes, u)
 	this.Buffer = this.Buffer[:this.Cursor]
@@ -176,7 +176,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 func keyFuncClear(ctx context.Context, this *Buffer) Result {
 	u := &undoT{
 		pos:  0,
-		text: moji2string(this.Buffer),
+		text: cell2string(this.Buffer),
 	}
 	this.undoes = append(this.undoes, u)
 	this.GotoHead()
@@ -279,7 +279,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		u := &undoT{
 			pos:  this.Cursor,
 			del:  2,
-			text: moji2string(this.Buffer[this.Cursor-2 : this.Cursor]),
+			text: cell2string(this.Buffer[this.Cursor-2 : this.Cursor]),
 		}
 		this.undoes = append(this.undoes, u)
 		this.Buffer[this.Cursor-2], this.Buffer[this.Cursor-1] = this.Buffer[this.Cursor-1], this.Buffer[this.Cursor-2]
@@ -294,7 +294,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		u := &undoT{
 			pos:  this.Cursor - 1,
 			del:  2,
-			text: moji2string(this.Buffer[this.Cursor-1 : this.Cursor+1]),
+			text: cell2string(this.Buffer[this.Cursor-1 : this.Cursor+1]),
 		}
 		this.undoes = append(this.undoes, u)
 
@@ -373,7 +373,7 @@ func keyFuncUndo(ctx context.Context, this *Buffer) Result {
 		this.Buffer = this.Buffer[:len(this.Buffer)-u.del]
 	}
 	if u.text != "" {
-		t := string2moji(u.text)
+		t := mojis2cells(string2moji(u.text))
 		// widen buffer
 		this.Buffer = append(this.Buffer, t...)
 		// make area

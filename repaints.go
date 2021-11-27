@@ -1,5 +1,30 @@
 package readline
 
+type _MonoChrome struct {}
+
+func (_MonoChrome) Init() {}
+
+func (_MonoChrome) Get(rune) ColorCode {
+	return 37
+}
+
+func (buf *Buffer) RefreshColor() {
+	if buf.Coloring == nil {
+		buf.Coloring = _MonoChrome{}
+	}
+	buf.Coloring.Init()
+	position := int16(0)
+	for i, cell := range buf.Buffer {
+		buf.Buffer[i].position = position
+		if codepoint, ok := cell.Moji.(_RawCodePoint); ok {
+			buf.Buffer[i].color = buf.Coloring.Get(rune(codepoint))
+		} else {
+			buf.Buffer[i].color = buf.Coloring.Get(' ')
+		}
+		position += int16(cell.Width())
+	}
+}
+
 // InsertAndRepaint inserts str and repaint the editline.
 func (buf *Buffer) InsertAndRepaint(str string) {
 	buf.ReplaceAndRepaint(buf.Cursor, str)

@@ -72,7 +72,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			this.ViewStart = 0
 			u := &undoT{
 				pos:  0,
-				text: moji2string(this.Buffer),
+				text: cell2string(this.Buffer),
 			}
 			this.undoes = append(this.undoes, u)
 			this.Buffer = this.Buffer[:0]

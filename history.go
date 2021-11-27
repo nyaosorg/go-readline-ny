@@ -37,6 +37,7 @@ type Editor struct {
 	Cursor        int
 	LineFeed      func(Result)
 	OpenKeyGetter func() (KeyGetter, error)
+	Coloring      Coloring
 }
 
 func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
