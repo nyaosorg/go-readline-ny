@@ -4,7 +4,7 @@ type _MonoChrome struct{}
 
 func (_MonoChrome) Init() {}
 
-func (_MonoChrome) Get(rune) ColorCode {
+func (_MonoChrome) Get(rune) int {
 	return 37
 }
 
@@ -17,9 +17,9 @@ func (buf *Buffer) RefreshColor() {
 	for i, cell := range buf.Buffer {
 		buf.Buffer[i].position = position
 		if codepoint, ok := cell.Moji.(_RawCodePoint); ok {
-			buf.Buffer[i].color = buf.Coloring.Get(rune(codepoint))
+			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(rune(codepoint)))
 		} else {
-			buf.Buffer[i].color = buf.Coloring.Get(' ')
+			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(' '))
 		}
 		position += int16(cell.Moji.Width())
 	}

@@ -21,7 +21,7 @@ type _Range []cellT
 
 func (B *Buffer) puts(s []cellT) _Range {
 	B.RefreshColor()
-	var color ColorCode
+	color := _PackedColorCode(White)
 	for _, ch := range s {
 		if ch.color != color {
 			color = ch.color
@@ -29,8 +29,8 @@ func (B *Buffer) puts(s []cellT) _Range {
 		}
 		ch.Moji.PrintTo(B.Out)
 	}
-	if color != 37 {
-		io.WriteString(B.Out, "\x1B[0;37m")
+	if color != White {
+		io.WriteString(B.Out, "\x1B[37;1m")
 	}
 	return _Range(s)
 }

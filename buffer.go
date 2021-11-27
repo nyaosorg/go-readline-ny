@@ -14,17 +14,28 @@ type undoT struct {
 	text string
 }
 
-type ColorCode int16
+const (
+	Black = 30 + iota
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+)
+
+type _PackedColorCode int16
 
 type cellT struct {
 	Moji     Moji
+	color    _PackedColorCode
 	position int16
-	color    ColorCode
 }
 
 type Coloring interface {
 	Init()
-	Get(rune) ColorCode
+	Get(rune) int
 }
 
 // Buffer is ReadLine's internal data structure

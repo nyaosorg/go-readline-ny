@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/coloring"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 			print("  0123456789ABCDEF\n$ ")
 			return 2, nil
 		},
-		Coloring: new(readline.VimBatchColor),
+		Coloring: &coloring.VimBatch{},
 	}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {
