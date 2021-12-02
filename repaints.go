@@ -1,5 +1,9 @@
 package readline
 
+import (
+	"unicode/utf8"
+)
+
 type _MonoChrome struct{}
 
 func (_MonoChrome) Init() {}
@@ -19,7 +23,7 @@ func (buf *Buffer) RefreshColor() {
 		if codepoint, ok := moji2rune(cell.Moji); ok {
 			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(codepoint))
 		} else {
-			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(' '))
+			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(utf8.RuneError))
 		}
 		position += int16(cell.Moji.Width())
 	}
