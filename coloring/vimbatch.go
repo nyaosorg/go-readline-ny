@@ -17,7 +17,7 @@ const (
 	quotedArea = 2
 )
 
-func (s *VimBatch) Get(codepoint rune) int {
+func (s *VimBatch) Next(codepoint rune) int {
 	newbits := s.bits
 	if codepoint == '%' {
 		newbits ^= envArea

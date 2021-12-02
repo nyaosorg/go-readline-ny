@@ -35,7 +35,7 @@ type _Cell struct {
 
 type Coloring interface {
 	Init()
-	Get(rune) int
+	Next(rune) int
 }
 
 // Buffer is ReadLine's internal data structure
