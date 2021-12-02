@@ -16,8 +16,8 @@ func (buf *Buffer) RefreshColor() {
 	position := int16(0)
 	for i, cell := range buf.Buffer {
 		buf.Buffer[i].position = position
-		if codepoint, ok := cell.Moji.(_RawCodePoint); ok {
-			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(rune(codepoint)))
+		if codepoint, ok := moji2rune(cell.Moji); ok {
+			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(codepoint))
 		} else {
 			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Get(' '))
 		}
