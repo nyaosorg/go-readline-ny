@@ -19,18 +19,27 @@ func (B *Buffer) eraseline() {
 
 type _Range []_Cell
 
+func putColor(w io.Writer, c _PackedColorCode) {
+	ofs := "\x1B["
+	for ; c > 0; c >>= 8 {
+		fmt.Fprintf(w, "%s%d", ofs, c&0xFF)
+		ofs = ";"
+	}
+	w.Write([]byte{'m'})
+}
+
 func (B *Buffer) puts(s []_Cell) _Range {
 	B.RefreshColor()
 	color := _PackedColorCode(White)
 	for _, ch := range s {
 		if ch.color != color {
 			color = ch.color
-			fmt.Fprintf(B.Out, "\x1B[%d;1m", color)
+			putColor(B.Out, color)
 		}
 		ch.Moji.PrintTo(B.Out)
 	}
 	if color != White {
-		io.WriteString(B.Out, "\x1B[37;1m")
+		putColor(B.Out, White)
 	}
 	return _Range(s)
 }

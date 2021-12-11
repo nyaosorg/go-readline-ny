@@ -15,7 +15,7 @@ type _Undo struct {
 }
 
 const (
-	Black = 30 + iota
+	Black = (1 << 16) + (40 << 8) + 30 + iota
 	Red
 	Green
 	Yellow
@@ -25,7 +25,18 @@ const (
 	White
 )
 
-type _PackedColorCode int16
+const (
+	DarkGray = (22 << 16) + (40 << 8) + 30 + iota
+	DarkRed
+	DarkGree
+	DarkYellow
+	DarkBlue
+	DarkMagenta
+	DarkCyan
+	DarkWhite
+)
+
+type _PackedColorCode int32
 
 type _Cell struct {
 	Moji     Moji
