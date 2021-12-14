@@ -19,10 +19,31 @@ func (B *Buffer) eraseline() {
 
 type _Range []_Cell
 
+const (
+	colorCodeBitSize = 8
+	colorCodeMask    = (1<<colorCodeBitSize - 1)
+)
+
+func SGR1(n1 int) int     { return n1 }
+func SGR2(n1, n2 int) int { return n1 | (n2 << colorCodeBitSize) }
+
+func SGR3(n1, n2, n3 int) int {
+	return n1 |
+		(n2 << colorCodeBitSize) |
+		(n3 << (colorCodeBitSize * 2))
+}
+
+func SGR4(n1, n2, n3, n4 int) int {
+	return n1 |
+		(n2 << colorCodeBitSize) |
+		(n3 << (colorCodeBitSize * 2)) |
+		(n4 << (colorCodeBitSize * 3))
+}
+
 func putColor(w io.Writer, c _PackedColorCode) {
 	ofs := "\x1B["
-	for ; c > 0; c >>= 8 {
-		fmt.Fprintf(w, "%s%d", ofs, c&0xFF)
+	for ; c > 0; c >>= colorCodeBitSize {
+		fmt.Fprintf(w, "%s%d", ofs, c&colorCodeMask)
 		ofs = ";"
 	}
 	w.Write([]byte{'m'})

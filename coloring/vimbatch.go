@@ -26,7 +26,7 @@ func (s *VimBatch) Next(codepoint rune) int {
 	}
 	color := readline.White
 	if codepoint == '\u3000' {
-		color = 37 | (22 << 8) | (41 << 16)
+		color = readline.SGR3(37, 22, 41)
 	} else if ((s.bits | newbits) & envArea) != 0 {
 		color = readline.Cyan
 	} else if ((s.bits | newbits) & quotedArea) != 0 {
