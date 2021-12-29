@@ -21,10 +21,11 @@ func main() {
 	history := simplehistory.New()
 
 	editor := readline.Editor{
-		Prompt:   func() (int, error) { return fmt.Print("$ ") },
-		Writer:   colorable.NewColorableStdout(),
-		History:  history,
-		Coloring: &coloring.VimBatch{},
+		Prompt:         func() (int, error) { return fmt.Print("$ ") },
+		Writer:         colorable.NewColorableStdout(),
+		History:        history,
+		Coloring:       &coloring.VimBatch{},
+		HistoryCycling: true,
 	}
 	fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
 	for {

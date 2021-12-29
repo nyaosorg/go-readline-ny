@@ -29,15 +29,16 @@ type KeyMap struct {
 // Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
-	History       IHistory
-	Writer        io.Writer
-	Out           *bufio.Writer
-	Prompt        func() (int, error)
-	Default       string
-	Cursor        int
-	LineFeed      func(Result)
-	OpenKeyGetter func() (KeyGetter, error)
-	Coloring      Coloring
+	History        IHistory
+	Writer         io.Writer
+	Out            *bufio.Writer
+	Prompt         func() (int, error)
+	Default        string
+	Cursor         int
+	LineFeed       func(Result)
+	OpenKeyGetter  func() (KeyGetter, error)
+	Coloring       Coloring
+	HistoryCycling bool
 }
 
 func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
@@ -45,6 +46,9 @@ func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 		return CONTINUE
 	}
 	if this.historyPointer <= 0 {
+		if ! this.HistoryCycling {
+			return CONTINUE
+		}
 		this.historyPointer = this.History.Len()
 	}
 	this.historyPointer--
