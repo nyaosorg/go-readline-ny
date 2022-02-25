@@ -15,7 +15,7 @@ type _Undo struct {
 }
 
 const (
-	Black = (1 << (colorCodeBitSize * 2)) + (40 << colorCodeBitSize) + 30 + iota
+	Black = (1 << (colorCodeBitSize * 2)) + (49 << colorCodeBitSize) + 30 + iota
 	Red
 	Green
 	Yellow
@@ -23,10 +23,12 @@ const (
 	Magenta
 	Cyan
 	White
+	_
+	DefaultForeGroundColor
 )
 
 const (
-	DarkGray = (22 << (colorCodeBitSize * 2)) + (40 << colorCodeBitSize) + 30 + iota
+	DarkGray = (22 << (colorCodeBitSize * 2)) + (49 << colorCodeBitSize) + 30 + iota
 	DarkRed
 	DarkGree
 	DarkYellow
