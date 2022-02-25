@@ -6,17 +6,19 @@ import (
 
 type _MonoChrome struct{}
 
-func (_MonoChrome) Init() {}
+func (_MonoChrome) Init() int {
+	return White
+}
 
 func (_MonoChrome) Next(rune) int {
 	return White
 }
 
-func (buf *Buffer) RefreshColor() {
+func (buf *Buffer) RefreshColor() int {
 	if buf.Coloring == nil {
 		buf.Coloring = _MonoChrome{}
 	}
-	buf.Coloring.Init()
+	defaultColor := buf.Coloring.Init()
 	position := int16(0)
 	for i, cell := range buf.Buffer {
 		buf.Buffer[i].position = position
@@ -27,6 +29,7 @@ func (buf *Buffer) RefreshColor() {
 		}
 		position += int16(cell.Moji.Width())
 	}
+	return defaultColor
 }
 
 // InsertAndRepaint inserts str and repaint the editline.

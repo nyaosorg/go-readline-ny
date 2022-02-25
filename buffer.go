@@ -47,7 +47,9 @@ type _Cell struct {
 }
 
 type Coloring interface {
-	Init()
+	// Reset has to initialize receiver's fields and return default color.
+	Init() int
+	// Next has to return color for the given rune.
 	Next(rune) int
 }
 

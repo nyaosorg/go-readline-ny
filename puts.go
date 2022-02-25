@@ -50,8 +50,8 @@ func putColor(w io.Writer, c _PackedColorCode) {
 }
 
 func (B *Buffer) puts(s []_Cell) _Range {
-	B.RefreshColor()
-	color := _PackedColorCode(White)
+	defaultColor := _PackedColorCode(B.RefreshColor())
+	color := defaultColor
 	for _, ch := range s {
 		if ch.color != color {
 			color = ch.color
@@ -59,8 +59,8 @@ func (B *Buffer) puts(s []_Cell) _Range {
 		}
 		ch.Moji.PrintTo(B.Out)
 	}
-	if color != White {
-		putColor(B.Out, White)
+	if color != defaultColor {
+		putColor(B.Out, defaultColor)
 	}
 	return _Range(s)
 }

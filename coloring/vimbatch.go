@@ -8,8 +8,9 @@ type VimBatch struct {
 	bits int
 }
 
-func (s *VimBatch) Init() {
+func (s *VimBatch) Init() int {
 	s.bits = 0
+	return readline.White
 }
 
 const (
