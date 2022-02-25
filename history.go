@@ -46,7 +46,7 @@ func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 		return CONTINUE
 	}
 	if this.historyPointer <= 0 {
-		if ! this.HistoryCycling {
+		if !this.HistoryCycling {
 			return CONTINUE
 		}
 		this.historyPointer = this.History.Len()
