@@ -41,6 +41,9 @@ func SGR4(n1, n2, n3, n4 int) int {
 }
 
 func putColor(w io.Writer, c _PackedColorCode) {
+	if c < 0 {
+		return
+	}
 	ofs := "\x1B["
 	for ; c > 0; c >>= colorCodeBitSize {
 		fmt.Fprintf(w, "%s%d", ofs, c&colorCodeMask)
