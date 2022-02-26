@@ -12,11 +12,12 @@ import (
 
 var isVsCodeTerminal = os.Getenv("VSCODE_PID") != ""
 var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != "" && !isVsCodeTerminal
+var isWezTerm = os.Getenv("WEZTERM_EXECUTABLE") != ""
 
 var (
 	// SurrogatePairOk is true when the surrogated pair unicode is supported
 	// If it is false, <NNNN> is displayed instead.
-	SurrogatePairOk = isWindowsTerminal
+	SurrogatePairOk = isWindowsTerminal || isWezTerm
 
 	// ZeroWidthJoinSequenceOk is true when ZWJ(U+200D) is supported.
 	// If it is false, <NNNN> is displayed instead.
