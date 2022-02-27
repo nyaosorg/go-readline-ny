@@ -12,7 +12,7 @@ import (
 
 var isVsCodeTerminal = os.Getenv("VSCODE_PID") != ""
 var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != "" && !isVsCodeTerminal
-var isWezTerm = os.Getenv("WEZTERM_EXECUTABLE") != ""
+var isWezTerm = os.Getenv("TERM_PROGRAM") == "WezTerm"
 var isContour = os.Getenv("TERMINAL_NAME") == "contour"
 
 var (
@@ -22,15 +22,15 @@ var (
 
 	// ZeroWidthJoinSequenceOk is true when ZWJ(U+200D) is supported.
 	// If it is false, <NNNN> is displayed instead.
-	ZeroWidthJoinSequenceOk = isWindowsTerminal || isContour
+	ZeroWidthJoinSequenceOk = isWindowsTerminal || isWezTerm || isContour
 
 	// VariationSequenceOk is true when Variation Sequences are supported.
 	// If it is false, <NNNN> is displayed instead.
-	VariationSequenceOk = isWindowsTerminal || isContour
+	VariationSequenceOk = isWindowsTerminal || isWezTerm || isContour
 
 	// ModifierSequenceOk is false, SkinTone sequence are treated as two
 	// character
-	ModifierSequenceOk = isWindowsTerminal
+	ModifierSequenceOk = isWindowsTerminal || isWezTerm
 )
 
 var wtRuneWidth *runewidth.Condition
