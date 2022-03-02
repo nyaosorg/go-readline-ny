@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"fmt"
 	"unicode/utf8"
 )
 
@@ -39,8 +40,8 @@ func (buf *Buffer) InsertAndRepaint(str string) {
 
 // GotoHead move screen-cursor to the top of the viewarea.
 // It should be called before text is changed.
-func (buf *Buffer) GotoHead() {
-	buf.backspace(_Range(buf.Buffer[buf.ViewStart:buf.Cursor]).Width())
+func (B *Buffer) GotoHead() {
+	fmt.Fprintf(B, "\x1B[%dG", B.topColumn+1)
 }
 
 // DrawFromHead draw all text in viewarea and
