@@ -99,14 +99,14 @@ func keyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 		} else {
 			this.ViewStart = this.Cursor
 		}
-		this.Repaint(this.Cursor, delw)
+		this.repaintAfter(this.Cursor)
 	}
 	return CONTINUE
 }
 
 func keyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
-	delw := this.Delete(this.Cursor, 1)
-	this.Repaint(this.Cursor, delw)
+	this.Delete(this.Cursor, 1)
+	this.repaintAfter(this.Cursor)
 	return CONTINUE
 }
 
@@ -154,8 +154,9 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		this.ResetViewStart()
 		this.DrawFromHead()
 	} else {
-		this.Repaint(this.Cursor, -w1)
+		this.puts(this.Buffer[this.Cursor : this.Cursor+lenMoji])
 		this.Cursor += lenMoji
+		this.repaintAfter(this.Cursor)
 	}
 	return CONTINUE
 }
@@ -198,7 +199,7 @@ func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	this.Cursor = newCursorPos
 	if newCursorPos-this.ViewStart >= 2 {
 		this.backspace(keta)
-		this.Repaint(newCursorPos, keta)
+		this.repaintAfter(newCursorPos)
 	} else {
 		this.backspace(this.GetWidthBetween(this.ViewStart, orgCursorPos))
 		this.RepaintAfterPrompt()

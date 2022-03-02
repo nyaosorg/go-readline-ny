@@ -74,24 +74,19 @@ func (buf *Buffer) ReplaceAndRepaint(pos int, str string) {
 }
 
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
-func (buf *Buffer) Repaint(pos int, del WidthT) {
-	view := buf.view()
-	bs := buf.puts(view[pos-buf.ViewStart:]).Width()
+func (B *Buffer) repaintAfter(pos int) {
+	view := B.view()
+	bs := B.puts(view[pos-B.ViewStart:]).Width()
 
-	buf.eraseline()
-	if del > 0 {
-		buf.backspace(bs)
-	} else {
-		// for readline_keyfunc.go: KeyFuncInsertSelf()
-		buf.backspace(bs + del)
-	}
+	B.eraseline()
+	B.backspace(bs)
 }
 
 // RepaintAfterPrompt repaints the all characters in the editline except for prompt.
 func (buf *Buffer) RepaintAfterPrompt() {
 	buf.ResetViewStart()
 	buf.puts(buf.Buffer[buf.ViewStart:buf.Cursor])
-	buf.Repaint(buf.Cursor, 0)
+	buf.repaintAfter(buf.Cursor)
 }
 
 // RepaintAll repaints the all characters in the editline including prompt.
