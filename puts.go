@@ -52,6 +52,10 @@ func putColor(w io.Writer, c _PackedColorCode) {
 	w.Write([]byte{'m'})
 }
 
+func (B *Buffer) Write(b []byte) (int, error) {
+	return B.Out.Write(b)
+}
+
 func (B *Buffer) puts(s []_Cell) _Range {
 	defaultColor := _PackedColorCode(B.RefreshColor())
 	color := defaultColor
