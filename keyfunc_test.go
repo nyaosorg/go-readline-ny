@@ -11,7 +11,7 @@ import (
 
 const f = "\U0001F468\u200D\U0001F33E"
 
-func tryAll(t *testing.T, texts ...string) (string, string) {
+func tryAll(t *testing.T, texts ...string) (string, []string) {
 	var buffer strings.Builder
 	editor := readline.Editor{
 		OpenKeyGetter: dummyin.New(texts...),
@@ -21,15 +21,29 @@ func tryAll(t *testing.T, texts ...string) (string, string) {
 	result, err := editor.ReadLine(context.Background())
 	if err != nil {
 		t.Fatalf("ERR=%s", err.Error())
-		return "", buffer.String()
+		return "", nil
 	}
-	return result, buffer.String()
+
+	outputPieces := strings.Split(buffer.String(), "\x1B[?25h\x1B[?25l")
+	for i, s := range outputPieces {
+		s = strings.ReplaceAll(s, "\x1B[?25h", "")
+		s = strings.ReplaceAll(s, "\x1B[?25l", "")
+		s = strings.ReplaceAll(s, "\u200D", "<ZWJ>")
+		s = strings.ReplaceAll(s, "\x1B", "<ESC>")
+		outputPieces[i] = s
+	}
+	return result, outputPieces
 }
 
 func TestKeyFuncBackSpace(t *testing.T) {
-	result, _ := tryAll(t, f, f, f, f, f, "\b", "\b", "x")
-	if result != f+f+f+"x" {
+	result, outputs := tryAll(t, f, "\b", "x")
+	if result != "x" {
 		t.Fatalf("TEXT=%s", result)
 		return
+	}
+	if false {
+		for _, o := range outputs {
+			println(o)
+		}
 	}
 }
