@@ -84,10 +84,10 @@ func (B *Buffer) view() _Range {
 	return _Range(view)
 }
 
-func (B *Buffer) view3() (_Range, _Range, _Range) {
+func (B *Buffer) view2() (all _Range, before _Range) {
 	v := B.view()
 	x := B.Cursor - B.ViewStart
-	return v, v[:x], v[x:]
+	return v, v[:x]
 }
 
 func (B *Buffer) insert(csrPos int, insStr []_Cell) {

@@ -5,14 +5,6 @@ import (
 	"io"
 )
 
-func (B *Buffer) backspace(n WidthT) {
-	if n > 1 {
-		fmt.Fprintf(B.Out, "\x1B[%dD", n)
-	} else if n == 1 {
-		B.Out.WriteByte('\b')
-	}
-}
-
 func (B *Buffer) eraseline() {
 	io.WriteString(B.Out, "\x1B[0K")
 }

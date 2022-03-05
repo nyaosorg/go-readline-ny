@@ -18,7 +18,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	foundStr := ""
 	searchStr := ""
 	lastFoundPos := this.History.Len() - 1
-	this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.GotoHead()
 
 	update := func() {
 		for i := this.History.Len() - 1; ; i-- {
@@ -54,7 +54,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			return CONTINUE
 		}
 		io.WriteString(this.Out, ansiCursorOff)
-		this.backspace(drawWidth)
+		this.GotoHead()
 		switch key {
 		case "\b":
 			searchBuf.Reset()
@@ -80,10 +80,11 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
 		case "\x03", "\x07", "\x1B":
-			all, _, right := this.view3()
+			all, left := this.view2()
 			this.puts(all)
 			this.eraseline()
-			this.backspace(right.Width())
+			this.GotoHead()
+			this.puts(left)
 			return CONTINUE
 		case "\x12":
 			for i := lastFoundPos - 1; ; i-- {

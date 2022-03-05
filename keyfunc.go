@@ -37,7 +37,8 @@ func keyFuncBackward(ctx context.Context, this *Buffer) Result { // Ctrl-B
 		this.ViewStart--
 		this.DrawFromHead()
 	} else {
-		this.backspace(this.Buffer[this.Cursor].Moji.Width())
+		this.GotoHead()
+		this.puts(this.Buffer[this.ViewStart:this.Cursor])
 	}
 	return CONTINUE
 }
@@ -48,7 +49,7 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 		this.puts(this.Buffer[this.Cursor:])
 		this.Cursor = len(this.Buffer)
 	} else {
-		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+		this.GotoHead()
 		this.ViewStart = len(this.Buffer) - 1
 		w := this.Buffer[this.ViewStart].Moji.Width()
 		for {
@@ -93,9 +94,10 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 func keyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 	if this.Cursor > 0 {
 		this.Cursor--
-		delw := this.Delete(this.Cursor, 1)
+		this.Delete(this.Cursor, 1)
 		if this.Cursor >= this.ViewStart {
-			this.backspace(delw)
+			this.GotoHead()
+			this.puts(this.Buffer[this.ViewStart:this.Cursor])
 		} else {
 			this.ViewStart = this.Cursor
 		}
@@ -149,7 +151,6 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	w1 := mojis.Width()
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
-		this.GotoHead()
 		this.Cursor += lenMoji
 		this.ResetViewStart()
 		this.DrawFromHead()
@@ -195,20 +196,20 @@ func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	}
 	newCursorPos := this.CurrentWordTop()
 	clipboard.WriteAll(this.SubString(newCursorPos, orgCursorPos))
-	keta := this.Delete(newCursorPos, orgCursorPos-newCursorPos)
+	this.Delete(newCursorPos, orgCursorPos-newCursorPos)
 	this.Cursor = newCursorPos
 	if newCursorPos-this.ViewStart >= 2 {
-		this.backspace(keta)
+		this.GotoHead()
+		this.puts(this.Buffer[this.ViewStart:this.Cursor])
 		this.repaintAfter(newCursorPos)
 	} else {
-		this.backspace(this.GetWidthBetween(this.ViewStart, orgCursorPos))
+		this.GotoHead()
 		this.RepaintAfterPrompt()
 	}
 	return CONTINUE
 }
 
 func keyFuncClearBefore(ctx context.Context, this *Buffer) Result {
-	this.GotoHead()
 	clipboard.WriteAll(this.SubString(0, this.Cursor))
 	this.Delete(0, this.Cursor)
 	this.Cursor = 0
@@ -265,13 +266,6 @@ func keyFuncPasteQuote(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func maxInt(a, b int) int {
-	if a < b {
-		return b
-	}
-	return a
-}
-
 func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 	if len(this.Buffer) == this.Cursor {
 		if this.Cursor < 2 {
@@ -285,9 +279,8 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		this.undoes = append(this.undoes, u)
 		this.Buffer[this.Cursor-2], this.Buffer[this.Cursor-1] = this.Buffer[this.Cursor-1], this.Buffer[this.Cursor-2]
 
-		redrawStart := maxInt(this.Cursor-2, this.ViewStart)
-		this.backspace(this.GetWidthBetween(redrawStart, this.Cursor))
-		this.puts(this.Buffer[redrawStart:this.Cursor])
+		this.GotoHead()
+		this.puts(this.Buffer[this.ViewStart:this.Cursor])
 	} else {
 		if this.Cursor < 1 {
 			return CONTINUE
@@ -301,19 +294,12 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 
 		w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
+		this.GotoHead()
 		if w >= this.ViewWidth() {
-			// cursor move right and scroll
-			_w1 := w - this.Buffer[this.Cursor].Moji.Width()
-			this.backspace(_w1)
 			this.ViewStart++
-			this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
-		} else {
-			// no necessary to scroll
-			redrawStart := maxInt(this.Cursor-1, this.ViewStart)
-			this.backspace(this.GetWidthBetween(redrawStart, this.Cursor))
-			this.puts(this.Buffer[redrawStart : this.Cursor+1])
 		}
 		this.Cursor++
+		this.puts(this.Buffer[this.ViewStart:this.Cursor])
 	}
 	return CONTINUE
 }
@@ -326,16 +312,11 @@ func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 	for newPos > 0 && !isSpaceMoji(this.Buffer[newPos-1].Moji) {
 		newPos--
 	}
-	if newPos >= this.ViewStart {
-		w := this.GetWidthBetween(newPos, this.Cursor)
-		this.backspace(w)
-		this.Cursor = newPos
-	} else {
-		this.GotoHead()
-		this.Cursor = newPos
+	if newPos < this.ViewStart {
 		this.ViewStart = newPos
-		this.DrawFromHead()
 	}
+	this.Cursor = newPos
+	this.DrawFromHead()
 	return CONTINUE
 }
 

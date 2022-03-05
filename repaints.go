@@ -48,12 +48,14 @@ func (B *Buffer) GotoHead() {
 // move screen-cursor to the position where it should be.
 func (buf *Buffer) DrawFromHead() {
 	// Repaint
-	view, _, right := buf.view3()
+	buf.GotoHead()
+	view, left := buf.view2()
 	buf.puts(view)
 
 	// Move to cursor position
 	buf.eraseline()
-	buf.backspace(right.Width())
+	buf.GotoHead()
+	buf.puts(left)
 }
 
 // ReplaceAndRepaint replaces the string between `pos` and cursor's position to `str`
@@ -76,10 +78,11 @@ func (buf *Buffer) ReplaceAndRepaint(pos int, str string) {
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
 func (B *Buffer) repaintAfter(pos int) {
 	view := B.view()
-	bs := B.puts(view[pos-B.ViewStart:]).Width()
+	B.puts(view[pos-B.ViewStart:])
 
 	B.eraseline()
-	B.backspace(bs)
+	B.GotoHead()
+	B.puts(B.Buffer[B.ViewStart:pos])
 }
 
 // RepaintAfterPrompt repaints the all characters in the editline except for prompt.
