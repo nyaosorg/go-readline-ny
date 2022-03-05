@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"fmt"
 	"strings"
 	"unicode"
 )
@@ -248,7 +247,6 @@ func (B *Buffer) startChangeWidthEventLoop(_lastw int, getResizeEvent func() (in
 			if lastw != w {
 				mu.Lock()
 				B.termWidth = w
-				fmt.Fprintf(B.Out, "\x1B[%dG", B.topColumn+1)
 				B.RepaintAfterPrompt()
 				mu.Unlock()
 				lastw = w

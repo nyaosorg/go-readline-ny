@@ -44,57 +44,42 @@ func (B *Buffer) GotoHead() {
 	fmt.Fprintf(B, "\x1B[%dG", B.topColumn+1)
 }
 
+func (B *Buffer) repaint() {
+	all, left := B.view2()
+	B.GotoHead()
+	B.puts(all)
+	B.eraseline()
+	B.GotoHead()
+	B.puts(left)
+}
+
 // DrawFromHead draw all text in viewarea and
 // move screen-cursor to the position where it should be.
-func (buf *Buffer) DrawFromHead() {
-	// Repaint
-	buf.GotoHead()
-	view, left := buf.view2()
-	buf.puts(view)
-
-	// Move to cursor position
-	buf.eraseline()
-	buf.GotoHead()
-	buf.puts(left)
+func (B *Buffer) DrawFromHead() {
+	B.repaint()
 }
 
 // ReplaceAndRepaint replaces the string between `pos` and cursor's position to `str`
 func (buf *Buffer) ReplaceAndRepaint(pos int, str string) {
-	buf.GotoHead()
-
 	// Replace Buffer
 	buf.Delete(pos, buf.Cursor-pos)
 
 	// Define ViewStart , Cursor
 	buf.Cursor = pos + buf.InsertString(pos, str)
-
 	buf.joinUndo() // merge delete and insert
-
 	buf.ResetViewStart()
-
-	buf.DrawFromHead()
-}
-
-// Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
-func (B *Buffer) repaintAfter(pos int) {
-	view := B.view()
-	B.puts(view[pos-B.ViewStart:])
-
-	B.eraseline()
-	B.GotoHead()
-	B.puts(B.Buffer[B.ViewStart:pos])
+	buf.repaint()
 }
 
 // RepaintAfterPrompt repaints the all characters in the editline except for prompt.
-func (buf *Buffer) RepaintAfterPrompt() {
-	buf.ResetViewStart()
-	buf.puts(buf.Buffer[buf.ViewStart:buf.Cursor])
-	buf.repaintAfter(buf.Cursor)
+func (B *Buffer) RepaintAfterPrompt() {
+	B.ResetViewStart()
+	B.repaint()
 }
 
 // RepaintAll repaints the all characters in the editline including prompt.
-func (buf *Buffer) RepaintAll() {
-	buf.Out.Flush()
-	buf.topColumn, _ = buf.Prompt()
-	buf.RepaintAfterPrompt()
+func (B *Buffer) RepaintAll() {
+	B.Out.Flush()
+	B.topColumn, _ = B.Prompt()
+	B.repaint()
 }
