@@ -167,7 +167,7 @@ func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 
 const (
 	ansiCursorOff = "\x1B[?25l"
-	ansiCursorOn  = "\x1B[?25h\x1B[s\x1B[u"
+	ansiCursorOn  = "\x1B[?25h"
 )
 
 // CtrlC is the error when Ctrl-C is pressed.
