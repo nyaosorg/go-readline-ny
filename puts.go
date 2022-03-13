@@ -40,16 +40,23 @@ func SGR4(n1, n2, n3, n4 int) int {
 		(n4 << (colorCodeBitSize * 3))
 }
 
-func putColor(w io.Writer, c _PackedColorCode) {
+func (c _PackedColorCode) WriteTo(w io.Writer) (int64, error) {
 	if c < 0 {
-		return
+		return 0, nil
 	}
 	ofs := "\x1B["
+	n := int64(0)
 	for ; c > 0; c >>= colorCodeBitSize {
-		fmt.Fprintf(w, "%s%d", ofs, c&colorCodeMask)
+		_n, err := fmt.Fprintf(w, "%s%d", ofs, c&colorCodeMask)
+		n += int64(_n)
+		if err != nil {
+			return n, err
+		}
 		ofs = ";"
 	}
-	w.Write([]byte{'m'})
+	_n, err := w.Write([]byte{'m'})
+	n += int64(_n)
+	return n, err
 }
 
 func (B *Buffer) Write(b []byte) (int, error) {
@@ -62,12 +69,12 @@ func (B *Buffer) puts(s []_Cell) _Range {
 	for _, ch := range s {
 		if ch.color != color {
 			color = ch.color
-			putColor(B.Out, color)
+			color.WriteTo(B.Out)
 		}
 		ch.Moji.PrintTo(B.Out)
 	}
 	if color != defaultColor {
-		putColor(B.Out, defaultColor)
+		defaultColor.WriteTo(B.Out)
 	}
 	return _Range(s)
 }
