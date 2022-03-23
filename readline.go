@@ -167,7 +167,10 @@ func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
 
 const (
 	ansiCursorOff = "\x1B[?25l"
-	ansiCursorOn  = "\x1B[?25h"
+
+	// On Windows 8.1, the cursor is not shown immediately
+	// without SetConsoleCursorPosition by `ESC[u`
+	ansiCursorOn = "\x1B[?25h\x1B[s\x1B[u"
 )
 
 // CtrlC is the error when Ctrl-C is pressed.
