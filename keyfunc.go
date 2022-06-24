@@ -62,6 +62,7 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 		this.puts(this.Buffer[this.ViewStart:])
 		this.Cursor = len(this.Buffer)
 	}
+	this.eraseline()
 	return CONTINUE
 }
 
