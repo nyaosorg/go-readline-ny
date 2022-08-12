@@ -1,3 +1,9 @@
+v0.8.2
+======
+12,Aug. 2022
+
+- Reset color before printing the first character
+
 v0.8.1
 ======
 25,Jun. 2022
