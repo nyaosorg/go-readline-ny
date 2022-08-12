@@ -1,3 +1,5 @@
+- Sample color: vimbatch: change foreground color ESC[37m to ESC[39m
+
 v0.8.2
 ======
 12,Aug. 2022
