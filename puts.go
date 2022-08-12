@@ -57,7 +57,7 @@ func (B *Buffer) Write(b []byte) (int, error) {
 
 func (B *Buffer) puts(s []_Cell) _Range {
 	defaultColor := _PackedColorCode(B.RefreshColor())
-	color := defaultColor
+	color := _PackedColorCode(-1)
 	for _, ch := range s {
 		if ch.color != color {
 			color = ch.color
