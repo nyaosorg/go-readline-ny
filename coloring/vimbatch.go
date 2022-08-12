@@ -10,7 +10,7 @@ type VimBatch struct {
 
 func (s *VimBatch) Init() int {
 	s.bits = 0
-	return readline.White
+	return readline.DefaultForeGroundColor
 }
 
 const (
@@ -25,7 +25,7 @@ func (s *VimBatch) Next(codepoint rune) int {
 	} else if codepoint == '"' {
 		newbits ^= quotedArea
 	}
-	color := readline.White
+	color := readline.DefaultForeGroundColor
 	if codepoint == '\u3000' {
 		color = readline.SGR3(37, 22, 41)
 	} else if ((s.bits | newbits) & envArea) != 0 {
@@ -35,7 +35,7 @@ func (s *VimBatch) Next(codepoint rune) int {
 	} else if codepoint == '&' {
 		color = readline.DarkYellow
 	} else {
-		color = readline.White
+		color = readline.DefaultForeGroundColor
 	}
 	s.bits = newbits
 	return color
