@@ -8,11 +8,11 @@ import (
 type _MonoChrome struct{}
 
 func (_MonoChrome) Init() int {
-	return White
+	return DefaultForeGroundColor
 }
 
 func (_MonoChrome) Next(rune) int {
-	return White
+	return DefaultForeGroundColor
 }
 
 func (buf *Buffer) RefreshColor() int {
