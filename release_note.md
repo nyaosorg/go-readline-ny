@@ -1,3 +1,7 @@
+v0.8.3
+======
+24,Sep. 2022 ( Used in nyagos-4.4.13\_0 )
+
 - Sample color: vimbatch: change foreground color ESC[37m to ESC[39m
 
 v0.8.2
