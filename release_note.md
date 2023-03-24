@@ -1,3 +1,9 @@
+v0.8.4
+======
+25.Mar. 2023
+
+- Fix: GetBindkey returned nil when key is in default state
+
 v0.8.3
 ======
 24,Sep. 2022 ( Used in nyagos-4.4.13\_0 )
