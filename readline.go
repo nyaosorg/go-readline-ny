@@ -137,7 +137,7 @@ func (editor *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffe
 func (editor *Editor) GetBindKey(key string) KeyFuncT {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
-		return getKeyFunction(editor, char)
+		return editor.getKeyFunction(char)
 	}
 	return nil
 }
@@ -173,7 +173,7 @@ var CtrlC = (errors.New("^C"))
 
 var mu sync.Mutex
 
-func getKeyFunction(editor *Editor, key1 string) KeyFuncT {
+func (editor *Editor) getKeyFunction(key1 string) KeyFuncT {
 	if editor.KeyMap.KeyMap != nil {
 		if f, ok := editor.KeyMap.KeyMap[key1]; ok {
 			return f
@@ -280,7 +280,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		mu.Lock()
 
-		f := getKeyFunction(editor, key1)
+		f := editor.getKeyFunction(key1)
 
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
 			io.WriteString(buffer.Out, ansiCursorOff)
