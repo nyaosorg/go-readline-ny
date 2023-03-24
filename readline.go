@@ -134,15 +134,10 @@ func (editor *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffe
 }
 
 // GetBindKey returns the function assigned to given key
-func (editor *KeyMap) GetBindKey(key string) KeyFuncT {
+func (editor *Editor) GetBindKey(key string) KeyFuncT {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
-		if editor.KeyMap != nil {
-			if f, ok := editor.KeyMap[char]; ok {
-				return f
-			}
-		}
-		return editor.KeyMap[char]
+		return getKeyFunction(editor, char)
 	}
 	return nil
 }
