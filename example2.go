@@ -1,5 +1,4 @@
 //go:build run
-// +build run
 
 package main
 
@@ -20,7 +19,7 @@ import (
 func main() {
 	history := simplehistory.New()
 
-	editor := readline.Editor{
+	editor := &readline.Editor{
 		Prompt:         func() (int, error) { return fmt.Print("$ ") },
 		Writer:         colorable.NewColorableStdout(),
 		History:        history,

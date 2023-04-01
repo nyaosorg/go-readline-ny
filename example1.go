@@ -1,5 +1,4 @@
 //go:build run
-// +build run
 
 package main
 
@@ -11,7 +10,7 @@ import (
 )
 
 func main() {
-	editor := readline.Editor{}
+	var editor readline.Editor
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {
 		fmt.Printf("ERR=%s\n", err.Error())

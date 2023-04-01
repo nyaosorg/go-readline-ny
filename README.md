@@ -23,7 +23,7 @@ example1.go
 
 The most simple sample.
 
-```go
+```example1.go
 package main
 
 import (
@@ -34,7 +34,7 @@ import (
 )
 
 func main() {
-    editor := readline.Editor{}
+    var editor readline.Editor
     text, err := editor.ReadLine(context.Background())
     if err != nil {
         fmt.Printf("ERR=%s\n", err.Error())
@@ -51,7 +51,7 @@ example2.go
 
 Tiny Shell
 
-```go
+```example2.go
 package main
 
 import (
@@ -71,7 +71,7 @@ import (
 func main() {
     history := simplehistory.New()
 
-    editor := readline.Editor{
+    editor := &readline.Editor{
         Prompt:         func() (int, error) { return fmt.Print("$ ") },
         Writer:         colorable.NewColorableStdout(),
         History:        history,
