@@ -1,6 +1,14 @@
+v0.8.5
+======
+2,Apr 2023
+
+- Fix: imcompatibility on v0.8.4  
+  Restore the removed method `(*KeyMap)GetBindKey(string)`  
+  because v0.8.4 failed to link on nyagos
+
 v0.8.4
 ======
-25.Mar. 2023
+25,Mar 2023
 
 - Fix: GetBindkey returned nil when key is in default state
 
