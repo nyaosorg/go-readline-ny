@@ -9,7 +9,7 @@ func (B *Buffer) eraseline() {
 	io.WriteString(B.Out, "\x1B[0K")
 }
 
-type _Range []_Cell
+type _Range []Cell
 
 const (
 	colorCodeBitSize = 8
@@ -55,7 +55,7 @@ func (B *Buffer) Write(b []byte) (int, error) {
 	return B.Out.Write(b)
 }
 
-func (B *Buffer) puts(s []_Cell) _Range {
+func (B *Buffer) puts(s []Cell) _Range {
 	defaultColor := _PackedColorCode(B.RefreshColor())
 	color := _PackedColorCode(-1)
 	for _, ch := range s {
