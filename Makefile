@@ -7,6 +7,8 @@ else
     D=/
 endif
 
+.PHONY: all test
+
 all :
 	go fmt
 	go build
