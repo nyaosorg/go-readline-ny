@@ -1,3 +1,10 @@
+v0.9.0
+=======
+9,Apr 2023
+
+- Rename: `_Cell` (unexported type) to `Cell` (exported). A instance of Cell contains a set of code points (=`Moji`) and color information (unexported) for one gryph.
+- Rename: `string2moji`(unexported function) to `StringToMoji` (exported) that converts string to an array of `Moji`. A instance of `Moji` contains code points for one gryph.
+
 v0.8.5
 ======
 2,Apr 2023
