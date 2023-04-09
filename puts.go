@@ -36,6 +36,10 @@ func (c _PackedColorCode) WriteTo(w io.Writer) (int64, error) {
 	if c < 0 {
 		return 0, nil
 	}
+	if c == 0 {
+		siz, err := io.WriteString(w, "\x1B[0m")
+		return int64(siz), err
+	}
 	ofs := "\x1B["
 	n := int64(0)
 	for ; c > 0; c >>= colorCodeBitSize {
