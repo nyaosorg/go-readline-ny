@@ -26,7 +26,7 @@ func GetCharWidth(n rune) WidthT {
 // GetStringWidth returns the width of the string. [Deprecated]
 func GetStringWidth(s string) WidthT {
 	width := WidthT(0)
-	for _, m := range string2moji(s) {
+	for _, m := range StringToMoji(s) {
 		width += m.Width()
 	}
 	return width

@@ -10,7 +10,7 @@ const emojiRice = '\U0001F33E'
 const emojiManFarmer = string(emojiMan) + string(zeroWidthJoinRune) + string(emojiRice)
 
 func TestZeroWidthJoinSequenceWidth(t *testing.T) {
-	manFarmer := string2moji(emojiManFarmer)
+	manFarmer := StringToMoji(emojiManFarmer)
 
 	if w := manFarmer[0].Width(); w != 5 {
 		t.Fatalf("EmojiManFarmer's width is invalid (%d). It should be 5", w)
@@ -25,7 +25,7 @@ func TestCodePointPut(t *testing.T) {
 
 	source := "1\b\t\x7F\u908A\U000E0104"
 	expect := "1^H^I<7F>\u908A<E0104>"
-	mojis := string2moji(source)
+	mojis := StringToMoji(source)
 
 	var buffer strings.Builder
 	for _, c := range mojis {
@@ -33,7 +33,7 @@ func TestCodePointPut(t *testing.T) {
 	}
 	result := buffer.String()
 	if result != expect {
-		t.Fatalf("string2moji(%v)='%s' (expect '%s')", source, result, expect)
+		t.Fatalf("StringToMoji(%v)='%s' (expect '%s')", source, result, expect)
 	}
 
 	buffer.Reset()
@@ -42,7 +42,7 @@ func TestCodePointPut(t *testing.T) {
 	}
 	result = buffer.String()
 	if result != source {
-		t.Fatalf("string2moji(%v).WriteTo()='%s' (expect '%s')", source, result, source)
+		t.Fatalf("StringToMoji(%v).WriteTo()='%s' (expect '%s')", source, result, source)
 	}
 }
 
@@ -85,7 +85,7 @@ func TestString2Moji(t *testing.T) {
 
 	for _, p := range table {
 		// t.Logf("try %s", p.Title)
-		mojis := string2moji(p.Source)
+		mojis := StringToMoji(p.Source)
 
 		if result := len(mojis); result != p.Count {
 			t.Fatalf("Count of %s == %d (expect %d)",

@@ -46,7 +46,7 @@ func init() {
 //
 // When we make a new implement type of Moji,
 // we have to append the code in the function:
-// string2moji() and KeyFuncInsertSelf().
+// StringToMoji() and KeyFuncInsertSelf().
 type Moji interface {
 	Width() WidthT
 	WriteTo(io.Writer) (int64, error)
@@ -181,7 +181,7 @@ func areZeroWidthJoin(s string) bool {
 	return isZeroWidthJoin(r)
 }
 
-func string2moji(s string) []Moji {
+func StringToMoji(s string) []Moji {
 	runes := []rune(s)
 	mojis := make([]Moji, 0, len(runes))
 	for i := 0; i < len(runes); i++ {

@@ -340,7 +340,7 @@ func keyFuncUndo(ctx context.Context, this *Buffer) Result {
 		this.Buffer = this.Buffer[:len(this.Buffer)-u.del]
 	}
 	if u.text != "" {
-		t := mojis2cells(string2moji(u.text))
+		t := mojis2cells(StringToMoji(u.text))
 		// widen buffer
 		this.Buffer = append(this.Buffer, t...)
 		// make area

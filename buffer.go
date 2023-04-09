@@ -115,7 +115,7 @@ func mojis2cells(mojis []Moji) []Cell {
 }
 
 func (B *Buffer) insertString(pos int, s string) _Range {
-	list := mojis2cells(string2moji(s))
+	list := mojis2cells(StringToMoji(s))
 	B.insert(pos, list)
 	return _Range(list)
 }
