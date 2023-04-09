@@ -16,7 +16,7 @@ v0.8.3
 ======
 24,Sep. 2022 ( Used in nyagos-4.4.13\_0 )
 
-- Sample color: vimbatch: change foreground color ESC[37m to ESC[39m
+- Sample color: vimbatch: change foreground color `ESC[37m` to `ESC[39m`
 
 v0.8.2
 ======
@@ -36,14 +36,14 @@ v0.8.0
 
 - Enable surrogate-pair on WezTerm
 - Enable surrogate-pair, ZWJ,and VS on Contour Terminal
-- Do not use BACKSPACE(\b) as output
+- Do not use BACKSPACE(`\b`) as output
 
 v0.7.0
 ======
 26 Feb. 2022
 
 - Coloring.Init() has to return default colors (This interface's compatibility is broken)
-- Use ESC[49m (default bgcolor) instead of ESC[40m
+- Use `ESC[49m` (default bgcolor) instead of `ESC[40m`
 
 v0.6.3
 ======
