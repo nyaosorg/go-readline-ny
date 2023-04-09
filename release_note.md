@@ -1,3 +1,5 @@
+- Fix: a trash text 'm' was printed when Coloring.Init/Next returns 0
+
 v0.9.0
 =======
 9,Apr 2023
