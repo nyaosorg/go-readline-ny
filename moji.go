@@ -205,14 +205,6 @@ func StringToMoji(s string) []Moji {
 	return mojis
 }
 
-func moji2string(m []Moji) string {
-	var buffer strings.Builder
-	for _, m1 := range m {
-		m1.WriteTo(&buffer)
-	}
-	return buffer.String()
-}
-
 func cell2string(m []Cell) string {
 	var buffer strings.Builder
 	for _, m1 := range m {
