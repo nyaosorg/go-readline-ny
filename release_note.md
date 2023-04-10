@@ -1,4 +1,8 @@
-- Fix: a trash text 'm' was printed when Coloring.Init/Next returns 0
+v0.9.1
+======
+Apr 10, 2023
+
+- Fix: a trash text 'm' was printed when `Coloring.Init()` / `Next()` returns 0
 
 v0.9.0
 =======
