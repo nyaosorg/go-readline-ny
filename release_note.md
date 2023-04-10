@@ -99,3 +99,98 @@ v0.4.11
 Apr 14, 2021
 
 - Support Emoji Moifier Sequence (skin tone) : something with &x1F3FB;(U+1F3FB)～ &x1F3FF;(U+1F3FF)
+
+v0.4.10
+=======
+Apr 14, 2021
+
+- Fix the problem the keyup code is entered which was pressed before calling .ReadLine method
+
+v0.4.9
+=======
+Apr 14, 2021
+
+- Support RAINBOW FLAG (U+1F3F3 U+200D U+1F308 &#x1F3F3;&#x200D;&#x1F308;)
+
+v0.4.8
+=======
+Apr 14, 2021
+
+- WAVING WHITE FLAG and its variations (U+1F3F3 &amp; U+1F3F3 U+FE0F / &#x1F3F3; &amp; &#x1F3F3;&#xFE0F;)
+
+
+v0.4.7
+=======
+Apr 14, 2021
+
+- Support REGIONAL INDICATOR (U+1F1E6 "&#x1F1E6;"..U+1F1FF "&#x1F1FF;" )
+
+v0.4.6
+=======
+Feb 27, 2021
+
+- Support editing COMBINING ENCLOSING KEYCAP after Variation Selector (&#x0023;&#xFE0F;&#x20E3;) in WindowsTerminal
+
+v0.4.5
+=======
+Feb 27, 2021
+
+Variation Selector Sequence can include ZeroWidthJoinerSequence for Emoji:WOMAN FACEPALMING
+
+v0.4.4
+=======
+Feb 27, 2021
+
+Fix: the view was broken when ANYONE + C-b + MANFARMER(or any ZeroWidthJoin Sequence) not via clipboard
+
+v0.4.3
+=======
+Feb 17, 2021
+
+Fix: CIRCLED DIGITS (e.g. ①) could not be input in WindowsTerminal 1.5
+
+v0.4.2
+=======
+Feb 14, 2021
+
+- include forked go-tty into internal directory
+
+v0.4.1
+=======
+Feb 14, 2021
+
+- Use the forked version of go-tty permanetly
+
+v0.4.0
+=======
+Feb 11, 2021
+
+temporaly replace go-tty with forked version to support emoji in WindowsTerminal 1.5
+
+v0.3.0
+=======
+Jan 11, 2021
+
+Support Variation Selectors 
+
+See also
+-  [異体字セレクタ - Wikipedia](https://ja.wikipedia.org/wiki/%E7%95%B0%E4%BD%93%E5%AD%97%E3%82%BB%E3%83%AC%E3%82%AF%E3%82%BF)
+- [UTS #37: Unicode Ideographic Variation Database](https://www.unicode.org/reports/tr37/)
+
+v0.2.8
+=======
+Dec 13, 2020
+
+Fix for [入力した文字がプロンプトにめり込む状態で CTRL+W で文字を消していくと Panic をおこして nyagos が落ちます ・ Issue #396 ・ zetamatta/nyagos](https://github.com/zetamatta/nyagos/issues/396)
+
+v0.2.7
+=======
+Nov 20, 2020
+
+Use go-tty includingthe patch on [Fix: the first key after terminal-window activated was input twice. by zetamatta ・ Pull Request #40 ・ mattn/go-tty](https://github.com/mattn/go-tty/pull/40)
+
+v0.2.6
+=======
+Nov 15, 2020
+
+- Temporarily replace mattn/go-tty by zetamatta/go-tty for https://github.com/zetamatta/nyagos/issues/393
