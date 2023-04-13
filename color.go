@@ -10,7 +10,9 @@ type ColorSequence int64
 const (
 	colorCodeBitSize = 8
 	colorCodeMask    = (1<<colorCodeBitSize - 1)
+)
 
+const (
 	Black ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (49 << (colorCodeBitSize * 2)) | (1 << (colorCodeBitSize * 3))
 	Red
 	Green
@@ -21,7 +23,9 @@ const (
 	White
 	_
 	DefaultForeGroundColor
+)
 
+const (
 	DarkGray ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (22 << (colorCodeBitSize * 2)) | (49 << (colorCodeBitSize * 3))
 	DarkRed
 	DarkGree
