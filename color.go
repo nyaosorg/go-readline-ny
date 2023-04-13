@@ -5,18 +5,32 @@ import (
 	"io"
 )
 
-func (B *Buffer) eraseline() {
-	io.WriteString(B.Out, "\x1B[0K")
-}
-
-type _Range []Cell
+type ColorSequence int64
 
 const (
 	colorCodeBitSize = 8
 	colorCodeMask    = (1<<colorCodeBitSize - 1)
-)
 
-type ColorSequence int64
+	Black ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (49 << (colorCodeBitSize * 2)) | (1 << (colorCodeBitSize * 3))
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+	_
+	DefaultForeGroundColor
+
+	DarkGray ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (22 << (colorCodeBitSize * 2)) | (49 << (colorCodeBitSize * 3))
+	DarkRed
+	DarkGree
+	DarkYellow
+	DarkBlue
+	DarkMagenta
+	DarkCyan
+	DarkWhite
+)
 
 func SGR1(n1 int) ColorSequence {
 	return ColorSequence(1) |
@@ -71,31 +85,4 @@ func (c ColorSequence) WriteTo(w io.Writer) (int64, error) {
 	_n, err := w.Write([]byte{'m'})
 	n += int64(_n)
 	return n, err
-}
-
-func (B *Buffer) Write(b []byte) (int, error) {
-	return B.Out.Write(b)
-}
-
-func (B *Buffer) puts(s []Cell) _Range {
-	defaultColor := ColorSequence(B.RefreshColor())
-	color := ColorSequence(-1)
-	for _, ch := range s {
-		if ch.color != color {
-			color = ch.color
-			color.WriteTo(B.Out)
-		}
-		ch.Moji.PrintTo(B.Out)
-	}
-	if color != defaultColor {
-		defaultColor.WriteTo(B.Out)
-	}
-	return _Range(s)
-}
-
-func (s _Range) Width() (w WidthT) {
-	for _, ch := range s {
-		w += ch.Moji.Width()
-	}
-	return
 }
