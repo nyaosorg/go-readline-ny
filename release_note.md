@@ -1,3 +1,17 @@
+v0.10.1
+=======
+Apr 14, 2023
+
+- Fix: some constants for color were broken at v0.10.0
+
+v0.10.0
+=======
+Apr 13, 2023
+
+- Change type `Coloring` interface
+    - Init and Next() returns ColorSequence(int64) instead of int32
+    - It can output ESC[0m now
+
 v0.9.1
 ======
 Apr 10, 2023
