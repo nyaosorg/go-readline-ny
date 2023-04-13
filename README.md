@@ -23,7 +23,7 @@ example1.go
 
 The most simple sample.
 
-```example1.go
+```examples/example1.go
 package main
 
 import (
@@ -51,7 +51,7 @@ example2.go
 
 Tiny Shell
 
-```example2.go
+```examples/example2.go
 package main
 
 import (
