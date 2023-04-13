@@ -112,25 +112,27 @@ func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
+// KeyMap is the class for key-bindings
+type KeyMap struct {
+	KeyMap map[string]KeyFuncT
+}
+
 // BindKeyFunc binds function to key
-func (editor *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
+func (km *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
 	key = normWord(key)
 	if char, ok := name2char[key]; ok {
-		if editor.KeyMap == nil {
-			editor.KeyMap = map[string]KeyFuncT{}
+		if km.KeyMap == nil {
+			km.KeyMap = map[string]KeyFuncT{}
 		}
-		editor.KeyMap[char] = f
+		km.KeyMap[char] = f
 		return nil
 	}
 	return fmt.Errorf("%s: no such keyname", key)
 }
 
-// GlobalKeyMap is the global keymap for users' customizing
-var GlobalKeyMap KeyMap
-
 // BindKeyClosure binds closure to key by name
-func (editor *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
-	return editor.BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
+func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
+	return km.BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
 }
 
 // GetBindKey returns the function assigned to given key
@@ -144,6 +146,24 @@ func (km *KeyMap) GetBindKey(key string) KeyFuncT {
 		}
 	}
 	return nil
+}
+
+// GlobalKeyMap is the global keymap for users' customizing
+var GlobalKeyMap KeyMap
+
+// Editor is the main class to hold the parameter for ReadLine
+type Editor struct {
+	KeyMap
+	History        IHistory
+	Writer         io.Writer
+	Out            *bufio.Writer
+	Prompt         func() (int, error)
+	Default        string
+	Cursor         int
+	LineFeed       func(Result)
+	OpenKeyGetter  func() (KeyGetter, error)
+	Coloring       Coloring
+	HistoryCycling bool
 }
 
 // GetBindKey returns the function assigned to given key

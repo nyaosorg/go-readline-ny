@@ -1,9 +1,7 @@
 package readline
 
 import (
-	"bufio"
 	"context"
-	"io"
 )
 
 // IHistory is the interface ReadLine can use as container for history.
@@ -20,26 +18,6 @@ func (*_EmptyHistory) Len() int { return 0 }
 
 // At always returns empty-string because the receiver is dummy.
 func (*_EmptyHistory) At(int) string { return "" }
-
-// KeyMap is the class for key-bindings
-type KeyMap struct {
-	KeyMap map[string]KeyFuncT
-}
-
-// Editor is the main class to hold the parameter for ReadLine
-type Editor struct {
-	KeyMap
-	History        IHistory
-	Writer         io.Writer
-	Out            *bufio.Writer
-	Prompt         func() (int, error)
-	Default        string
-	Cursor         int
-	LineFeed       func(Result)
-	OpenKeyGetter  func() (KeyGetter, error)
-	Coloring       Coloring
-	HistoryCycling bool
-}
 
 func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 	if this.History.Len() <= 0 {
