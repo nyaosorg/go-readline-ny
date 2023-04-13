@@ -7,15 +7,15 @@ import (
 
 type _MonoChrome struct{}
 
-func (_MonoChrome) Init() int {
+func (_MonoChrome) Init() ColorSequence {
 	return DefaultForeGroundColor
 }
 
-func (_MonoChrome) Next(rune) int {
+func (_MonoChrome) Next(rune) ColorSequence {
 	return DefaultForeGroundColor
 }
 
-func (buf *Buffer) RefreshColor() int {
+func (buf *Buffer) RefreshColor() ColorSequence {
 	if buf.Coloring == nil {
 		buf.Coloring = _MonoChrome{}
 	}
@@ -24,9 +24,9 @@ func (buf *Buffer) RefreshColor() int {
 	for i, cell := range buf.Buffer {
 		buf.Buffer[i].position = position
 		if codepoint, ok := moji2rune(cell.Moji); ok {
-			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Next(codepoint))
+			buf.Buffer[i].color = ColorSequence(buf.Coloring.Next(codepoint))
 		} else {
-			buf.Buffer[i].color = _PackedColorCode(buf.Coloring.Next(utf8.RuneError))
+			buf.Buffer[i].color = ColorSequence(buf.Coloring.Next(utf8.RuneError))
 		}
 		position += int16(cell.Moji.Width())
 	}

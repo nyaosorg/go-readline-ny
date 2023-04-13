@@ -11,12 +11,17 @@ type Coloring struct {
 	quoted bool
 }
 
-func (c *Coloring) Init() int {
+var (
+	defaultColor = readline.SGR4(0, 37, 40, 1)
+	quotedColor  = readline.SGR4(0, 35, 40, 1)
+)
+
+func (c *Coloring) Init() readline.ColorSequence {
 	c.quoted = false
-	return 0
+	return defaultColor
 }
 
-func (c *Coloring) Next(r rune) int {
+func (c *Coloring) Next(r rune) readline.ColorSequence {
 	next := c.quoted
 
 	if r == '"' {
@@ -28,9 +33,9 @@ func (c *Coloring) Next(r rune) int {
 	}()
 
 	if next || c.quoted {
-		return readline.Magenta
+		return quotedColor
 	}
-	return 0
+	return defaultColor
 }
 
 func main() {

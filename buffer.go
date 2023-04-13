@@ -14,7 +14,7 @@ type _Undo struct {
 }
 
 const (
-	Black = (1 << (colorCodeBitSize * 2)) + (49 << colorCodeBitSize) + 30 + iota
+	Black ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (49 << (colorCodeBitSize * 2)) | (1 << (colorCodeBitSize * 3))
 	Red
 	Green
 	Yellow
@@ -27,7 +27,7 @@ const (
 )
 
 const (
-	DarkGray = (22 << (colorCodeBitSize * 2)) + (49 << colorCodeBitSize) + 30 + iota
+	DarkGray ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (22 << (colorCodeBitSize * 2)) | (49 << (colorCodeBitSize * 3))
 	DarkRed
 	DarkGree
 	DarkYellow
@@ -37,19 +37,17 @@ const (
 	DarkWhite
 )
 
-type _PackedColorCode int32
-
 type Cell struct {
 	Moji     Moji
-	color    _PackedColorCode
+	color    ColorSequence
 	position int16
 }
 
 type Coloring interface {
 	// Reset has to initialize receiver's fields and return default color.
-	Init() int
+	Init() ColorSequence
 	// Next has to return color for the given rune.
-	Next(rune) int
+	Next(rune) ColorSequence
 }
 
 // Buffer is ReadLine's internal data structure

@@ -8,7 +8,7 @@ type VimBatch struct {
 	bits int
 }
 
-func (s *VimBatch) Init() int {
+func (s *VimBatch) Init() readline.ColorSequence {
 	s.bits = 0
 	return readline.DefaultForeGroundColor
 }
@@ -18,7 +18,7 @@ const (
 	quotedArea = 2
 )
 
-func (s *VimBatch) Next(codepoint rune) int {
+func (s *VimBatch) Next(codepoint rune) readline.ColorSequence {
 	newbits := s.bits
 	if codepoint == '%' {
 		newbits ^= envArea
