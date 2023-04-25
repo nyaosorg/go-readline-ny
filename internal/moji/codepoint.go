@@ -1,4 +1,4 @@
-package readline
+package moji
 
 import (
 	"fmt"
@@ -122,7 +122,7 @@ func rune2moji(ch rune) Moji {
 	}
 }
 
-func moji2rune(m Moji) (rune, bool) {
+func MojiToRune(m Moji) (rune, bool) {
 	switch r := m.(type) {
 	case _RawCodePoint:
 		return rune(r), true
@@ -139,8 +139,8 @@ func moji2rune(m Moji) (rune, bool) {
 	}
 }
 
-func isSpaceMoji(m Moji) bool {
-	if r, ok := moji2rune(m); ok {
+func IsSpaceMoji(m Moji) bool {
+	if r, ok := MojiToRune(m); ok {
 		return unicode.IsSpace(r)
 	}
 	return false

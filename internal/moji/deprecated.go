@@ -1,4 +1,4 @@
-package readline
+package moji
 
 // Deprecated: GetCharWidth returns the width of the character.
 func GetCharWidth(n rune) WidthT {
@@ -19,16 +19,6 @@ func GetCharWidth(n rune) WidthT {
 			}
 		}
 		widthCache[n] = width
-	}
-	return width
-}
-
-// Deprecated: GetStringWidth returns the width of the string.
-// ( Used on github.com/nyaosorg/nyagos/internal/functions/prompt.go )
-func GetStringWidth(s string) WidthT {
-	width := WidthT(0)
-	for _, m := range StringToMoji(s) {
-		width += m.Width()
 	}
 	return width
 }

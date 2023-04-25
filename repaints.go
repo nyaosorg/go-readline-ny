@@ -3,6 +3,8 @@ package readline
 import (
 	"fmt"
 	"unicode/utf8"
+
+	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
 type _MonoChrome struct{}
@@ -23,7 +25,7 @@ func (buf *Buffer) RefreshColor() ColorSequence {
 	position := int16(0)
 	for i, cell := range buf.Buffer {
 		buf.Buffer[i].position = position
-		if codepoint, ok := moji2rune(cell.Moji); ok {
+		if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
 			buf.Buffer[i].color = ColorSequence(buf.Coloring.Next(codepoint))
 		} else {
 			buf.Buffer[i].color = ColorSequence(buf.Coloring.Next(utf8.RuneError))

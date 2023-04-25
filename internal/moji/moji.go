@@ -1,9 +1,8 @@
-package readline
+package moji
 
 import (
 	"io"
 	"os"
-	"strings"
 	"unicode"
 	"unicode/utf8"
 )
@@ -90,7 +89,7 @@ func isEmojiModifier(ch rune) bool {
 	return '\U0001F3FB' <= ch && ch <= '\U0001F3FF'
 }
 
-func areEmojiModifier(s string) bool {
+func AreEmojiModifier(s string) bool {
 	if !ModifierSequenceOk {
 		return false
 	}
@@ -165,7 +164,7 @@ func isZeroWidthJoin(r rune) bool {
 	return ZeroWidthJoinSequenceOk && unicode.Is(unicode.Join_Control, r)
 }
 
-func areZeroWidthJoin(s string) bool {
+func AreZeroWidthJoin(s string) bool {
 	if !ZeroWidthJoinSequenceOk {
 		return false
 	}
@@ -195,12 +194,4 @@ func StringToMoji(s string) []Moji {
 		}
 	}
 	return mojis
-}
-
-func cell2string(m []Cell) string {
-	var buffer strings.Builder
-	for _, m1 := range m {
-		m1.Moji.WriteTo(&buffer)
-	}
-	return buffer.String()
 }

@@ -4,6 +4,8 @@ import (
 	"io"
 	"strings"
 	"unicode"
+
+	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
 const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
@@ -159,8 +161,8 @@ var Delimiters = "\"'"
 func (B *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
-	for i, moji := range B.Buffer[:B.Cursor] {
-		if ch, ok := moji2rune(moji.Moji); ok {
+	for i, m := range B.Buffer[:B.Cursor] {
+		if ch, ok := moji.MojiToRune(m.Moji); ok {
 			if quotedchar == '\000' {
 				if strings.ContainsRune(Delimiters, ch) {
 					quotedchar = ch
@@ -265,4 +267,46 @@ func (s _Range) Width() (w WidthT) {
 		w += ch.Moji.Width()
 	}
 	return
+}
+
+func cell2string(m []Cell) string {
+	var buffer strings.Builder
+	for _, m1 := range m {
+		m1.Moji.WriteTo(&buffer)
+	}
+	return buffer.String()
+}
+
+type WidthT = moji.WidthT
+
+type Moji = moji.Moji
+
+func StringToMoji(s string) []Moji {
+	return moji.StringToMoji(s)
+}
+
+// Deprecated: GetStringWidth returns the width of the string.
+// ( Used on github.com/nyaosorg/nyagos/internal/functions/prompt.go )
+func GetStringWidth(s string) WidthT {
+	width := WidthT(0)
+	for _, m := range StringToMoji(s) {
+		width += m.Width()
+	}
+	return width
+}
+
+func ResetCharWidth() {
+	moji.ResetCharWidth()
+}
+
+func SetCharWidth(c rune, width int) {
+	moji.SetCharWidth(c, width)
+}
+
+func EnableSurrogatePair(value bool) {
+	moji.SurrogatePairOk = value
+}
+
+func IsSurrogatePairEnabled() bool {
+	return moji.SurrogatePairOk
 }

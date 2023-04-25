@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/atotto/clipboard"
+
+	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
 func keyFuncEnter(ctx context.Context, this *Buffer) Result { // Ctrl-M
@@ -124,12 +126,12 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
-	if areZeroWidthJoin(keys) && this.Cursor > 0 {
+	if moji.AreZeroWidthJoin(keys) && this.Cursor > 0 {
 		this.pending = mojiAndStringToString(
 			this.Buffer[this.Cursor-1].Moji,
 			keys)
 		return keyFuncBackSpace(ctx, this)
-	} else if (areVariationSelectorLike(keys) || areEmojiModifier(keys)) && this.Cursor > 0 {
+	} else if (moji.AreVariationSelectorLike(keys) || moji.AreEmojiModifier(keys)) && this.Cursor > 0 {
 		baseMoji := this.Buffer[this.Cursor-1].Moji
 		keyFuncBackSpace(ctx, this)
 		keys = mojiAndStringToString(baseMoji, keys)
@@ -181,7 +183,7 @@ func keyFuncClear(ctx context.Context, this *Buffer) Result {
 
 func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	orgCursorPos := this.Cursor
-	for this.Cursor > 0 && isSpaceMoji(this.Buffer[this.Cursor-1].Moji) {
+	for this.Cursor > 0 && moji.IsSpaceMoji(this.Buffer[this.Cursor-1].Moji) {
 		this.Cursor--
 	}
 	newCursorPos := this.CurrentWordTop()
@@ -292,10 +294,10 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 
 func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos > 0 && isSpaceMoji(this.Buffer[newPos-1].Moji) {
+	for newPos > 0 && moji.IsSpaceMoji(this.Buffer[newPos-1].Moji) {
 		newPos--
 	}
-	for newPos > 0 && !isSpaceMoji(this.Buffer[newPos-1].Moji) {
+	for newPos > 0 && !moji.IsSpaceMoji(this.Buffer[newPos-1].Moji) {
 		newPos--
 	}
 	if newPos < this.ViewStart {
@@ -308,10 +310,10 @@ func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 
 func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos < len(this.Buffer) && !isSpaceMoji(this.Buffer[newPos].Moji) {
+	for newPos < len(this.Buffer) && !moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
 		newPos++
 	}
-	for newPos < len(this.Buffer) && isSpaceMoji(this.Buffer[newPos].Moji) {
+	for newPos < len(this.Buffer) && moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
 		newPos++
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)

@@ -1,4 +1,4 @@
-package readline
+package moji
 
 import "testing"
 

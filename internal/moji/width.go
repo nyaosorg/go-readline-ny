@@ -1,4 +1,4 @@
-package readline
+package moji
 
 import (
 	"unicode"
@@ -53,7 +53,7 @@ func isVariationSelectorLike(ch rune) bool {
 		unicode.Is(unicode.Me, ch)
 }
 
-func areVariationSelectorLike(s string) bool {
+func AreVariationSelectorLike(s string) bool {
 	if !VariationSequenceOk {
 		return false
 	}
