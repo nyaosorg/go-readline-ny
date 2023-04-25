@@ -1,3 +1,10 @@
+- Replace the fork version of go-tty to the original version v0.0.4.  
+  Because Windows Terminal's bug was fixed that is the reason to fork.  
+  Test:
+    - OK: CIRCLE DIGIT ONE: U+2460
+    - OK: FARMER: MAN(U+1F468)+ZERO WIDTH JOINER(U+200D)+EAR OF RICE(U+1F33E)
+    - OK: KANJI with VARIATION SELECTOR(U+908A U+E0104)
+
 v0.10.1
 =======
 Apr 14, 2023
