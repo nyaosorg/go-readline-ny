@@ -6,6 +6,7 @@
     - OK: KANJI with VARIATION SELECTOR(U+908A U+E0104)
 - Add internal switch to use "golang.org/x/term" instead of "go-tty"
 - Add internal switch to use "golang.org/x/text/width" instead of "go-runewidth"
+- Remove SurrogatePairOk. Use EnableSurrogatePair() and IsSurrogatePairOk()
 
 v0.10.1
 =======
