@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/nyaosorg/go-readline-ny/internal/github.com/mattn/go-tty"
+	"github.com/mattn/go-tty"
 )
 
 type MinimumTty interface {
