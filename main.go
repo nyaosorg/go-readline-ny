@@ -9,6 +9,8 @@ import (
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/nyaosorg/go-readline-ny/internal/xtty"
 )
 
 // Result is the type for readline's result.
@@ -257,7 +259,10 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 	}
 	if editor.OpenKeyGetter == nil {
-		editor.OpenKeyGetter = NewDefaultTty
+		editor.OpenKeyGetter = func() (KeyGetter, error) {
+			return &xtty.TTY{}, nil
+		}
+		// editor.OpenKeyGetter = NewDefaultTty
 	}
 	buffer := Buffer{
 		Editor:         editor,
