@@ -11,12 +11,7 @@ import (
 type _RawCodePoint rune
 
 func (c _RawCodePoint) Width() WidthT {
-	r := rune(c)
-	width, ok := widthCache[r]
-	if !ok {
-		width = WidthT(wtRuneWidth.RuneWidth(r))
-	}
-	return width
+	return getWidth(rune(c))
 }
 
 func writeRune(w io.Writer, r rune) (int64, error) {
@@ -112,7 +107,7 @@ const (
 func rune2moji(ch rune) Moji {
 	if ch < ' ' {
 		return _CtrlCodePoint(ch)
-	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && wtRuneWidth.EastAsianWidth {
+	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && AmbiguousIsWide {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else if isToBeEscaped(ch) {
 		return _EscCodePoint(ch)

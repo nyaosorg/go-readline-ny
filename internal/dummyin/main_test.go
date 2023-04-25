@@ -9,7 +9,7 @@ import (
 
 func TestDummyIn(t *testing.T) {
 	editor := &readline.Editor{
-		OpenKeyGetter: New("a", "i", "u", "\b", "\x1B[D", "e"),
+		Tty: &Tty{Text: []string{"a", "i", "u", "\b", "\x1B[D", "e"}},
 	}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {

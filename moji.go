@@ -6,8 +6,6 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
-
-	"github.com/mattn/go-runewidth"
 )
 
 var isVsCodeTerminal = os.Getenv("VSCODE_PID") != ""
@@ -31,16 +29,10 @@ var (
 	// ModifierSequenceOk is false, SkinTone sequence are treated as two
 	// character
 	ModifierSequenceOk = isWindowsTerminal || isWezTerm
+
+	// AmbiguousIsWide is true, EastAsianAmbiguous are treated as two width
+	AmbiguousIsWide = !isWindowsTerminal
 )
-
-var wtRuneWidth *runewidth.Condition
-
-func init() {
-	wtRuneWidth = runewidth.NewCondition()
-	if isWindowsTerminal {
-		wtRuneWidth.EastAsianWidth = false
-	}
-}
 
 // Moji is the interface for minimum unit to edit in readline
 //

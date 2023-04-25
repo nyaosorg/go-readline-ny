@@ -14,9 +14,9 @@ const f = "\U0001F468\u200D\U0001F33E"
 func tryAll(t *testing.T, texts ...string) (string, []string) {
 	var buffer strings.Builder
 	editor := readline.Editor{
-		OpenKeyGetter: dummyin.New(texts...),
-		Writer:        &buffer,
-		Prompt:        func() (int, error) { return 0, nil },
+		Tty:    &dummyin.Tty{texts},
+		Writer: &buffer,
+		Prompt: func() (int, error) { return 0, nil },
 	}
 	result, err := editor.ReadLine(context.Background())
 	if err != nil {

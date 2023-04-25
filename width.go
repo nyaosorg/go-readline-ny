@@ -4,7 +4,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/mattn/go-runewidth"
+	// rw "github.com/nyaosorg/go-readline-ny/internal/orgxwidth"
+	rw "github.com/nyaosorg/go-readline-ny/internal/runewidth"
 )
 
 // WidthT means the width type
@@ -20,6 +21,19 @@ func ResetCharWidth() {
 // SetCharWidth sets the width of the character into the cache.
 func SetCharWidth(c rune, width int) {
 	widthCache[c] = WidthT(width)
+}
+
+var condition interface {
+	RuneWidth(rune) int
+} = rw.New(AmbiguousIsWide)
+
+func getWidth(r rune) WidthT {
+	w, ok := widthCache[r]
+	if !ok {
+		w = WidthT(condition.RuneWidth(r))
+		widthCache[r] = w
+	}
+	return w
 }
 
 func lenEscaped(c rune) WidthT {
@@ -50,5 +64,5 @@ func areVariationSelectorLike(s string) bool {
 func isToBeEscaped(ch rune) bool {
 	return isVariationSelectorLike(ch) ||
 		(ch >= 0x10000 && !SurrogatePairOk) ||
-		runewidth.RuneWidth(ch) == 0
+		getWidth(ch) == 0
 }
