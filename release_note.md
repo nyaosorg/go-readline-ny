@@ -4,6 +4,8 @@
     - OK: CIRCLE DIGIT ONE: U+2460
     - OK: FARMER: MAN(U+1F468)+ZERO WIDTH JOINER(U+200D)+EAR OF RICE(U+1F33E)
     - OK: KANJI with VARIATION SELECTOR(U+908A U+E0104)
+- Add internal switch to use "golang.org/x/term" instead of "go-tty"
+- Add internal switch to use "golang.org/x/text/width" instead of "go-runewidth"
 
 v0.10.1
 =======
