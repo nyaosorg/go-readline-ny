@@ -31,7 +31,6 @@ type Coloring interface {
 type Buffer struct {
 	*Editor
 	Buffer         []Cell
-	tty            KeyGetter
 	ViewStart      int
 	termWidth      int // == topColumn + termWidth + forbiddenWidth
 	topColumn      int // == width of Prompt
@@ -230,9 +229,9 @@ func (B *Buffer) startChangeWidthEventLoop(_lastw int, getResizeEvent func() (in
 	}(_lastw)
 }
 
-// GetKey reads one-key from tty.
+// GetKey reads one-key from Tty.
 func (B *Buffer) GetKey() (string, error) {
-	return GetKey(B.tty)
+	return GetKey(B.Tty)
 }
 
 func (B *Buffer) Write(b []byte) (int, error) {

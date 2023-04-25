@@ -1,4 +1,4 @@
-package xtty
+package tty10
 
 import (
 	"os"
@@ -7,12 +7,16 @@ import (
 	"golang.org/x/term"
 )
 
-type TTY struct {
+type Tty struct {
 	buffer [128]byte
 	text   []byte
 }
 
-func (*TTY) Raw() (func() error, error) {
+func (*Tty) Open() error {
+	return nil
+}
+
+func (*Tty) Raw() (func() error, error) {
 	stdin := int(os.Stdin.Fd())
 	oldState, err := term.MakeRaw(stdin)
 	if err != nil {
@@ -29,7 +33,7 @@ func (*TTY) Raw() (func() error, error) {
 	}, nil
 }
 
-func (M *TTY) ReadRune() (rune, error) {
+func (M *Tty) ReadRune() (rune, error) {
 	if M.text == nil || len(M.text) <= 0 {
 		n, err := os.Stdin.Read(M.buffer[:])
 		if err != nil {
@@ -43,19 +47,19 @@ func (M *TTY) ReadRune() (rune, error) {
 	return r, nil
 }
 
-func (M *TTY) Buffered() bool {
+func (M *Tty) Buffered() bool {
 	return len(M.text) > 0
 }
 
-func (M *TTY) Close() error {
+func (M *Tty) Close() error {
 	return nil
 }
 
-func (M *TTY) Size() (int, int, error) {
+func (M *Tty) Size() (int, int, error) {
 	return term.GetSize(int(os.Stdout.Fd()))
 }
 
-func (M *TTY) GetResizeNotifier() func() (int, int, bool) {
+func (M *Tty) GetResizeNotifier() func() (int, int, bool) {
 	return func() (int, int, bool) {
 		w, h, err := M.Size()
 		return w, h, err == nil

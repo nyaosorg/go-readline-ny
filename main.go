@@ -9,8 +9,9 @@ import (
 	"os"
 	"strings"
 	"sync"
-	// Disable for Windows 8 and WindowsServer
-	// "github.com/nyaosorg/go-readline-ny/internal/xtty"
+
+	//tty "github.com/nyaosorg/go-readline-ny/tty10"
+	tty "github.com/nyaosorg/go-readline-ny/tty8"
 )
 
 // Result is the type for readline's result.
@@ -153,6 +154,16 @@ func (km *KeyMap) GetBindKey(key string) KeyFuncT {
 // GlobalKeyMap is the global keymap for users' customizing
 var GlobalKeyMap KeyMap
 
+type ITty interface {
+	Raw() (func() error, error)
+	ReadRune() (rune, error)
+	Buffered() bool
+	Open() error
+	Close() error
+	Size() (int, int, error)
+	GetResizeNotifier() func() (int, int, bool)
+}
+
 // Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
@@ -163,7 +174,7 @@ type Editor struct {
 	Default        string
 	Cursor         int
 	LineFeed       func(Result)
-	OpenKeyGetter  func() (KeyGetter, error)
+	Tty            ITty
 	Coloring       Coloring
 	HistoryCycling bool
 }
@@ -258,12 +269,8 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 			editor.Out.WriteByte('\n')
 		}
 	}
-	if editor.OpenKeyGetter == nil {
-		// Disable for Windows 8 and WindowsServer
-		// editor.OpenKeyGetter = func() (KeyGetter, error) {
-		//	return &xtty.TTY{}, nil
-		//}
-		editor.OpenKeyGetter = NewDefaultTty
+	if editor.Tty == nil {
+		editor.Tty = &tty.Tty{}
 	}
 	buffer := Buffer{
 		Editor:         editor,
@@ -271,14 +278,13 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		historyPointer: editor.History.Len(),
 	}
 
-	tty1, err := editor.OpenKeyGetter()
-	if err != nil {
+	if err := editor.Tty.Open(); err != nil {
 		return "", fmt.Errorf("go-tty.Open: %s", err.Error())
 	}
-	buffer.tty = tty1
-	defer tty1.Close()
+	defer editor.Tty.Close()
 
-	buffer.termWidth, _, err = tty1.Size()
+	var err error
+	buffer.termWidth, _, err = editor.Tty.Size()
 	if err != nil {
 		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
 	}
@@ -302,7 +308,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 
 	cursorOnSwitch := false
 
-	buffer.startChangeWidthEventLoop(buffer.termWidth, tty1.GetResizeNotifier())
+	buffer.startChangeWidthEventLoop(buffer.termWidth, editor.Tty.GetResizeNotifier())
 
 	for {
 		mu.Lock()

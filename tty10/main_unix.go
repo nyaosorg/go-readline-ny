@@ -1,7 +1,7 @@
 //go:build !windows
 // +build !windows
 
-package xtty
+package tty10
 
 func nop() {}
 
