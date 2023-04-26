@@ -1,4 +1,8 @@
-- Replace the fork version of go-tty to the original version v0.0.4.  
+v0.11.0
+=======
+Apr 26, 2023
+
+- Remove the fork version of go-tty and use the original one v0.0.4.  
   Because Windows Terminal's bug was fixed that is the reason to fork.  
   Test:
     - OK: CIRCLE DIGIT ONE: U+2460
@@ -6,7 +10,7 @@
     - OK: KANJI with VARIATION SELECTOR(U+908A U+E0104)
 - Add internal switch to use "golang.org/x/term" instead of "go-tty"
 - Add internal switch to use "golang.org/x/text/width" instead of "go-runewidth"
-- Remove SurrogatePairOk. Use EnableSurrogatePair() and IsSurrogatePairOk()
+- Remove SurrogatePairOk. Use EnableSurrogatePair() and IsSurrogatePairEnabled()
 
 v0.10.1
 =======
