@@ -61,7 +61,7 @@ const (
 )
 
 // CtrlC is the error when Ctrl-C is pressed.
-var CtrlC = (errors.New("^C"))
+var CtrlC = errors.New("^C")
 
 var mu sync.Mutex
 
@@ -136,11 +136,10 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
 	}
 
-	var err1 error
-	buffer.topColumn, err1 = editor.Prompt()
-	if err1 != nil {
+	buffer.topColumn, err = editor.Prompt()
+	if err != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(buffer.Out, "%s\n$ ", err1.Error())
+		fmt.Fprintf(buffer.Out, "%s\n$ ", err.Error())
 		buffer.topColumn = 2
 	} else if buffer.topColumn >= buffer.termWidth-3 {
 		// ViewWidth is too narrow to edit.
@@ -166,13 +165,13 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		buffer.Out.Flush()
 
 		mu.Unlock()
-		key1, err := buffer.GetKey()
+		key, err := buffer.GetKey()
 		if err != nil {
 			return "", err
 		}
 		mu.Lock()
 
-		f := editor.getKeyFunction(key1)
+		f := editor.getKeyFunction(key)
 
 		if fg, ok := f.(*GoCommand); !ok || fg.Func != nil {
 			io.WriteString(buffer.Out, ansiCursorOff)
