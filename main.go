@@ -45,12 +45,12 @@ func (R Result) String() string {
 	}
 }
 
-// KeyFuncT is the interface for object bound to key-mapping
-type KeyFuncT interface {
+// Command is the interface for object bound to key-mapping
+type Command interface {
 	Call(ctx context.Context, buffer *Buffer) Result
 }
 
-var defaultKeyMap = map[keys.Code]KeyFuncT{
+var defaultKeyMap = map[keys.Code]Command{
 	// keys.Ctrl:         name2func(F_PASS),
 	keys.AltB:         CmdBackwardWord,
 	keys.AltF:         CmdForwardWord,
@@ -96,15 +96,15 @@ func normWord(src string) string {
 
 // KeyMap is the class for key-bindings
 type KeyMap struct {
-	KeyMap map[keys.Code]KeyFuncT
+	KeyMap map[keys.Code]Command
 }
 
 // BindKeyFunc binds function to key
-func (km *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
+func (km *KeyMap) BindKeyFunc(key string, f Command) error {
 	key = normWord(key)
 	if char, ok := name2code[key]; ok {
 		if km.KeyMap == nil {
-			km.KeyMap = map[keys.Code]KeyFuncT{}
+			km.KeyMap = map[keys.Code]Command{}
 		}
 		km.KeyMap[char] = f
 		return nil
@@ -118,7 +118,7 @@ func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) R
 }
 
 // GetBindKey returns the function assigned to given key
-func (km *KeyMap) GetBindKey(key string) KeyFuncT {
+func (km *KeyMap) GetBindKey(key string) Command {
 	key = normWord(key)
 	if ch, ok := name2code[key]; ok {
 		if km.KeyMap != nil {
@@ -159,7 +159,7 @@ type Editor struct {
 }
 
 // GetBindKey returns the function assigned to given key
-func (editor *Editor) GetBindKey(key string) KeyFuncT {
+func (editor *Editor) GetBindKey(key string) Command {
 	key = normWord(key)
 	if code, ok := name2code[key]; ok {
 		return editor.getKeyFunction(code.String())
@@ -167,8 +167,8 @@ func (editor *Editor) GetBindKey(key string) KeyFuncT {
 	return nil
 }
 
-// GetFunc returns KeyFuncT-object by name
-func GetFunc(name string) (KeyFuncT, error) {
+// GetFunc returns Command-object by name
+func GetFunc(name string) (Command, error) {
 	f, ok := name2func[normWord(name)]
 	if ok {
 		return f, nil
@@ -198,7 +198,7 @@ var CtrlC = (errors.New("^C"))
 
 var mu sync.Mutex
 
-func (editor *Editor) getKeyFunction(key string) KeyFuncT {
+func (editor *Editor) getKeyFunction(key string) Command {
 	code := keys.Code(key)
 	if editor.KeyMap.KeyMap != nil {
 		if f, ok := editor.KeyMap.KeyMap[code]; ok {

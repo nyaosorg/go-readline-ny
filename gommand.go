@@ -10,7 +10,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
-// Gommand is the implement of KeyFuncT which has a name and a function
+// Gommand is the implement of Command which has a name and a function
 type Gommand struct {
 	Name string
 	Func func(ctx context.Context, buffer *Buffer) Result
