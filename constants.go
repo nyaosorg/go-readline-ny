@@ -1,8 +1,6 @@
 package readline
 
 import (
-	"context"
-
 	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
@@ -256,43 +254,40 @@ var name2code = map[string]keys.Code{
 // KeyCode from
 // http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 
-var _name2func = map[string]func(context.Context, *Buffer) Result{
-	F_ACCEPT_LINE:          keyFuncEnter,
-	F_BACKWARD_CHAR:        keyFuncBackward,
-	F_BACKWARD_WORD:        keyFuncBackwardWord,
-	F_BACKWARD_DELETE_CHAR: keyFuncBackSpace,
-	F_BEGINNING_OF_LINE:    keyFuncHead,
-	F_CLEAR_SCREEN:         keyFuncCLS,
-	F_DELETE_CHAR:          keyFuncDelete,
-	F_DELETE_OR_ABORT:      keyFuncDeleteOrAbort,
-	F_END_OF_LINE:          keyFuncTail,
-	F_FORWARD_CHAR:         keyFuncForward,
-	F_FORWARD_WORD:         keyFuncForwardWord,
-	F_HISTORY_DOWN:         keyFuncHistoryDown, // for compatible
-	F_HISTORY_UP:           keyFuncHistoryUp,   // for compatible
-	F_NEXT_HISTORY:         keyFuncHistoryDown,
-	F_PREVIOUS_HISTORY:     keyFuncHistoryUp,
-	F_INTR:                 keyFuncIntr,
-	F_ISEARCH_BACKWARD:     keyFuncIncSearch,
-	F_KILL_LINE:            keyFuncClearAfter,
-	F_KILL_WHOLE_LINE:      keyFuncClear,
+var _name2func = map[string]KeyFuncT{
+	F_ACCEPT_LINE:          FunAcceptLine,
+	F_BACKWARD_CHAR:        FunBackwardChar,
+	F_BACKWARD_WORD:        FunBackwardWord,
+	F_BACKWARD_DELETE_CHAR: FunBackwardDeleteChar,
+	F_BEGINNING_OF_LINE:    FunBeginningOfLine,
+	F_CLEAR_SCREEN:         FunClearScreen,
+	F_DELETE_CHAR:          FunDeleteChar,
+	F_DELETE_OR_ABORT:      FunDeleteOrAbort,
+	F_END_OF_LINE:          FunEndOfLine,
+	F_FORWARD_CHAR:         FunForwardChar,
+	F_FORWARD_WORD:         FunForwardWord,
+	F_HISTORY_DOWN:         FunNextHistory,     // for compatible
+	F_HISTORY_UP:           FunPreviousHistory, // for compatible
+	F_NEXT_HISTORY:         FunNextHistory,
+	F_PREVIOUS_HISTORY:     FunPreviousHistory,
+	F_INTR:                 FunInterrupt,
+	F_ISEARCH_BACKWARD:     FunISearchBackward,
+	F_KILL_LINE:            FunKillLine,
+	F_KILL_WHOLE_LINE:      FunKillWholeLine,
 	F_PASS:                 nil,
-	F_QUOTED_INSERT:        keyFuncQuotedInsert,
-	F_UNIX_LINE_DISCARD:    keyFuncClearBefore,
-	F_UNIX_WORD_RUBOUT:     keyFuncWordRubout,
-	F_YANK:                 keyFuncPaste,
-	F_YANK_WITH_QUOTE:      keyFuncPasteQuote,
-	F_SWAPCHAR:             keyFuncSwapChar,
-	F_REPAINT_ON_NEWLINE:   keyFuncRepaintOnNewline,
-	F_UNDO:                 keyFuncUndo,
+	F_QUOTED_INSERT:        FunQuotedInsert,
+	F_UNIX_LINE_DISCARD:    FunUnixLineDiscard,
+	F_UNIX_WORD_RUBOUT:     FunUnixWordRubout,
+	F_YANK:                 FunYank,
+	F_YANK_WITH_QUOTE:      FunYankWithQuote,
+	F_SWAPCHAR:             FunSwapChar,
+	F_REPAINT_ON_NEWLINE:   FunRepaintOnNewline,
+	F_UNDO:                 FunUndo,
 }
 
 func name2func(keyName string) KeyFuncT {
 	if p, ok := _name2func[keyName]; ok {
-		return &KeyGoFuncT{
-			Func: p,
-			Name: keyName,
-		}
+		return p
 	}
 	return nil
 }

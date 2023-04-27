@@ -19,41 +19,47 @@ func (*_EmptyHistory) Len() int { return 0 }
 // At always returns empty-string because the receiver is dummy.
 func (*_EmptyHistory) At(int) string { return "" }
 
-func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
-	if this.History.Len() <= 0 {
-		return CONTINUE
-	}
-	if this.historyPointer <= 0 {
-		if !this.HistoryCycling {
+var FunPreviousHistory = &KeyGoFuncT{
+	Name: F_PREVIOUS_HISTORY,
+	Func: func(ctx context.Context, this *Buffer) Result {
+		if this.History.Len() <= 0 {
 			return CONTINUE
 		}
-		this.historyPointer = this.History.Len()
-	}
-	this.historyPointer--
-	keyFuncClear(ctx, this)
-	if this.historyPointer >= 0 {
-		this.InsertString(0, this.History.At(this.historyPointer))
-		this.ViewStart = 0
-		this.Cursor = 0
-		keyFuncTail(ctx, this)
-	}
-	return CONTINUE
+		if this.historyPointer <= 0 {
+			if !this.HistoryCycling {
+				return CONTINUE
+			}
+			this.historyPointer = this.History.Len()
+		}
+		this.historyPointer--
+		FunKillWholeLine.Func(ctx, this)
+		if this.historyPointer >= 0 {
+			this.InsertString(0, this.History.At(this.historyPointer))
+			this.ViewStart = 0
+			this.Cursor = 0
+			FunEndOfLine.Func(ctx, this)
+		}
+		return CONTINUE
+	},
 }
 
-func keyFuncHistoryDown(ctx context.Context, this *Buffer) Result {
-	if this.History.Len() <= 0 {
+var FunNextHistory = &KeyGoFuncT{
+	Name: F_NEXT_HISTORY,
+	Func: func(ctx context.Context, this *Buffer) Result {
+		if this.History.Len() <= 0 {
+			return CONTINUE
+		}
+		if this.historyPointer+1 > this.History.Len() {
+			return CONTINUE
+		}
+		this.historyPointer++
+		FunKillWholeLine.Func(ctx, this)
+		if this.historyPointer < this.History.Len() {
+			this.InsertString(0, this.History.At(this.historyPointer))
+			this.ViewStart = 0
+			this.Cursor = 0
+			FunEndOfLine.Func(ctx, this)
+		}
 		return CONTINUE
-	}
-	if this.historyPointer+1 > this.History.Len() {
-		return CONTINUE
-	}
-	this.historyPointer++
-	keyFuncClear(ctx, this)
-	if this.historyPointer < this.History.Len() {
-		this.InsertString(0, this.History.At(this.historyPointer))
-		this.ViewStart = 0
-		this.Cursor = 0
-		keyFuncTail(ctx, this)
-	}
-	return CONTINUE
+	},
 }
