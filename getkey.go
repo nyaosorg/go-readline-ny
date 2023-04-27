@@ -5,6 +5,16 @@ import (
 	"unicode/utf16"
 )
 
+type ITty interface {
+	Raw() (func() error, error)
+	ReadRune() (rune, error)
+	Buffered() bool
+	Open() error
+	Close() error
+	Size() (int, int, error)
+	GetResizeNotifier() func() (int, int, bool)
+}
+
 // getKey reads one-key from tty.
 func getKey(tty1 ITty) (string, error) {
 	clean, err := tty1.Raw()

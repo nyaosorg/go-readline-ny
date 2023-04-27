@@ -44,16 +44,6 @@ func (R Result) String() string {
 	}
 }
 
-type ITty interface {
-	Raw() (func() error, error)
-	ReadRune() (rune, error)
-	Buffered() bool
-	Open() error
-	Close() error
-	Size() (int, int, error)
-	GetResizeNotifier() func() (int, int, bool)
-}
-
 // Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
