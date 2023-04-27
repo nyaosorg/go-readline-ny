@@ -10,22 +10,22 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
-// Gommand is the implement of Command which has a name and a function
-type Gommand struct {
+// GoCommand is the implement of Command which has a name and a function
+type GoCommand struct {
 	Name string
 	Func func(ctx context.Context, buffer *Buffer) Result
 }
 
-// Deprecate: use Gommand instead
-type KeyGoFuncT = Gommand
+// Deprecate: use GoCommand instead
+type KeyGoFuncT = GoCommand
 
-// String returns Gommand's name
-func (K Gommand) String() string {
+// String returns GoCommand's name
+func (K GoCommand) String() string {
 	return K.Name
 }
 
 // Call calls the function the receiver contains
-func (K *Gommand) Call(ctx context.Context, buffer *Buffer) Result {
+func (K *GoCommand) Call(ctx context.Context, buffer *Buffer) Result {
 	if K.Func == nil {
 		return CONTINUE
 	}
@@ -34,8 +34,8 @@ func (K *Gommand) Call(ctx context.Context, buffer *Buffer) Result {
 
 var name2func = map[string]Command{}
 
-func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *Gommand {
-	instance := &Gommand{
+func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *GoCommand {
+	instance := &GoCommand{
 		Name: name,
 		Func: f,
 	}

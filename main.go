@@ -118,7 +118,7 @@ func (km *KeyMap) BindKeyFunc(key string, f Command) error {
 
 // BindKeyClosure binds closure to key by name
 func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
-	return km.BindKeyFunc(name, &Gommand{Func: f, Name: "annonymous"})
+	return km.BindKeyFunc(name, &GoCommand{Func: f, Name: "annonymous"})
 }
 
 // GetBindKey returns the function assigned to given key
@@ -215,7 +215,7 @@ func (editor *Editor) getKeyFunction(key string) Command {
 	if f, ok := defaultKeyMap[code]; ok {
 		return f
 	}
-	return &Gommand{
+	return &GoCommand{
 		Func: func(ctx context.Context, this *Buffer) Result {
 			return keyFuncInsertSelf(ctx, this, key)
 		},
@@ -311,7 +311,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 
 		f := editor.getKeyFunction(key1)
 
-		if fg, ok := f.(*Gommand); !ok || fg.Func != nil {
+		if fg, ok := f.(*GoCommand); !ok || fg.Func != nil {
 			io.WriteString(buffer.Out, ansiCursorOff)
 			cursorOnSwitch = false
 			buffer.Out.Flush()
