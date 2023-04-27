@@ -2,6 +2,7 @@ package tty10
 
 import (
 	"os"
+	"time"
 	"unicode/utf8"
 
 	"golang.org/x/term"
@@ -10,9 +11,13 @@ import (
 type Tty struct {
 	buffer [128]byte
 	text   []byte
+	done   chan struct{}
+	ticker *time.Ticker
 }
 
-func (*Tty) Open() error {
+func (M *Tty) Open() error {
+	M.done = make(chan struct{})
+	M.ticker = time.NewTicker(time.Second)
 	return nil
 }
 
@@ -52,6 +57,7 @@ func (M *Tty) Buffered() bool {
 }
 
 func (M *Tty) Close() error {
+	M.done <- struct{}{}
 	return nil
 }
 
@@ -61,7 +67,13 @@ func (M *Tty) Size() (int, int, error) {
 
 func (M *Tty) GetResizeNotifier() func() (int, int, bool) {
 	return func() (int, int, bool) {
-		w, h, err := M.Size()
-		return w, h, err == nil
+		select {
+		case <-M.done:
+			M.ticker.Stop()
+			return 0,0, false
+		case <-M.ticker.C:
+			w, h, err := M.Size()
+			return w, h, err == nil
+		}
 	}
 }
