@@ -14,10 +14,10 @@ type IHistory interface {
 type _EmptyHistory struct{}
 
 // Len always returns zero because the receiver is dummy.
-func (*_EmptyHistory) Len() int { return 0 }
+func (_EmptyHistory) Len() int { return 0 }
 
 // At always returns empty-string because the receiver is dummy.
-func (*_EmptyHistory) At(int) string { return "" }
+func (_EmptyHistory) At(int) string { return "" }
 
 var CmdPreviousHistory = NewGoCommand("PREVIOUS_HISTORY", cmdPreviousHistory)
 

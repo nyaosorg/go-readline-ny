@@ -109,7 +109,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 	}
 	if editor.History == nil {
-		editor.History = new(_EmptyHistory)
+		editor.History = _EmptyHistory{}
 	}
 	if editor.LineFeed == nil {
 		editor.LineFeed = func(Result) {
