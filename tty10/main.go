@@ -10,7 +10,7 @@ import (
 
 type Tty struct {
 	buffer [128]byte
-	text   []byte
+	key   []byte
 	done   chan struct{}
 	ticker *time.Ticker
 }
@@ -39,21 +39,21 @@ func (*Tty) Raw() (func() error, error) {
 }
 
 func (M *Tty) ReadRune() (rune, error) {
-	if M.text == nil || len(M.text) <= 0 {
+	if M.key == nil || len(M.key) <= 0 {
 		n, err := os.Stdin.Read(M.buffer[:])
 		if err != nil {
 			return 0, err
 		}
-		M.text = M.buffer[:n]
+		M.key = M.buffer[:n]
 	}
-	r, size := utf8.DecodeRune(M.text)
-	M.text = M.text[size:]
+	r, size := utf8.DecodeRune(M.key)
+	M.key = M.key[size:]
 
 	return r, nil
 }
 
 func (M *Tty) Buffered() bool {
-	return len(M.text) > 0
+	return len(M.key) > 0
 }
 
 func (M *Tty) Close() error {
