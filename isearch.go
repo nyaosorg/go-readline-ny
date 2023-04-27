@@ -14,7 +14,7 @@ func caseInsensitiveStringContains(s, t string) bool {
 }
 
 var CmdISearchBackward = &Gommand{
-	Name: F_ISEARCH_BACKWARD,
+	Name: "ISEARCH_BACKWARD",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		var searchBuf strings.Builder
 		foundStr := ""

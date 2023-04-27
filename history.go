@@ -20,7 +20,7 @@ func (*_EmptyHistory) Len() int { return 0 }
 func (*_EmptyHistory) At(int) string { return "" }
 
 var CmdPreviousHistory = &Gommand{
-	Name: F_PREVIOUS_HISTORY,
+	Name: "PREVIOUS_HISTORY",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if this.History.Len() <= 0 {
 			return CONTINUE
@@ -44,7 +44,7 @@ var CmdPreviousHistory = &Gommand{
 }
 
 var CmdNextHistory = &Gommand{
-	Name: F_NEXT_HISTORY,
+	Name: "NEXT_HISTORY",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if this.History.Len() <= 0 {
 			return CONTINUE

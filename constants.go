@@ -113,37 +113,6 @@ const (
 	K_ALT_OEM_2      = "M_OEM_2"
 )
 
-const (
-	F_ACCEPT_LINE          = "ACCEPT_LINE"
-	F_BACKWARD_CHAR        = "BACKWARD_CHAR"
-	F_BACKWARD_WORD        = "BACKWARD_WORD"
-	F_BACKWARD_DELETE_CHAR = "BACKWARD_DELETE_CHAR"
-	F_BEGINNING_OF_LINE    = "BEGINNING_OF_LINE"
-	F_CLEAR_SCREEN         = "CLEAR_SCREEN"
-	F_DELETE_CHAR          = "DELETE_CHAR"
-	F_DELETE_OR_ABORT      = "DELETE_OR_ABORT"
-	F_END_OF_LINE          = "END_OF_LINE"
-	F_FORWARD_CHAR         = "FORWARD_CHAR"
-	F_FORWARD_WORD         = "FORWARD_WORD"
-	F_HISTORY_DOWN         = "HISTORY_DOWN" // for compatible
-	F_HISTORY_UP           = "HISTORY_UP"   // for compatible
-	F_NEXT_HISTORY         = "NEXT_HISTORY"
-	F_PREVIOUS_HISTORY     = "PREVIOUS_HISTORY"
-	F_INTR                 = "INTR"
-	F_ISEARCH_BACKWARD     = "ISEARCH_BACKWARD"
-	F_KILL_LINE            = "KILL_LINE"
-	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
-	F_PASS                 = "PASS"
-	F_QUOTED_INSERT        = "QUOTED_INSERT"
-	F_REPAINT_ON_NEWLINE   = "REPAINT_ON_NEWLINE"
-	F_SWAPCHAR             = "SWAPCHAR"
-	F_UNIX_LINE_DISCARD    = "UNIX_LINE_DISCARD"
-	F_UNIX_WORD_RUBOUT     = "UNIX_WORD_RUBOUT"
-	F_YANK                 = "YANK"
-	F_YANK_WITH_QUOTE      = "YANK_WITH_QUOTE"
-	F_UNDO                 = "UNDO"
-)
-
 var name2code = map[string]keys.Code{
 	K_BACKSPACE:      keys.Backspace,
 	K_CTRL_A:         keys.CtrlA,
@@ -254,33 +223,31 @@ var name2code = map[string]keys.Code{
 // KeyCode from
 // http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 
-var name2func = map[string]Command{
-	F_ACCEPT_LINE:          CmdAcceptLine,
-	F_BACKWARD_CHAR:        CmdBackwardChar,
-	F_BACKWARD_WORD:        CmdBackwardWord,
-	F_BACKWARD_DELETE_CHAR: CmdBackwardDeleteChar,
-	F_BEGINNING_OF_LINE:    CmdBeginningOfLine,
-	F_CLEAR_SCREEN:         CmdClearScreen,
-	F_DELETE_CHAR:          CmdDeleteChar,
-	F_DELETE_OR_ABORT:      CmdDeleteOrAbort,
-	F_END_OF_LINE:          CmdEndOfLine,
-	F_FORWARD_CHAR:         CmdForwardChar,
-	F_FORWARD_WORD:         CmdForwardWord,
-	F_HISTORY_DOWN:         CmdNextHistory,     // for compatible
-	F_HISTORY_UP:           CmdPreviousHistory, // for compatible
-	F_NEXT_HISTORY:         CmdNextHistory,
-	F_PREVIOUS_HISTORY:     CmdPreviousHistory,
-	F_INTR:                 CmdInterrupt,
-	F_ISEARCH_BACKWARD:     CmdISearchBackward,
-	F_KILL_LINE:            CmdKillLine,
-	F_KILL_WHOLE_LINE:      CmdKillWholeLine,
-	F_PASS:                 nil,
-	F_QUOTED_INSERT:        CmdQuotedInsert,
-	F_UNIX_LINE_DISCARD:    CmdUnixLineDiscard,
-	F_UNIX_WORD_RUBOUT:     CmdUnixWordRubout,
-	F_YANK:                 CmdYank,
-	F_YANK_WITH_QUOTE:      CmdYankWithQuote,
-	F_SWAPCHAR:             CmdSwapChar,
-	F_REPAINT_ON_NEWLINE:   CmdRepaintOnNewline,
-	F_UNDO:                 CmdUndo,
+var defaultCommand = []Command{
+	CmdAcceptLine,
+	CmdBackwardChar,
+	CmdBackwardWord,
+	CmdBackwardDeleteChar,
+	CmdBeginningOfLine,
+	CmdClearScreen,
+	CmdDeleteChar,
+	CmdDeleteOrAbort,
+	CmdEndOfLine,
+	CmdForwardChar,
+	CmdForwardWord,
+	CmdNextHistory,
+	CmdPreviousHistory,
+	CmdInterrupt,
+	CmdISearchBackward,
+	CmdKillLine,
+	CmdKillWholeLine,
+	nil,
+	CmdQuotedInsert,
+	CmdUnixLineDiscard,
+	CmdUnixWordRubout,
+	CmdYank,
+	CmdYankWithQuote,
+	CmdSwapChar,
+	CmdRepaintOnNewline,
+	CmdUndo,
 }

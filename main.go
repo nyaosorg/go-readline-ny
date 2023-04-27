@@ -47,11 +47,11 @@ func (R Result) String() string {
 
 // Command is the interface for object bound to key-mapping
 type Command interface {
+	String() string
 	Call(ctx context.Context, buffer *Buffer) Result
 }
 
 var defaultKeyMap = map[keys.Code]Command{
-	// keys.Ctrl:         name2func(F_PASS),
 	keys.AltB:         CmdBackwardWord,
 	keys.AltF:         CmdForwardWord,
 	keys.AltV:         CmdYank,
@@ -171,8 +171,16 @@ func (editor *Editor) GetBindKey(key string) Command {
 	return nil
 }
 
+var name2func map[string]Command
+
 // GetFunc returns Command-object by name
 func GetFunc(name string) (Command, error) {
+	if name2func == nil {
+		name2func := map[string]Command{}
+		for _, c := range defaultCommand {
+			name2func[c.String()] = c
+		}
+	}
 	f, ok := name2func[normWord(name)]
 	if ok {
 		return f, nil
@@ -182,9 +190,9 @@ func GetFunc(name string) (Command, error) {
 
 // BindKeySymbol assigns function to key by names.
 func (km *KeyMap) BindKeySymbol(key, funcName string) error {
-	f, ok := name2func[normWord(funcName)]
-	if !ok {
-		return fmt.Errorf("%s: no such function", funcName)
+	f, err := GetFunc(key)
+	if err != nil {
+		return err
 	}
 	return km.BindKeyFunc(key, f)
 }

@@ -33,14 +33,14 @@ func (K *Gommand) Call(ctx context.Context, buffer *Buffer) Result {
 }
 
 var CmdAcceptLine = &Gommand{
-	Name: F_ACCEPT_LINE,
+	Name: "ACCEPT_LINE",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-M
 		return ENTER
 	},
 }
 
 var CmdInterrupt = &Gommand{
-	Name: F_INTR,
+	Name: "INTR",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-C
 		this.Buffer = this.Buffer[:0]
 		this.Cursor = 0
@@ -51,7 +51,7 @@ var CmdInterrupt = &Gommand{
 }
 
 var CmdBeginningOfLine = &Gommand{
-	Name: F_BEGINNING_OF_LINE,
+	Name: "BEGINNING_OF_LINE",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-A
 		this.Cursor = 0
 		this.ViewStart = 0
@@ -61,7 +61,7 @@ var CmdBeginningOfLine = &Gommand{
 }
 
 var CmdBackwardChar = &Gommand{
-	Name: F_BACKWARD_CHAR,
+	Name: "BACKWARD_CHAR",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-B
 		if this.Cursor <= 0 {
 			return CONTINUE
@@ -76,7 +76,7 @@ var CmdBackwardChar = &Gommand{
 }
 
 var CmdEndOfLine = &Gommand{
-	Name: F_END_OF_LINE,
+	Name: "END_OF_LINE",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-E
 		allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
 		if allength < this.ViewWidth() {
@@ -106,7 +106,7 @@ var CmdEndOfLine = &Gommand{
 }
 
 var CmdForwardChar = &Gommand{
-	Name: F_FORWARD_CHAR,
+	Name: "FORWARD_CHAR",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-F
 		if this.Cursor >= len(this.Buffer) {
 			return CONTINUE
@@ -131,7 +131,7 @@ var CmdForwardChar = &Gommand{
 }
 
 var CmdBackwardDeleteChar = &Gommand{
-	Name: F_BACKWARD_DELETE_CHAR,
+	Name: "BACKWARD_DELETE_CHAR",
 	Func: func(ctx context.Context, this *Buffer) Result { // Backspace
 		if this.Cursor > 0 {
 			this.Cursor--
@@ -146,7 +146,7 @@ var CmdBackwardDeleteChar = &Gommand{
 }
 
 var CmdDeleteChar = &Gommand{
-	Name: F_DELETE_CHAR,
+	Name: "DELETE_CHAR",
 	Func: func(ctx context.Context, this *Buffer) Result { // Del
 		this.Delete(this.Cursor, 1)
 		this.repaint()
@@ -155,7 +155,7 @@ var CmdDeleteChar = &Gommand{
 }
 
 var CmdDeleteOrAbort = &Gommand{
-	Name: F_DELETE_OR_ABORT,
+	Name: "DELETE_OR_ABORT",
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-D
 		if len(this.Buffer) > 0 {
 			return CmdDeleteChar.Func(ctx, this)
@@ -204,7 +204,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 }
 
 var CmdKillLine = &Gommand{
-	Name: F_KILL_LINE,
+	Name: "KILL_LINE",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
 
@@ -220,7 +220,7 @@ var CmdKillLine = &Gommand{
 }
 
 var CmdKillWholeLine = &Gommand{
-	Name: F_KILL_WHOLE_LINE,
+	Name: "KILL_WHOLE_LINE",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		u := &_Undo{
 			pos:  0,
@@ -237,7 +237,7 @@ var CmdKillWholeLine = &Gommand{
 }
 
 var CmdUnixWordRubout = &Gommand{
-	Name: F_UNIX_WORD_RUBOUT,
+	Name: "UNIX_WORD_RUBOUT",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		orgCursorPos := this.Cursor
 		for this.Cursor > 0 && moji.IsSpaceMoji(this.Buffer[this.Cursor-1].Moji) {
@@ -256,7 +256,7 @@ var CmdUnixWordRubout = &Gommand{
 }
 
 var CmdUnixLineDiscard = &Gommand{
-	Name: F_UNIX_LINE_DISCARD,
+	Name: "UNIX_LINE_DISCARD",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		clipboard.WriteAll(this.SubString(0, this.Cursor))
 		this.Delete(0, this.Cursor)
@@ -268,7 +268,7 @@ var CmdUnixLineDiscard = &Gommand{
 }
 
 var CmdClearScreen = &Gommand{
-	Name: F_CLEAR_SCREEN,
+	Name: "CLEAR_SCREEN",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, "\x1B[1;1H\x1B[2J")
 		this.RepaintAll()
@@ -277,7 +277,7 @@ var CmdClearScreen = &Gommand{
 }
 
 var CmdRepaintOnNewline = &Gommand{
-	Name: F_REPAINT_ON_NEWLINE,
+	Name: "REPAINT_ON_NEWLINE",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		this.Out.WriteByte('\n')
 		this.RepaintAll()
@@ -286,7 +286,7 @@ var CmdRepaintOnNewline = &Gommand{
 }
 
 var CmdQuotedInsert = &Gommand{
-	Name: F_QUOTED_INSERT,
+	Name: "QUOTED_INSERT",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, ansiCursorOn)
 		defer io.WriteString(this.Out, ansiCursorOff)
@@ -300,7 +300,7 @@ var CmdQuotedInsert = &Gommand{
 }
 
 var CmdYank = &Gommand{
-	Name: F_YANK,
+	Name: "YANK",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		text, err := clipboard.ReadAll()
 		if err != nil {
@@ -313,7 +313,7 @@ var CmdYank = &Gommand{
 }
 
 var CmdYankWithQuote = &Gommand{
-	Name: F_YANK_WITH_QUOTE,
+	Name: "YANK_WITH_QUOTE",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		text, err := clipboard.ReadAll()
 		if err != nil {
@@ -331,7 +331,7 @@ var CmdYankWithQuote = &Gommand{
 }
 
 var CmdSwapChar = &Gommand{
-	Name: F_SWAPCHAR,
+	Name: "SWAPCHAR",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if len(this.Buffer) == this.Cursor {
 			if this.Cursor < 2 {
@@ -372,7 +372,7 @@ var CmdSwapChar = &Gommand{
 }
 
 var CmdBackwardWord = &Gommand{
-	Name: F_BACKWARD_WORD,
+	Name: "BACKWARD_WORD",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		newPos := this.Cursor
 		for newPos > 0 && moji.IsSpaceMoji(this.Buffer[newPos-1].Moji) {
@@ -391,7 +391,7 @@ var CmdBackwardWord = &Gommand{
 }
 
 var CmdForwardWord = &Gommand{
-	Name: F_FORWARD_WORD,
+	Name: "FORWARD_WORD",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		newPos := this.Cursor
 		for newPos < len(this.Buffer) && !moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
@@ -414,7 +414,7 @@ var CmdForwardWord = &Gommand{
 }
 
 var CmdUndo = &Gommand{
-	Name: F_UNDO,
+	Name: "UNDO",
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if len(this.undoes) <= 0 {
 			io.WriteString(this.Out, "\a")
