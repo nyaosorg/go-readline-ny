@@ -240,7 +240,7 @@ func (B *Buffer) eraseline() {
 type _Range []Cell
 
 func (B *Buffer) puts(s []Cell) _Range {
-	defaultColor := ColorSequence(B.RefreshColor())
+	defaultColor := ColorSequence(B.refreshColor())
 	color := ColorSequence(-1)
 	for _, ch := range s {
 		if ch.color != color {

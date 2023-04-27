@@ -7,7 +7,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
-func (B *Buffer) RefreshColor() ColorSequence {
+func (B *Buffer) refreshColor() ColorSequence {
 	if B.Coloring == nil {
 		B.Coloring = _MonoChrome{}
 	}
