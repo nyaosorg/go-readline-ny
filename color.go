@@ -5,6 +5,13 @@ import (
 	"io"
 )
 
+type Coloring interface {
+	// Reset has to initialize receiver's fields and return default color.
+	Init() ColorSequence
+	// Next has to return color for the given rune.
+	Next(rune) ColorSequence
+}
+
 type ColorSequence int64
 
 const (
@@ -35,6 +42,16 @@ const (
 	DarkCyan
 	DarkWhite
 )
+
+type _MonoChrome struct{}
+
+func (_MonoChrome) Init() ColorSequence {
+	return DefaultForeGroundColor
+}
+
+func (_MonoChrome) Next(rune) ColorSequence {
+	return DefaultForeGroundColor
+}
 
 func SGR1(n1 int) ColorSequence {
 	return ColorSequence(1) |

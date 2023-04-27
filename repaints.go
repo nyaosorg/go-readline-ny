@@ -7,16 +7,6 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
-type _MonoChrome struct{}
-
-func (_MonoChrome) Init() ColorSequence {
-	return DefaultForeGroundColor
-}
-
-func (_MonoChrome) Next(rune) ColorSequence {
-	return DefaultForeGroundColor
-}
-
 func (buf *Buffer) RefreshColor() ColorSequence {
 	if buf.Coloring == nil {
 		buf.Coloring = _MonoChrome{}

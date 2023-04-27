@@ -22,13 +22,6 @@ type Cell struct {
 	position int16
 }
 
-type Coloring interface {
-	// Reset has to initialize receiver's fields and return default color.
-	Init() ColorSequence
-	// Next has to return color for the given rune.
-	Next(rune) ColorSequence
-}
-
 // Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
