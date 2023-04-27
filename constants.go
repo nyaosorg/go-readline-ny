@@ -254,7 +254,7 @@ var name2code = map[string]keys.Code{
 // KeyCode from
 // http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 
-var _name2func = map[string]KeyFuncT{
+var name2func = map[string]KeyFuncT{
 	F_ACCEPT_LINE:          FunAcceptLine,
 	F_BACKWARD_CHAR:        FunBackwardChar,
 	F_BACKWARD_WORD:        FunBackwardWord,
@@ -283,11 +283,4 @@ var _name2func = map[string]KeyFuncT{
 	F_SWAPCHAR:             FunSwapChar,
 	F_REPAINT_ON_NEWLINE:   FunRepaintOnNewline,
 	F_UNDO:                 FunUndo,
-}
-
-func name2func(keyName string) KeyFuncT {
-	if p, ok := _name2func[keyName]; ok {
-		return p
-	}
-	return nil
 }

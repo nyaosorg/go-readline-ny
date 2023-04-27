@@ -187,21 +187,21 @@ func (editor *Editor) GetBindKey(key string) KeyFuncT {
 }
 
 // GetFunc returns KeyFuncT-object by name
-func GetFunc(funcName string) (KeyFuncT, error) {
-	rc := name2func(normWord(funcName))
-	if rc != nil {
-		return rc, nil
+func GetFunc(name string) (KeyFuncT, error) {
+	f, ok := name2func[normWord(name)]
+	if ok {
+		return f, nil
 	}
-	return nil, fmt.Errorf("%s: not found in the function-list", funcName)
+	return nil, fmt.Errorf("%s: not found in the function-list", name)
 }
 
 // BindKeySymbol assigns function to key by names.
-func (editor *KeyMap) BindKeySymbol(keyName, funcName string) error {
-	funcValue := name2func(normWord(funcName))
-	if funcValue == nil {
+func (km *KeyMap) BindKeySymbol(key, funcName string) error {
+	f, ok := name2func[normWord(funcName)]
+	if !ok {
 		return fmt.Errorf("%s: no such function", funcName)
 	}
-	return editor.BindKeyFunc(keyName, funcValue)
+	return km.BindKeyFunc(key, f)
 }
 
 const (
