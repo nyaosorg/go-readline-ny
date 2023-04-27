@@ -1,3 +1,7 @@
+v0.11.1
+=======
+Apr 28, 2023
+
 - Create sub-package: `keys` that defines key codes
 - Rename `KeyGoFuncT` to `GoCommand`
 - Rename `KeyFuncT` to `Command`
