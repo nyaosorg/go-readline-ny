@@ -229,10 +229,6 @@ func (B *Buffer) GetKey() (string, error) {
 	return getKey(B.Tty)
 }
 
-func (B *Buffer) Write(b []byte) (int, error) {
-	return B.Out.Write(b)
-}
-
 func (B *Buffer) eraseline() {
 	io.WriteString(B.Out, "\x1B[0K")
 }

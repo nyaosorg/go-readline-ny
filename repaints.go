@@ -33,7 +33,7 @@ func (B *Buffer) InsertAndRepaint(str string) {
 // GotoHead move screen-cursor to the top of the viewarea.
 // It should be called before text is changed.
 func (B *Buffer) GotoHead() {
-	fmt.Fprintf(B, "\x1B[%dG", B.topColumn+1)
+	fmt.Fprintf(B.Out, "\x1B[%dG", B.topColumn+1)
 }
 
 func (B *Buffer) repaint() {
