@@ -99,14 +99,18 @@ type KeyMap struct {
 	KeyMap map[keys.Code]Command
 }
 
+func (km *KeyMap) BindKey(key keys.Code, f Command) {
+	if km.KeyMap == nil {
+		km.KeyMap = map[keys.Code]Command{}
+	}
+	km.KeyMap[key] = f
+}
+
 // BindKeyFunc binds function to key
 func (km *KeyMap) BindKeyFunc(key string, f Command) error {
 	key = normWord(key)
-	if char, ok := name2code[key]; ok {
-		if km.KeyMap == nil {
-			km.KeyMap = map[keys.Code]Command{}
-		}
-		km.KeyMap[char] = f
+	if code, ok := name2code[key]; ok {
+		km.BindKey(code, f)
 		return nil
 	}
 	return fmt.Errorf("%s: no such keyname", key)
