@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"sync"
 
 	//tty "github.com/nyaosorg/go-readline-ny/tty10"
@@ -45,98 +44,6 @@ func (R Result) String() string {
 	}
 }
 
-// Command is the interface for object bound to key-mapping
-type Command interface {
-	String() string
-	Call(ctx context.Context, buffer *Buffer) Result
-}
-
-var defaultKeyMap = map[keys.Code]Command{
-	keys.AltB:         CmdBackwardWord,
-	keys.AltF:         CmdForwardWord,
-	keys.AltV:         CmdYank,
-	keys.AltY:         CmdYankWithQuote,
-	keys.Backspace:    CmdBackwardDeleteChar,
-	keys.CtrlA:        CmdBeginningOfLine,
-	keys.CtrlB:        CmdBackwardChar,
-	keys.CtrlC:        CmdInterrupt,
-	keys.CtrlD:        CmdDeleteOrAbort,
-	keys.CtrlE:        CmdEndOfLine,
-	keys.CtrlF:        CmdForwardChar,
-	keys.CtrlH:        CmdBackwardDeleteChar,
-	keys.CtrlK:        CmdKillLine,
-	keys.CtrlL:        CmdClearScreen,
-	keys.CtrlLeft:     CmdBackwardWord,
-	keys.CtrlM:        CmdAcceptLine,
-	keys.CtrlN:        CmdNextHistory,
-	keys.CtrlP:        CmdPreviousHistory,
-	keys.CtrlQ:        CmdQuotedInsert,
-	keys.CtrlR:        CmdISearchBackward,
-	keys.CtrlRight:    CmdForwardWord,
-	keys.CtrlT:        CmdSwapChar,
-	keys.CtrlU:        CmdUnixLineDiscard,
-	keys.CtrlUnderbar: CmdUndo,
-	keys.CtrlV:        CmdQuotedInsert,
-	keys.CtrlW:        CmdUnixWordRubout,
-	keys.CtrlY:        CmdYank,
-	keys.CtrlZ:        CmdUndo,
-	keys.Delete:       CmdDeleteChar,
-	keys.Down:         CmdNextHistory,
-	keys.End:          CmdEndOfLine,
-	keys.Escape:       CmdKillWholeLine,
-	keys.Home:         CmdBeginningOfLine,
-	keys.Left:         CmdBackwardChar,
-	keys.Right:        CmdForwardChar,
-	keys.Up:           CmdPreviousHistory,
-}
-
-func normWord(src string) string {
-	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
-}
-
-// KeyMap is the class for key-bindings
-type KeyMap struct {
-	KeyMap map[keys.Code]Command
-}
-
-func (km *KeyMap) BindKey(key keys.Code, f Command) {
-	if km.KeyMap == nil {
-		km.KeyMap = map[keys.Code]Command{}
-	}
-	km.KeyMap[key] = f
-}
-
-// BindKeyFunc binds function to key
-func (km *KeyMap) BindKeyFunc(key string, f Command) error {
-	key = normWord(key)
-	if code, ok := name2code[key]; ok {
-		km.BindKey(code, f)
-		return nil
-	}
-	return fmt.Errorf("%s: no such keyname", key)
-}
-
-// BindKeyClosure binds closure to key by name
-func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
-	return km.BindKeyFunc(name, &GoCommand{Func: f, Name: "annonymous"})
-}
-
-// GetBindKey returns the function assigned to given key
-func (km *KeyMap) GetBindKey(key string) Command {
-	key = normWord(key)
-	if ch, ok := name2code[key]; ok {
-		if km.KeyMap != nil {
-			if f, ok := km.KeyMap[ch]; ok {
-				return f
-			}
-		}
-	}
-	return nil
-}
-
-// GlobalKeyMap is the global keymap for users' customizing
-var GlobalKeyMap KeyMap
-
 type ITty interface {
 	Raw() (func() error, error)
 	ReadRune() (rune, error)
@@ -169,24 +76,6 @@ func (editor *Editor) GetBindKey(key string) Command {
 		return editor.getKeyFunction(code.String())
 	}
 	return nil
-}
-
-// GetFunc returns Command-object by name
-func GetFunc(name string) (Command, error) {
-	f, ok := name2func[normWord(name)]
-	if ok {
-		return f, nil
-	}
-	return nil, fmt.Errorf("%s: not found in the function-list", name)
-}
-
-// BindKeySymbol assigns function to key by names.
-func (km *KeyMap) BindKeySymbol(key, funcName string) error {
-	f, err := GetFunc(key)
-	if err != nil {
-		return err
-	}
-	return km.BindKeyFunc(key, f)
 }
 
 const (
