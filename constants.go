@@ -219,35 +219,3 @@ var name2code = map[string]keys.Code{
 	K_UP:            keys.Up,
 	K_CTRL_UP:       keys.CtrlUp,
 }
-
-// KeyCode from
-// http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
-
-var defaultCommand = []Command{
-	CmdAcceptLine,
-	CmdBackwardChar,
-	CmdBackwardWord,
-	CmdBackwardDeleteChar,
-	CmdBeginningOfLine,
-	CmdClearScreen,
-	CmdDeleteChar,
-	CmdDeleteOrAbort,
-	CmdEndOfLine,
-	CmdForwardChar,
-	CmdForwardWord,
-	CmdNextHistory,
-	CmdPreviousHistory,
-	CmdInterrupt,
-	CmdISearchBackward,
-	CmdKillLine,
-	CmdKillWholeLine,
-	nil,
-	CmdQuotedInsert,
-	CmdUnixLineDiscard,
-	CmdUnixWordRubout,
-	CmdYank,
-	CmdYankWithQuote,
-	CmdSwapChar,
-	CmdRepaintOnNewline,
-	CmdUndo,
-}

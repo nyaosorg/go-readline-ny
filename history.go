@@ -19,9 +19,9 @@ func (*_EmptyHistory) Len() int { return 0 }
 // At always returns empty-string because the receiver is dummy.
 func (*_EmptyHistory) At(int) string { return "" }
 
-var CmdPreviousHistory = &Gommand{
-	Name: "PREVIOUS_HISTORY",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdPreviousHistory = NewGoCommand(
+	"PREVIOUS_HISTORY",
+	func(ctx context.Context, this *Buffer) Result {
 		if this.History.Len() <= 0 {
 			return CONTINUE
 		}
@@ -41,11 +41,11 @@ var CmdPreviousHistory = &Gommand{
 		}
 		return CONTINUE
 	},
-}
+)
 
-var CmdNextHistory = &Gommand{
-	Name: "NEXT_HISTORY",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdNextHistory = NewGoCommand(
+	"NEXT_HISTORY",
+	func(ctx context.Context, this *Buffer) Result {
 		if this.History.Len() <= 0 {
 			return CONTINUE
 		}
@@ -62,4 +62,4 @@ var CmdNextHistory = &Gommand{
 		}
 		return CONTINUE
 	},
-}
+)

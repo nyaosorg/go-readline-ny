@@ -32,37 +32,48 @@ func (K *Gommand) Call(ctx context.Context, buffer *Buffer) Result {
 	return K.Func(ctx, buffer)
 }
 
-var CmdAcceptLine = &Gommand{
-	Name: "ACCEPT_LINE",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-M
-		return ENTER
-	},
+var name2func = map[string]Command{}
+
+func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *Gommand {
+	instance := &Gommand{
+		Name: name,
+		Func: f,
+	}
+	name2func[name] = instance
+	return instance
 }
 
-var CmdInterrupt = &Gommand{
-	Name: "INTR",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-C
+var CmdAcceptLine = NewGoCommand(
+	"ACCEPT_LINE",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-M
+		return ENTER
+	},
+)
+
+var CmdInterrupt = NewGoCommand(
+	"INTR",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-C
 		this.Buffer = this.Buffer[:0]
 		this.Cursor = 0
 		this.ViewStart = 0
 		this.undoes = nil
 		return INTR
 	},
-}
+)
 
-var CmdBeginningOfLine = &Gommand{
-	Name: "BEGINNING_OF_LINE",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-A
+var CmdBeginningOfLine = NewGoCommand(
+	"BEGINNING_OF_LINE",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-A
 		this.Cursor = 0
 		this.ViewStart = 0
 		this.repaint()
 		return CONTINUE
 	},
-}
+)
 
-var CmdBackwardChar = &Gommand{
-	Name: "BACKWARD_CHAR",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-B
+var CmdBackwardChar = NewGoCommand(
+	"BACKWARD_CHAR",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-B
 		if this.Cursor <= 0 {
 			return CONTINUE
 		}
@@ -73,11 +84,11 @@ var CmdBackwardChar = &Gommand{
 		this.repaint()
 		return CONTINUE
 	},
-}
+)
 
-var CmdEndOfLine = &Gommand{
-	Name: "END_OF_LINE",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-E
+var CmdEndOfLine = NewGoCommand(
+	"END_OF_LINE",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-E
 		allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
 		if allength < this.ViewWidth() {
 			this.puts(this.Buffer[this.Cursor:])
@@ -103,11 +114,11 @@ var CmdEndOfLine = &Gommand{
 		this.eraseline()
 		return CONTINUE
 	},
-}
+)
 
-var CmdForwardChar = &Gommand{
-	Name: "FORWARD_CHAR",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-F
+var CmdForwardChar = NewGoCommand(
+	"FORWARD_CHAR",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-F
 		if this.Cursor >= len(this.Buffer) {
 			return CONTINUE
 		}
@@ -128,11 +139,11 @@ var CmdForwardChar = &Gommand{
 		this.Cursor++
 		return CONTINUE
 	},
-}
+)
 
-var CmdBackwardDeleteChar = &Gommand{
-	Name: "BACKWARD_DELETE_CHAR",
-	Func: func(ctx context.Context, this *Buffer) Result { // Backspace
+var CmdBackwardDeleteChar = NewGoCommand(
+	"BACKWARD_DELETE_CHAR",
+	func(ctx context.Context, this *Buffer) Result { // Backspace
 		if this.Cursor > 0 {
 			this.Cursor--
 			this.Delete(this.Cursor, 1)
@@ -143,26 +154,26 @@ var CmdBackwardDeleteChar = &Gommand{
 		}
 		return CONTINUE
 	},
-}
+)
 
-var CmdDeleteChar = &Gommand{
-	Name: "DELETE_CHAR",
-	Func: func(ctx context.Context, this *Buffer) Result { // Del
+var CmdDeleteChar = NewGoCommand(
+	"DELETE_CHAR",
+	func(ctx context.Context, this *Buffer) Result { // Del
 		this.Delete(this.Cursor, 1)
 		this.repaint()
 		return CONTINUE
 	},
-}
+)
 
-var CmdDeleteOrAbort = &Gommand{
-	Name: "DELETE_OR_ABORT",
-	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-D
+var CmdDeleteOrAbort = NewGoCommand(
+	"DELETE_OR_ABORT",
+	func(ctx context.Context, this *Buffer) Result { // Ctrl-D
 		if len(this.Buffer) > 0 {
 			return CmdDeleteChar.Func(ctx, this)
 		}
 		return ABORT
 	},
-}
+)
 
 func mojiAndStringToString(m Moji, s string) string {
 	var buffer strings.Builder
@@ -203,9 +214,9 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	return CONTINUE
 }
 
-var CmdKillLine = &Gommand{
-	Name: "KILL_LINE",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdKillLine = NewGoCommand(
+	"KILL_LINE",
+	func(ctx context.Context, this *Buffer) Result {
 		clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
 
 		this.eraseline()
@@ -217,11 +228,11 @@ var CmdKillLine = &Gommand{
 		this.Buffer = this.Buffer[:this.Cursor]
 		return CONTINUE
 	},
-}
+)
 
-var CmdKillWholeLine = &Gommand{
-	Name: "KILL_WHOLE_LINE",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdKillWholeLine = NewGoCommand(
+	"KILL_WHOLE_LINE",
+	func(ctx context.Context, this *Buffer) Result {
 		u := &_Undo{
 			pos:  0,
 			text: cell2string(this.Buffer),
@@ -234,11 +245,11 @@ var CmdKillWholeLine = &Gommand{
 		this.ViewStart = 0
 		return CONTINUE
 	},
-}
+)
 
-var CmdUnixWordRubout = &Gommand{
-	Name: "UNIX_WORD_RUBOUT",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdUnixWordRubout = NewGoCommand(
+	"UNIX_WORD_RUBOUT",
+	func(ctx context.Context, this *Buffer) Result {
 		orgCursorPos := this.Cursor
 		for this.Cursor > 0 && moji.IsSpaceMoji(this.Buffer[this.Cursor-1].Moji) {
 			this.Cursor--
@@ -253,11 +264,11 @@ var CmdUnixWordRubout = &Gommand{
 		this.repaint()
 		return CONTINUE
 	},
-}
+)
 
-var CmdUnixLineDiscard = &Gommand{
-	Name: "UNIX_LINE_DISCARD",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdUnixLineDiscard = NewGoCommand(
+	"UNIX_LINE_DISCARD",
+	func(ctx context.Context, this *Buffer) Result {
 		clipboard.WriteAll(this.SubString(0, this.Cursor))
 		this.Delete(0, this.Cursor)
 		this.Cursor = 0
@@ -265,29 +276,29 @@ var CmdUnixLineDiscard = &Gommand{
 		this.repaint()
 		return CONTINUE
 	},
-}
+)
 
-var CmdClearScreen = &Gommand{
-	Name: "CLEAR_SCREEN",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdClearScreen = NewGoCommand(
+	"CLEAR_SCREEN",
+	func(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, "\x1B[1;1H\x1B[2J")
 		this.RepaintAll()
 		return CONTINUE
 	},
-}
+)
 
-var CmdRepaintOnNewline = &Gommand{
-	Name: "REPAINT_ON_NEWLINE",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdRepaintOnNewline = NewGoCommand(
+	"REPAINT_ON_NEWLINE",
+	func(ctx context.Context, this *Buffer) Result {
 		this.Out.WriteByte('\n')
 		this.RepaintAll()
 		return CONTINUE
 	},
-}
+)
 
-var CmdQuotedInsert = &Gommand{
-	Name: "QUOTED_INSERT",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdQuotedInsert = NewGoCommand(
+	"QUOTED_INSERT",
+	func(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, ansiCursorOn)
 		defer io.WriteString(this.Out, ansiCursorOff)
 
@@ -297,11 +308,11 @@ var CmdQuotedInsert = &Gommand{
 		}
 		return CONTINUE
 	},
-}
+)
 
-var CmdYank = &Gommand{
-	Name: "YANK",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdYank = NewGoCommand(
+	"YANK",
+	func(ctx context.Context, this *Buffer) Result {
 		text, err := clipboard.ReadAll()
 		if err != nil {
 			return CONTINUE
@@ -310,11 +321,11 @@ var CmdYank = &Gommand{
 		this.InsertAndRepaint(text)
 		return CONTINUE
 	},
-}
+)
 
-var CmdYankWithQuote = &Gommand{
-	Name: "YANK_WITH_QUOTE",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdYankWithQuote = NewGoCommand(
+	"YANK_WITH_QUOTE",
+	func(ctx context.Context, this *Buffer) Result {
 		text, err := clipboard.ReadAll()
 		if err != nil {
 			return CONTINUE
@@ -328,11 +339,11 @@ var CmdYankWithQuote = &Gommand{
 		this.InsertAndRepaint(text)
 		return CONTINUE
 	},
-}
+)
 
-var CmdSwapChar = &Gommand{
-	Name: "SWAPCHAR",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdSwapChar = NewGoCommand(
+	"SWAPCHAR",
+	func(ctx context.Context, this *Buffer) Result {
 		if len(this.Buffer) == this.Cursor {
 			if this.Cursor < 2 {
 				return CONTINUE
@@ -369,11 +380,11 @@ var CmdSwapChar = &Gommand{
 		}
 		return CONTINUE
 	},
-}
+)
 
-var CmdBackwardWord = &Gommand{
-	Name: "BACKWARD_WORD",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdBackwardWord = NewGoCommand(
+	"BACKWARD_WORD",
+	func(ctx context.Context, this *Buffer) Result {
 		newPos := this.Cursor
 		for newPos > 0 && moji.IsSpaceMoji(this.Buffer[newPos-1].Moji) {
 			newPos--
@@ -388,11 +399,11 @@ var CmdBackwardWord = &Gommand{
 		this.repaint()
 		return CONTINUE
 	},
-}
+)
 
-var CmdForwardWord = &Gommand{
-	Name: "FORWARD_WORD",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdForwardWord = NewGoCommand(
+	"FORWARD_WORD",
+	func(ctx context.Context, this *Buffer) Result {
 		newPos := this.Cursor
 		for newPos < len(this.Buffer) && !moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
 			newPos++
@@ -411,11 +422,11 @@ var CmdForwardWord = &Gommand{
 		}
 		return CONTINUE
 	},
-}
+)
 
-var CmdUndo = &Gommand{
-	Name: "UNDO",
-	Func: func(ctx context.Context, this *Buffer) Result {
+var CmdUndo = NewGoCommand(
+	"UNDO",
+	func(ctx context.Context, this *Buffer) Result {
 		if len(this.undoes) <= 0 {
 			io.WriteString(this.Out, "\a")
 			return CONTINUE
@@ -443,4 +454,4 @@ var CmdUndo = &Gommand{
 		this.repaint()
 		return CONTINUE
 	},
-}
+)

@@ -171,16 +171,8 @@ func (editor *Editor) GetBindKey(key string) Command {
 	return nil
 }
 
-var name2func map[string]Command
-
 // GetFunc returns Command-object by name
 func GetFunc(name string) (Command, error) {
-	if name2func == nil {
-		name2func := map[string]Command{}
-		for _, c := range defaultCommand {
-			name2func[c.String()] = c
-		}
-	}
 	f, ok := name2func[normWord(name)]
 	if ok {
 		return f, nil
