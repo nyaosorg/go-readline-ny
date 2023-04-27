@@ -50,63 +50,44 @@ type KeyFuncT interface {
 	Call(ctx context.Context, buffer *Buffer) Result
 }
 
-// KeyGoFuncT is the implement of KeyFuncT which has a name and a function
-type KeyGoFuncT struct {
-	Name string
-	Func func(ctx context.Context, buffer *Buffer) Result
-}
-
-// Call calls the function the receiver contains
-func (K *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
-	if K.Func == nil {
-		return CONTINUE
-	}
-	return K.Func(ctx, buffer)
-}
-
-// String returns KeyGoFuncT's name
-func (K KeyGoFuncT) String() string {
-	return K.Name
-}
-
 var defaultKeyMap = map[keys.Code]KeyFuncT{
 	// keys.Ctrl:         name2func(F_PASS),
-	keys.AltB:         FunBackwardWord,
-	keys.AltF:         FunForwardWord,
-	keys.AltV:         FunYank,
-	keys.AltY:         FunYankWithQuote,
-	keys.Backspace:    FunBackwardDeleteChar,
-	keys.CtrlA:        FunBeginningOfLine,
-	keys.CtrlB:        FunBackwardChar,
-	keys.CtrlC:        FunInterrupt,
-	keys.CtrlD:        FunDeleteOrAbort,
-	keys.CtrlE:        FunEndOfLine,
-	keys.CtrlF:        FunForwardChar,
-	keys.CtrlH:        FunBackwardDeleteChar,
-	keys.CtrlK:        FunKillLine,
-	keys.CtrlL:        FunClearScreen,
-	keys.CtrlLeft:     FunBackwardWord,
-	keys.CtrlM:        FunAcceptLine,
-	keys.CtrlN:        FunNextHistory,
-	keys.CtrlP:        FunPreviousHistory,
-	keys.CtrlQ:        FunQuotedInsert,
-	keys.CtrlR:        FunISearchBackward,
-	keys.CtrlRight:    FunForwardWord,
-	keys.CtrlT:        FunSwapChar,
-	keys.CtrlU:        FunUnixLineDiscard,
-	keys.CtrlUnderbar: FunUndo,
-	keys.CtrlV:        FunQuotedInsert,
-	keys.CtrlW:        FunUnixWordRubout,
-	keys.CtrlY:        FunYank,
-	keys.CtrlZ:        FunUndo,
-	keys.Delete:       FunDeleteChar,
-	keys.Down:         FunNextHistory,
-	keys.End:          FunEndOfLine,
-	keys.Escape:       FunKillWholeLine,
-	keys.Home:         FunBeginningOfLine,
-	keys.Left:         FunBackwardChar,
-	keys.Right:        FunForwardChar,
-	keys.Up:           FunPreviousHistory,
+	keys.AltB:         CmdBackwardWord,
+	keys.AltF:         CmdForwardWord,
+	keys.AltV:         CmdYank,
+	keys.AltY:         CmdYankWithQuote,
+	keys.Backspace:    CmdBackwardDeleteChar,
+	keys.CtrlA:        CmdBeginningOfLine,
+	keys.CtrlB:        CmdBackwardChar,
+	keys.CtrlC:        CmdInterrupt,
+	keys.CtrlD:        CmdDeleteOrAbort,
+	keys.CtrlE:        CmdEndOfLine,
+	keys.CtrlF:        CmdForwardChar,
+	keys.CtrlH:        CmdBackwardDeleteChar,
+	keys.CtrlK:        CmdKillLine,
+	keys.CtrlL:        CmdClearScreen,
+	keys.CtrlLeft:     CmdBackwardWord,
+	keys.CtrlM:        CmdAcceptLine,
+	keys.CtrlN:        CmdNextHistory,
+	keys.CtrlP:        CmdPreviousHistory,
+	keys.CtrlQ:        CmdQuotedInsert,
+	keys.CtrlR:        CmdISearchBackward,
+	keys.CtrlRight:    CmdForwardWord,
+	keys.CtrlT:        CmdSwapChar,
+	keys.CtrlU:        CmdUnixLineDiscard,
+	keys.CtrlUnderbar: CmdUndo,
+	keys.CtrlV:        CmdQuotedInsert,
+	keys.CtrlW:        CmdUnixWordRubout,
+	keys.CtrlY:        CmdYank,
+	keys.CtrlZ:        CmdUndo,
+	keys.Delete:       CmdDeleteChar,
+	keys.Down:         CmdNextHistory,
+	keys.End:          CmdEndOfLine,
+	keys.Escape:       CmdKillWholeLine,
+	keys.Home:         CmdBeginningOfLine,
+	keys.Left:         CmdBackwardChar,
+	keys.Right:        CmdForwardChar,
+	keys.Up:           CmdPreviousHistory,
 }
 
 func normWord(src string) string {
@@ -133,7 +114,7 @@ func (km *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
 
 // BindKeyClosure binds closure to key by name
 func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
-	return km.BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
+	return km.BindKeyFunc(name, &Gommand{Func: f, Name: "annonymous"})
 }
 
 // GetBindKey returns the function assigned to given key
@@ -230,7 +211,7 @@ func (editor *Editor) getKeyFunction(key string) KeyFuncT {
 	if f, ok := defaultKeyMap[code]; ok {
 		return f
 	}
-	return &KeyGoFuncT{
+	return &Gommand{
 		Func: func(ctx context.Context, this *Buffer) Result {
 			return keyFuncInsertSelf(ctx, this, key)
 		},
@@ -326,7 +307,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 
 		f := editor.getKeyFunction(key1)
 
-		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
+		if fg, ok := f.(*Gommand); !ok || fg.Func != nil {
 			io.WriteString(buffer.Out, ansiCursorOff)
 			cursorOnSwitch = false
 			buffer.Out.Flush()

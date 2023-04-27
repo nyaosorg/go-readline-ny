@@ -10,14 +10,36 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
-var FunAcceptLine = &KeyGoFuncT{
+// Gommand is the implement of KeyFuncT which has a name and a function
+type Gommand struct {
+	Name string
+	Func func(ctx context.Context, buffer *Buffer) Result
+}
+
+// Deprecate: use Gommand instead
+type KeyGoFuncT = Gommand
+
+// String returns Gommand's name
+func (K Gommand) String() string {
+	return K.Name
+}
+
+// Call calls the function the receiver contains
+func (K *Gommand) Call(ctx context.Context, buffer *Buffer) Result {
+	if K.Func == nil {
+		return CONTINUE
+	}
+	return K.Func(ctx, buffer)
+}
+
+var CmdAcceptLine = &Gommand{
 	Name: F_ACCEPT_LINE,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-M
 		return ENTER
 	},
 }
 
-var FunInterrupt = &KeyGoFuncT{
+var CmdInterrupt = &Gommand{
 	Name: F_INTR,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-C
 		this.Buffer = this.Buffer[:0]
@@ -28,7 +50,7 @@ var FunInterrupt = &KeyGoFuncT{
 	},
 }
 
-var FunBeginningOfLine = &KeyGoFuncT{
+var CmdBeginningOfLine = &Gommand{
 	Name: F_BEGINNING_OF_LINE,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-A
 		this.Cursor = 0
@@ -38,7 +60,7 @@ var FunBeginningOfLine = &KeyGoFuncT{
 	},
 }
 
-var FunBackwardChar = &KeyGoFuncT{
+var CmdBackwardChar = &Gommand{
 	Name: F_BACKWARD_CHAR,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-B
 		if this.Cursor <= 0 {
@@ -53,7 +75,7 @@ var FunBackwardChar = &KeyGoFuncT{
 	},
 }
 
-var FunEndOfLine = &KeyGoFuncT{
+var CmdEndOfLine = &Gommand{
 	Name: F_END_OF_LINE,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-E
 		allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
@@ -83,7 +105,7 @@ var FunEndOfLine = &KeyGoFuncT{
 	},
 }
 
-var FunForwardChar = &KeyGoFuncT{
+var CmdForwardChar = &Gommand{
 	Name: F_FORWARD_CHAR,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-F
 		if this.Cursor >= len(this.Buffer) {
@@ -108,7 +130,7 @@ var FunForwardChar = &KeyGoFuncT{
 	},
 }
 
-var FunBackwardDeleteChar = &KeyGoFuncT{
+var CmdBackwardDeleteChar = &Gommand{
 	Name: F_BACKWARD_DELETE_CHAR,
 	Func: func(ctx context.Context, this *Buffer) Result { // Backspace
 		if this.Cursor > 0 {
@@ -123,7 +145,7 @@ var FunBackwardDeleteChar = &KeyGoFuncT{
 	},
 }
 
-var FunDeleteChar = &KeyGoFuncT{
+var CmdDeleteChar = &Gommand{
 	Name: F_DELETE_CHAR,
 	Func: func(ctx context.Context, this *Buffer) Result { // Del
 		this.Delete(this.Cursor, 1)
@@ -132,11 +154,11 @@ var FunDeleteChar = &KeyGoFuncT{
 	},
 }
 
-var FunDeleteOrAbort = &KeyGoFuncT{
+var CmdDeleteOrAbort = &Gommand{
 	Name: F_DELETE_OR_ABORT,
 	Func: func(ctx context.Context, this *Buffer) Result { // Ctrl-D
 		if len(this.Buffer) > 0 {
-			return FunDeleteChar.Func(ctx, this)
+			return CmdDeleteChar.Func(ctx, this)
 		}
 		return ABORT
 	},
@@ -157,10 +179,10 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		this.pending = mojiAndStringToString(
 			this.Buffer[this.Cursor-1].Moji,
 			keys)
-		return FunBackwardDeleteChar.Func(ctx, this)
+		return CmdBackwardDeleteChar.Func(ctx, this)
 	} else if (moji.AreVariationSelectorLike(keys) || moji.AreEmojiModifier(keys)) && this.Cursor > 0 {
 		baseMoji := this.Buffer[this.Cursor-1].Moji
-		FunBackwardDeleteChar.Func(ctx, this)
+		CmdBackwardDeleteChar.Func(ctx, this)
 		keys = mojiAndStringToString(baseMoji, keys)
 	} else if len(this.pending) > 0 {
 		keys = this.pending + keys
@@ -181,7 +203,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	return CONTINUE
 }
 
-var FunKillLine = &KeyGoFuncT{
+var CmdKillLine = &Gommand{
 	Name: F_KILL_LINE,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
@@ -197,7 +219,7 @@ var FunKillLine = &KeyGoFuncT{
 	},
 }
 
-var FunKillWholeLine = &KeyGoFuncT{
+var CmdKillWholeLine = &Gommand{
 	Name: F_KILL_WHOLE_LINE,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		u := &_Undo{
@@ -214,7 +236,7 @@ var FunKillWholeLine = &KeyGoFuncT{
 	},
 }
 
-var FunUnixWordRubout = &KeyGoFuncT{
+var CmdUnixWordRubout = &Gommand{
 	Name: F_UNIX_WORD_RUBOUT,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		orgCursorPos := this.Cursor
@@ -233,7 +255,7 @@ var FunUnixWordRubout = &KeyGoFuncT{
 	},
 }
 
-var FunUnixLineDiscard = &KeyGoFuncT{
+var CmdUnixLineDiscard = &Gommand{
 	Name: F_UNIX_LINE_DISCARD,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		clipboard.WriteAll(this.SubString(0, this.Cursor))
@@ -245,7 +267,7 @@ var FunUnixLineDiscard = &KeyGoFuncT{
 	},
 }
 
-var FunClearScreen = &KeyGoFuncT{
+var CmdClearScreen = &Gommand{
 	Name: F_CLEAR_SCREEN,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, "\x1B[1;1H\x1B[2J")
@@ -254,7 +276,7 @@ var FunClearScreen = &KeyGoFuncT{
 	},
 }
 
-var FunRepaintOnNewline = &KeyGoFuncT{
+var CmdRepaintOnNewline = &Gommand{
 	Name: F_REPAINT_ON_NEWLINE,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		this.Out.WriteByte('\n')
@@ -263,7 +285,7 @@ var FunRepaintOnNewline = &KeyGoFuncT{
 	},
 }
 
-var FunQuotedInsert = &KeyGoFuncT{
+var CmdQuotedInsert = &Gommand{
 	Name: F_QUOTED_INSERT,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, ansiCursorOn)
@@ -277,7 +299,7 @@ var FunQuotedInsert = &KeyGoFuncT{
 	},
 }
 
-var FunYank = &KeyGoFuncT{
+var CmdYank = &Gommand{
 	Name: F_YANK,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		text, err := clipboard.ReadAll()
@@ -290,7 +312,7 @@ var FunYank = &KeyGoFuncT{
 	},
 }
 
-var FunYankWithQuote = &KeyGoFuncT{
+var CmdYankWithQuote = &Gommand{
 	Name: F_YANK_WITH_QUOTE,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		text, err := clipboard.ReadAll()
@@ -308,7 +330,7 @@ var FunYankWithQuote = &KeyGoFuncT{
 	},
 }
 
-var FunSwapChar = &KeyGoFuncT{
+var CmdSwapChar = &Gommand{
 	Name: F_SWAPCHAR,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if len(this.Buffer) == this.Cursor {
@@ -349,7 +371,7 @@ var FunSwapChar = &KeyGoFuncT{
 	},
 }
 
-var FunBackwardWord = &KeyGoFuncT{
+var CmdBackwardWord = &Gommand{
 	Name: F_BACKWARD_WORD,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		newPos := this.Cursor
@@ -368,7 +390,7 @@ var FunBackwardWord = &KeyGoFuncT{
 	},
 }
 
-var FunForwardWord = &KeyGoFuncT{
+var CmdForwardWord = &Gommand{
 	Name: F_FORWARD_WORD,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		newPos := this.Cursor
@@ -391,7 +413,7 @@ var FunForwardWord = &KeyGoFuncT{
 	},
 }
 
-var FunUndo = &KeyGoFuncT{
+var CmdUndo = &Gommand{
 	Name: F_UNDO,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if len(this.undoes) <= 0 {

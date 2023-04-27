@@ -19,7 +19,7 @@ func (*_EmptyHistory) Len() int { return 0 }
 // At always returns empty-string because the receiver is dummy.
 func (*_EmptyHistory) At(int) string { return "" }
 
-var FunPreviousHistory = &KeyGoFuncT{
+var CmdPreviousHistory = &Gommand{
 	Name: F_PREVIOUS_HISTORY,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if this.History.Len() <= 0 {
@@ -32,18 +32,18 @@ var FunPreviousHistory = &KeyGoFuncT{
 			this.historyPointer = this.History.Len()
 		}
 		this.historyPointer--
-		FunKillWholeLine.Func(ctx, this)
+		CmdKillWholeLine.Func(ctx, this)
 		if this.historyPointer >= 0 {
 			this.InsertString(0, this.History.At(this.historyPointer))
 			this.ViewStart = 0
 			this.Cursor = 0
-			FunEndOfLine.Func(ctx, this)
+			CmdEndOfLine.Func(ctx, this)
 		}
 		return CONTINUE
 	},
 }
 
-var FunNextHistory = &KeyGoFuncT{
+var CmdNextHistory = &Gommand{
 	Name: F_NEXT_HISTORY,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		if this.History.Len() <= 0 {
@@ -53,12 +53,12 @@ var FunNextHistory = &KeyGoFuncT{
 			return CONTINUE
 		}
 		this.historyPointer++
-		FunKillWholeLine.Func(ctx, this)
+		CmdKillWholeLine.Func(ctx, this)
 		if this.historyPointer < this.History.Len() {
 			this.InsertString(0, this.History.At(this.historyPointer))
 			this.ViewStart = 0
 			this.Cursor = 0
-			FunEndOfLine.Func(ctx, this)
+			CmdEndOfLine.Func(ctx, this)
 		}
 		return CONTINUE
 	},

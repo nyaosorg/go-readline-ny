@@ -13,7 +13,7 @@ func caseInsensitiveStringContains(s, t string) bool {
 	return strings.Contains(strings.ToUpper(s), strings.ToUpper(t))
 }
 
-var FunISearchBackward = &KeyGoFuncT{
+var CmdISearchBackward = &Gommand{
 	Name: F_ISEARCH_BACKWARD,
 	Func: func(ctx context.Context, this *Buffer) Result {
 		var searchBuf strings.Builder
