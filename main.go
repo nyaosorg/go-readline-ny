@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	//tty "github.com/nyaosorg/go-readline-ny/tty10"
+	"github.com/nyaosorg/go-readline-ny/keys"
 	tty "github.com/nyaosorg/go-readline-ny/tty8"
 )
 
@@ -68,47 +69,44 @@ func (K KeyGoFuncT) String() string {
 	return K.Name
 }
 
-var defaultKeyMap = map[string]KeyFuncT{
-	name2char[K_CTRL_A]:        name2func(F_BEGINNING_OF_LINE),
-	name2char[K_CTRL_B]:        name2func(F_BACKWARD_CHAR),
-	name2char[K_BACKSPACE]:     name2func(F_BACKWARD_DELETE_CHAR),
-	name2char[K_CTRL_C]:        name2func(F_INTR),
-	name2char[K_CTRL_D]:        name2func(F_DELETE_OR_ABORT),
-	name2char[K_CTRL_E]:        name2func(F_END_OF_LINE),
-	name2char[K_CTRL_F]:        name2func(F_FORWARD_CHAR),
-	name2char[K_CTRL_H]:        name2func(F_BACKWARD_DELETE_CHAR),
-	name2char[K_CTRL_K]:        name2func(F_KILL_LINE),
-	name2char[K_CTRL_L]:        name2func(F_CLEAR_SCREEN),
-	name2char[K_CTRL_M]:        name2func(F_ACCEPT_LINE),
-	name2char[K_CTRL_R]:        name2func(F_ISEARCH_BACKWARD),
-	name2char[K_CTRL_U]:        name2func(F_UNIX_LINE_DISCARD),
-	name2char[K_CTRL_Y]:        name2func(F_YANK),
-	name2char[K_DELETE]:        name2func(F_DELETE_CHAR),
-	name2char[K_ENTER]:         name2func(F_ACCEPT_LINE),
-	name2char[K_ESCAPE]:        name2func(F_KILL_WHOLE_LINE),
-	name2char[K_CTRL_N]:        name2func(F_HISTORY_DOWN),
-	name2char[K_CTRL_P]:        name2func(F_HISTORY_UP),
-	name2char[K_CTRL_Q]:        name2func(F_QUOTED_INSERT),
-	name2char[K_CTRL_T]:        name2func(F_SWAPCHAR),
-	name2char[K_CTRL_V]:        name2func(F_QUOTED_INSERT),
-	name2char[K_CTRL_W]:        name2func(F_UNIX_WORD_RUBOUT),
-	name2char[K_CTRL]:          name2func(F_PASS),
-	name2char[K_DELETE]:        name2func(F_DELETE_CHAR),
-	name2char[K_END]:           name2func(F_END_OF_LINE),
-	name2char[K_HOME]:          name2func(F_BEGINNING_OF_LINE),
-	name2char[K_LEFT]:          name2func(F_BACKWARD_CHAR),
-	name2char[K_RIGHT]:         name2func(F_FORWARD_CHAR),
-	name2char[K_SHIFT]:         name2func(F_PASS),
-	name2char[K_DOWN]:          name2func(F_HISTORY_DOWN),
-	name2char[K_UP]:            name2func(F_HISTORY_UP),
-	name2char[K_ALT_V]:         name2func(F_YANK),
-	name2char[K_ALT_Y]:         name2func(F_YANK_WITH_QUOTE),
-	name2char[K_ALT_B]:         name2func(F_BACKWARD_WORD),
-	name2char[K_ALT_F]:         name2func(F_FORWARD_WORD),
-	name2char[K_CTRL_LEFT]:     name2func(F_BACKWARD_WORD),
-	name2char[K_CTRL_RIGHT]:    name2func(F_FORWARD_WORD),
-	name2char[K_CTRL_Z]:        name2func(F_UNDO),
-	name2char[K_CTRL_UNDERBAR]: name2func(F_UNDO),
+var defaultKeyMap = map[keys.Code]KeyFuncT{
+	keys.AltB:         name2func(F_BACKWARD_WORD),
+	keys.AltF:         name2func(F_FORWARD_WORD),
+	keys.AltV:         name2func(F_YANK),
+	keys.AltY:         name2func(F_YANK_WITH_QUOTE),
+	keys.Backspace:    name2func(F_BACKWARD_DELETE_CHAR),
+	keys.Ctrl:         name2func(F_PASS),
+	keys.CtrlA:        name2func(F_BEGINNING_OF_LINE),
+	keys.CtrlB:        name2func(F_BACKWARD_CHAR),
+	keys.CtrlC:        name2func(F_INTR),
+	keys.CtrlD:        name2func(F_DELETE_OR_ABORT),
+	keys.CtrlE:        name2func(F_END_OF_LINE),
+	keys.CtrlF:        name2func(F_FORWARD_CHAR),
+	keys.CtrlH:        name2func(F_BACKWARD_DELETE_CHAR),
+	keys.CtrlK:        name2func(F_KILL_LINE),
+	keys.CtrlL:        name2func(F_CLEAR_SCREEN),
+	keys.CtrlLeft:     name2func(F_BACKWARD_WORD),
+	keys.CtrlM:        name2func(F_ACCEPT_LINE),
+	keys.CtrlN:        name2func(F_HISTORY_DOWN),
+	keys.CtrlP:        name2func(F_HISTORY_UP),
+	keys.CtrlQ:        name2func(F_QUOTED_INSERT),
+	keys.CtrlR:        name2func(F_ISEARCH_BACKWARD),
+	keys.CtrlRight:    name2func(F_FORWARD_WORD),
+	keys.CtrlT:        name2func(F_SWAPCHAR),
+	keys.CtrlU:        name2func(F_UNIX_LINE_DISCARD),
+	keys.CtrlUnderbar: name2func(F_UNDO),
+	keys.CtrlV:        name2func(F_QUOTED_INSERT),
+	keys.CtrlW:        name2func(F_UNIX_WORD_RUBOUT),
+	keys.CtrlY:        name2func(F_YANK),
+	keys.CtrlZ:        name2func(F_UNDO),
+	keys.Delete:       name2func(F_DELETE_CHAR),
+	keys.Down:         name2func(F_HISTORY_DOWN),
+	keys.End:          name2func(F_END_OF_LINE),
+	keys.Escape:       name2func(F_KILL_WHOLE_LINE),
+	keys.Home:         name2func(F_BEGINNING_OF_LINE),
+	keys.Left:         name2func(F_BACKWARD_CHAR),
+	keys.Right:        name2func(F_FORWARD_CHAR),
+	keys.Up:           name2func(F_HISTORY_UP),
 }
 
 func normWord(src string) string {
@@ -117,15 +115,15 @@ func normWord(src string) string {
 
 // KeyMap is the class for key-bindings
 type KeyMap struct {
-	KeyMap map[string]KeyFuncT
+	KeyMap map[keys.Code]KeyFuncT
 }
 
 // BindKeyFunc binds function to key
 func (km *KeyMap) BindKeyFunc(key string, f KeyFuncT) error {
 	key = normWord(key)
-	if char, ok := name2char[key]; ok {
+	if char, ok := name2code[key]; ok {
 		if km.KeyMap == nil {
-			km.KeyMap = map[string]KeyFuncT{}
+			km.KeyMap = map[keys.Code]KeyFuncT{}
 		}
 		km.KeyMap[char] = f
 		return nil
@@ -141,7 +139,7 @@ func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) R
 // GetBindKey returns the function assigned to given key
 func (km *KeyMap) GetBindKey(key string) KeyFuncT {
 	key = normWord(key)
-	if ch, ok := name2char[key]; ok {
+	if ch, ok := name2code[key]; ok {
 		if km.KeyMap != nil {
 			if f, ok := km.KeyMap[ch]; ok {
 				return f
@@ -182,8 +180,8 @@ type Editor struct {
 // GetBindKey returns the function assigned to given key
 func (editor *Editor) GetBindKey(key string) KeyFuncT {
 	key = normWord(key)
-	if char, ok := name2char[key]; ok {
-		return editor.getKeyFunction(char)
+	if code, ok := name2code[key]; ok {
+		return editor.getKeyFunction(code.String())
 	}
 	return nil
 }
@@ -219,23 +217,24 @@ var CtrlC = (errors.New("^C"))
 
 var mu sync.Mutex
 
-func (editor *Editor) getKeyFunction(key1 string) KeyFuncT {
+func (editor *Editor) getKeyFunction(key string) KeyFuncT {
+	code := keys.Code(key)
 	if editor.KeyMap.KeyMap != nil {
-		if f, ok := editor.KeyMap.KeyMap[key1]; ok {
+		if f, ok := editor.KeyMap.KeyMap[code]; ok {
 			return f
 		}
 	}
-	if f, ok := GlobalKeyMap.KeyMap[key1]; ok {
+	if f, ok := GlobalKeyMap.KeyMap[code]; ok {
 		return f
 	}
-	if f, ok := defaultKeyMap[key1]; ok {
+	if f, ok := defaultKeyMap[code]; ok {
 		return f
 	}
 	return &KeyGoFuncT{
 		Func: func(ctx context.Context, this *Buffer) Result {
-			return keyFuncInsertSelf(ctx, this, key1)
+			return keyFuncInsertSelf(ctx, this, key)
 		},
-		Name: key1,
+		Name: key,
 	}
 }
 
