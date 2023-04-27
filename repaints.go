@@ -7,18 +7,18 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
-func (buf *Buffer) RefreshColor() ColorSequence {
-	if buf.Coloring == nil {
-		buf.Coloring = _MonoChrome{}
+func (B *Buffer) RefreshColor() ColorSequence {
+	if B.Coloring == nil {
+		B.Coloring = _MonoChrome{}
 	}
-	defaultColor := buf.Coloring.Init()
+	defaultColor := B.Coloring.Init()
 	position := int16(0)
-	for i, cell := range buf.Buffer {
-		buf.Buffer[i].position = position
+	for i, cell := range B.Buffer {
+		B.Buffer[i].position = position
 		if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
-			buf.Buffer[i].color = ColorSequence(buf.Coloring.Next(codepoint))
+			B.Buffer[i].color = ColorSequence(B.Coloring.Next(codepoint))
 		} else {
-			buf.Buffer[i].color = ColorSequence(buf.Coloring.Next(utf8.RuneError))
+			B.Buffer[i].color = ColorSequence(B.Coloring.Next(utf8.RuneError))
 		}
 		position += int16(cell.Moji.Width())
 	}
@@ -26,8 +26,8 @@ func (buf *Buffer) RefreshColor() ColorSequence {
 }
 
 // InsertAndRepaint inserts str and repaint the editline.
-func (buf *Buffer) InsertAndRepaint(str string) {
-	buf.ReplaceAndRepaint(buf.Cursor, str)
+func (B *Buffer) InsertAndRepaint(str string) {
+	B.ReplaceAndRepaint(B.Cursor, str)
 }
 
 // GotoHead move screen-cursor to the top of the viewarea.
@@ -52,15 +52,15 @@ func (B *Buffer) DrawFromHead() {
 }
 
 // ReplaceAndRepaint replaces the string between `pos` and cursor's position to `str`
-func (buf *Buffer) ReplaceAndRepaint(pos int, str string) {
+func (B *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Replace Buffer
-	buf.Delete(pos, buf.Cursor-pos)
+	B.Delete(pos, B.Cursor-pos)
 
 	// Define ViewStart , Cursor
-	buf.Cursor = pos + buf.InsertString(pos, str)
-	buf.joinUndo() // merge delete and insert
-	buf.ResetViewStart()
-	buf.repaint()
+	B.Cursor = pos + B.InsertString(pos, str)
+	B.joinUndo() // merge delete and insert
+	B.ResetViewStart()
+	B.repaint()
 }
 
 // RepaintAfterPrompt repaints the all characters in the editline except for prompt.
