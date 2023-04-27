@@ -28,22 +28,6 @@ const (
 	INTR Result = iota
 )
 
-// String makes Result to fmt.Stringer
-func (R Result) String() string {
-	switch R {
-	case CONTINUE:
-		return "CONTINUE"
-	case ENTER:
-		return "ENTER"
-	case ABORT:
-		return "ABORT"
-	case INTR:
-		return "INTR"
-	default:
-		return "ERROR"
-	}
-}
-
 // Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
