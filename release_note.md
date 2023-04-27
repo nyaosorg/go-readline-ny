@@ -1,3 +1,11 @@
+- Create sub-package: `keys` that defines key codes
+- Rename `KeyGoFuncT` to `GoCommand`
+- Rename `KeyFuncT` to `Command`
+- Hide `GetKey(ITty)`
+- Remove Key name constants: K_mmmm. Use `keys.*`
+- Remove Command name constants: F_mmmm. Use `(Command) String()` method
+- Remove `(Result) String()`
+
 v0.11.0
 =======
 Apr 26, 2023
