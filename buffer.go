@@ -233,7 +233,7 @@ func (B *Buffer) startChangeWidthEventLoop(_lastw int, getResizeEvent func() (in
 
 // GetKey reads one-key from Tty.
 func (B *Buffer) GetKey() (string, error) {
-	return GetKey(B.Tty)
+	return getKey(B.Tty)
 }
 
 func (B *Buffer) Write(b []byte) (int, error) {

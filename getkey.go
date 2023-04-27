@@ -5,8 +5,8 @@ import (
 	"unicode/utf16"
 )
 
-// GetKey reads one-key from tty.
-func GetKey(tty1 ITty) (string, error) {
+// getKey reads one-key from tty.
+func getKey(tty1 ITty) (string, error) {
 	clean, err := tty1.Raw()
 	if err != nil {
 		return "", err
