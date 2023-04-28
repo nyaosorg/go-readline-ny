@@ -34,6 +34,7 @@ func (K *GoCommand) Call(ctx context.Context, buffer *Buffer) Result {
 
 var name2func = map[string]Command{}
 
+// NewGoCommand creates an instance of GoCommand with a name and an function.
 func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *GoCommand {
 	instance := &GoCommand{
 		Name: name,
@@ -43,15 +44,19 @@ func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *GoComma
 	return instance
 }
 
+// CmdAcceptLine is the command that ends the editing successfully (for Ctrl-M)
+// Then the method `(*Editor) ReadLine()` returns nil as error.
 var CmdAcceptLine = NewGoCommand("ACCEPT_LINE", cmdAcceptLine)
 
-func cmdAcceptLine(ctx context.Context, this *Buffer) Result { // Ctrl-M
+func cmdAcceptLine(ctx context.Context, this *Buffer) Result {
 	return ENTER
 }
 
+// CmdInterrupt is the command that aborts the editing (for Ctrl-C)
+// Then the method `(*Editor) ReadLine()` returns `readline.CtrlC` as error.
 var CmdInterrupt = NewGoCommand("INTR", cmdInterrupt)
 
-func cmdInterrupt(ctx context.Context, this *Buffer) Result { // Ctrl-C
+func cmdInterrupt(ctx context.Context, this *Buffer) Result {
 	this.Buffer = this.Buffer[:0]
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -59,18 +64,20 @@ func cmdInterrupt(ctx context.Context, this *Buffer) Result { // Ctrl-C
 	return INTR
 }
 
+// CmdBeginningOfLine is the command that moves cursor to the top of line (for Ctrl-A)
 var CmdBeginningOfLine = NewGoCommand("BEGINNING_OF_LINE", cmdBeginningOfLine)
 
-func cmdBeginningOfLine(ctx context.Context, this *Buffer) Result { // Ctrl-A
+func cmdBeginningOfLine(ctx context.Context, this *Buffer) Result {
 	this.Cursor = 0
 	this.ViewStart = 0
 	this.repaint()
 	return CONTINUE
 }
 
+// CmdBackwardChar is the command that moves cursor to the previous character (for Ctrl-B)
 var CmdBackwardChar = NewGoCommand("BACKWARD_CHAR", cmdBackwardChar)
 
-func cmdBackwardChar(ctx context.Context, this *Buffer) Result { // Ctrl-B
+func cmdBackwardChar(ctx context.Context, this *Buffer) Result {
 	if this.Cursor <= 0 {
 		return CONTINUE
 	}
@@ -82,9 +89,10 @@ func cmdBackwardChar(ctx context.Context, this *Buffer) Result { // Ctrl-B
 	return CONTINUE
 }
 
+// CmdEndOfLine is the command that moves cursor to the end of the line (for Ctrl-E)
 var CmdEndOfLine = NewGoCommand("END_OF_LINE", cmdEndOfLine)
 
-func cmdEndOfLine(ctx context.Context, this *Buffer) Result { // Ctrl-E
+func cmdEndOfLine(ctx context.Context, this *Buffer) Result {
 	allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
 	if allength < this.ViewWidth() {
 		this.puts(this.Buffer[this.Cursor:])
@@ -111,9 +119,10 @@ func cmdEndOfLine(ctx context.Context, this *Buffer) Result { // Ctrl-E
 	return CONTINUE
 }
 
+// CmdForwardChar is the command that moves cursor to the next character (for Ctrl-F)
 var CmdForwardChar = NewGoCommand("FORWARD_CHAR", cmdForwardChar)
 
-func cmdForwardChar(ctx context.Context, this *Buffer) Result { // Ctrl-F
+func cmdForwardChar(ctx context.Context, this *Buffer) Result {
 	if this.Cursor >= len(this.Buffer) {
 		return CONTINUE
 	}
@@ -135,9 +144,10 @@ func cmdForwardChar(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	return CONTINUE
 }
 
+// CmdBackwardDeleteChar is the command that deletes a character on the leftside of cursor (for Backspace)
 var CmdBackwardDeleteChar = NewGoCommand("BACKWARD_DELETE_CHAR", cmdBackwardDeleteChar)
 
-func cmdBackwardDeleteChar(ctx context.Context, this *Buffer) Result { // Backspace
+func cmdBackwardDeleteChar(ctx context.Context, this *Buffer) Result {
 	if this.Cursor > 0 {
 		this.Cursor--
 		this.Delete(this.Cursor, 1)
@@ -149,17 +159,19 @@ func cmdBackwardDeleteChar(ctx context.Context, this *Buffer) Result { // Backsp
 	return CONTINUE
 }
 
+// CmdDeleteChar is the command that delete a character on the cursor (for Del)
 var CmdDeleteChar = NewGoCommand("DELETE_CHAR", cmdDeleteChar)
 
-func cmdDeleteChar(ctx context.Context, this *Buffer) Result { // Del
+func cmdDeleteChar(ctx context.Context, this *Buffer) Result {
 	this.Delete(this.Cursor, 1)
 	this.repaint()
 	return CONTINUE
 }
 
+// CmdDeleteOrAbort is the command that deletes a character on the cursor when the line has any characters. Otherwise quit the editing (for Ctrl-D)
 var CmdDeleteOrAbort = NewGoCommand("DELETE_OR_ABORT", cmdDeleteOrAbort)
 
-func cmdDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
+func cmdDeleteOrAbort(ctx context.Context, this *Buffer) Result {
 	if len(this.Buffer) > 0 {
 		return CmdDeleteChar.Func(ctx, this)
 	}
@@ -205,6 +217,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	return CONTINUE
 }
 
+// CmdKillLine is the command that removes text from cursor to the end of the line (for Ctrl-K)
 var CmdKillLine = NewGoCommand("KILL_LINE", cmdKillLine)
 
 func cmdKillLine(ctx context.Context, this *Buffer) Result {
@@ -220,6 +233,7 @@ func cmdKillLine(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdKillWholeLine is the command that removes the whole characters of the line.
 var CmdKillWholeLine = NewGoCommand("KILL_WHOLE_LINE", cmdKillWholeLine)
 
 func cmdKillWholeLine(ctx context.Context, this *Buffer) Result {
@@ -236,6 +250,7 @@ func cmdKillWholeLine(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdUnixWordRubout is the command that removes the current word (for Ctrl-W)
 var CmdUnixWordRubout = NewGoCommand("UNIX_WORD_RUBOUT", cmdUnixWordRubout)
 
 func cmdUnixWordRubout(ctx context.Context, this *Buffer) Result {
@@ -254,6 +269,7 @@ func cmdUnixWordRubout(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdUnixLineDiscard is the command that removes from the top of the line until cursor. (for Ctrl-U)
 var CmdUnixLineDiscard = NewGoCommand("UNIX_LINE_DISCARD", cmdUnixLineDiscard)
 
 func cmdUnixLineDiscard(ctx context.Context, this *Buffer) Result {
@@ -265,6 +281,7 @@ func cmdUnixLineDiscard(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdClearScreen is the command that clears the screen and repaints the line (for Ctrl-L)
 var CmdClearScreen = NewGoCommand("CLEAR_SCREEN", cmdClearScreen)
 
 func cmdClearScreen(ctx context.Context, this *Buffer) Result {
@@ -281,6 +298,7 @@ func cmdRepaintOnNewline(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdQuotedInsert is the command that inserts the next typed character itself even if it is a control-character (for Ctrl-V or Ctrl-Q)
 var CmdQuotedInsert = NewGoCommand("QUOTED_INSERT", cmdQuotedInsert)
 
 func cmdQuotedInsert(ctx context.Context, this *Buffer) Result {
@@ -294,6 +312,7 @@ func cmdQuotedInsert(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdYank is the command that inserts the string in the clipboard (for Ctrl-Y)
 var CmdYank = NewGoCommand("YANK", cmdYank)
 
 func cmdYank(ctx context.Context, this *Buffer) Result {
@@ -306,6 +325,7 @@ func cmdYank(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdYankWithQuote is the command that inserts the string in the clipboard and enclose it with double quoatations.
 var CmdYankWithQuote = NewGoCommand("YANK_WITH_QUOTE", cmdYankWithQuote)
 
 func cmdYankWithQuote(ctx context.Context, this *Buffer) Result {
@@ -323,6 +343,7 @@ func cmdYankWithQuote(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdSwapChar is the command that swaps the character on the cursor and on on the leftside of the cursor (for Ctrl-T)
 var CmdSwapChar = NewGoCommand("SWAPCHAR", cmdSwapChar)
 
 func cmdSwapChar(ctx context.Context, this *Buffer) Result {
@@ -363,6 +384,7 @@ func cmdSwapChar(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdBackwardWord is the command that moves cursor to the top of the previous word (for M-B)
 var CmdBackwardWord = NewGoCommand("BACKWARD_WORD", cmdBackwardWord)
 
 func cmdBackwardWord(ctx context.Context, this *Buffer) Result {
@@ -381,6 +403,7 @@ func cmdBackwardWord(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdForwardWord is the command that move cursor to the top of the next word (for M-F)
 var CmdForwardWord = NewGoCommand("FORWARD_WORD", cmdForwardWord)
 
 func cmdForwardWord(ctx context.Context, this *Buffer) Result {
@@ -403,6 +426,7 @@ func cmdForwardWord(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdUndo is the command that executes undo (for Ctrl-U)
 var CmdUndo = NewGoCommand("UNDO", cmdUndo)
 
 func cmdUndo(ctx context.Context, this *Buffer) Result {

@@ -13,6 +13,7 @@ func caseInsensitiveStringContains(s, t string) bool {
 	return strings.Contains(strings.ToUpper(s), strings.ToUpper(t))
 }
 
+// CmdISearchBackward is the command that enters incremental-search-mode. (Ctrl-I)
 var CmdISearchBackward = NewGoCommand("ISEARCH_BACKWARD", cmdISearchBackward)
 
 func cmdISearchBackward(ctx context.Context, this *Buffer) Result {

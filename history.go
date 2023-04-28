@@ -19,6 +19,7 @@ func (_EmptyHistory) Len() int { return 0 }
 // At always returns empty-string because the receiver is dummy.
 func (_EmptyHistory) At(int) string { return "" }
 
+// CmdPreviousHistory is the command that replaces the line to the previous entry in the history (Ctrl-P)
 var CmdPreviousHistory = NewGoCommand("PREVIOUS_HISTORY", cmdPreviousHistory)
 
 func cmdPreviousHistory(ctx context.Context, this *Buffer) Result {
@@ -42,6 +43,7 @@ func cmdPreviousHistory(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+// CmdNextHistory is the command that replaces the line to the next entry of the history. (Ctrl-N)
 var CmdNextHistory = NewGoCommand("NEXT_HISTORY", cmdNextHistory)
 
 func cmdNextHistory(ctx context.Context, this *Buffer) Result {
