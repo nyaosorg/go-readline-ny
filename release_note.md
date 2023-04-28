@@ -6,8 +6,8 @@ Apr 28, 2023
 - Rename `KeyGoFuncT` to `GoCommand`
 - Rename `KeyFuncT` to `Command`
 - Hide `GetKey(ITty)`
-- Remove Key name constants: K_mmmm. Use `keys.*`
-- Remove Command name constants: F_mmmm. Use `(Command) String()` method
+- Remove Key name constants: `K_mmmm`. Use `keys.*`
+- Remove Command name constants: `F_mmmm`. Use `(Command) String()` method
 - Remove `(Result) String()`
 
 v0.11.0
@@ -32,7 +32,7 @@ Apr 26, 2023
 
 v0.10.1
 =======
-Apr 14, 2023
+Apr 14, 2023 ( Used in nyagos-4.4.13\_2 )
 
 - Fix: some constants for color were broken at v0.10.0
 
@@ -42,7 +42,7 @@ Apr 13, 2023
 
 - Change type `Coloring` interface
     - Init and Next() returns ColorSequence(int64) instead of int32
-    - It can output ESC[0m now
+    - It can output `ESC[0m` now
 
 v0.9.1
 ======
@@ -148,7 +148,7 @@ v0.4.11
 =======
 Apr 14, 2021
 
-- Support Emoji Moifier Sequence (skin tone) : something with &x1F3FB;(U+1F3FB)～ &x1F3FF;(U+1F3FF)
+- Support Emoji Moifier Sequence (skin tone) : something with &#x1F3FB;(U+1F3FB)～ &#x1F3FF;(U+1F3FF)
 
 v0.4.10
 =======
