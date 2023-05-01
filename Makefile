@@ -12,8 +12,11 @@ all :
 	go build
 	cd "test/unicodetest" && go fmt && go build
 
-test :
+try :
 	$(MAKE) all && "test/unicodetest/unicodetest"
+
+test :
+	go test -v
 
 get :
 	go get -u all
