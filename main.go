@@ -43,15 +43,6 @@ type Editor struct {
 	HistoryCycling bool
 }
 
-// GetBindKey returns the function assigned to given key
-func (editor *Editor) GetBindKey(key string) Command {
-	key = normWord(key)
-	if code, ok := name2code[key]; ok {
-		return editor.loolupCommand(code.String())
-	}
-	return nil
-}
-
 const (
 	ansiCursorOff = "\x1B[?25l"
 
