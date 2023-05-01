@@ -67,12 +67,10 @@ var mu sync.Mutex
 
 func (editor *Editor) loolupCommand(key string) Command {
 	code := keys.Code(key)
-	if editor.KeyMap.KeyMap != nil {
-		if f, ok := editor.KeyMap.KeyMap[code]; ok {
-			return f
-		}
+	if f, ok := editor.KeyMap[code]; ok {
+		return f
 	}
-	if f, ok := GlobalKeyMap.KeyMap[code]; ok {
+	if f, ok := GlobalKeyMap[code]; ok {
 		return f
 	}
 	if f, ok := defaultKeyMap[code]; ok {
@@ -86,6 +84,9 @@ func (editor *Editor) loolupCommand(key string) Command {
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
 func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
+	if editor.KeyMap == nil {
+		editor.KeyMap = KeyMap{}
+	}
 	if editor.Writer == nil {
 		editor.Writer = os.Stdout
 	}

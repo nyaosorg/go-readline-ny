@@ -164,19 +164,14 @@ func normWord(src string) string {
 }
 
 // KeyMap is the class for key-bindings
-type KeyMap struct {
-	KeyMap map[keys.Code]Command
-}
+type KeyMap map[keys.Code]Command
 
-func (km *KeyMap) BindKey(key keys.Code, f Command) {
-	if km.KeyMap == nil {
-		km.KeyMap = map[keys.Code]Command{}
-	}
-	km.KeyMap[key] = f
+func (km KeyMap) BindKey(key keys.Code, f Command) {
+	km[key] = f
 }
 
 // BindKeyFunc binds function to key
-func (km *KeyMap) BindKeyFunc(key string, f Command) error {
+func (km KeyMap) BindKeyFunc(key string, f Command) error {
 	key = normWord(key)
 	if code, ok := name2code[key]; ok {
 		km.BindKey(code, f)
@@ -186,18 +181,16 @@ func (km *KeyMap) BindKeyFunc(key string, f Command) error {
 }
 
 // BindKeyClosure binds closure to key by name
-func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
+func (km KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
 	return km.BindKeyFunc(name, &GoCommand{Func: f, Name: "annonymous"})
 }
 
 // GetBindKey returns the function assigned to given key
-func (km *KeyMap) GetBindKey(key string) Command {
+func (km KeyMap) GetBindKey(key string) Command {
 	key = normWord(key)
 	if ch, ok := name2code[key]; ok {
-		if km.KeyMap != nil {
-			if f, ok := km.KeyMap[ch]; ok {
-				return f
-			}
+		if f, ok := km[ch]; ok {
+			return f
 		}
 	}
 	return nil
@@ -216,7 +209,7 @@ func GetFunc(name string) (Command, error) {
 }
 
 // BindKeySymbol assigns function to key by names.
-func (km *KeyMap) BindKeySymbol(key, funcName string) error {
+func (km KeyMap) BindKeySymbol(key, funcName string) error {
 	f, err := GetFunc(key)
 	if err != nil {
 		return err
