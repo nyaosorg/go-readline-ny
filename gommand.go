@@ -16,9 +16,6 @@ type GoCommand struct {
 	Func func(ctx context.Context, buffer *Buffer) Result
 }
 
-// Deprecate: use GoCommand instead
-type KeyGoFuncT = GoCommand
-
 // String returns GoCommand's name
 func (K GoCommand) String() string {
 	return K.Name

@@ -61,3 +61,6 @@ func (editor *Editor) GetBindKey(key string) Command {
 	}
 	return nil
 }
+
+// Deprecated: use GoCommand instead
+type KeyGoFuncT = GoCommand
