@@ -1,3 +1,7 @@
+v0.11.2
+=======
+May 1, 2023
+
 - Remove `(*Buffer) Write`
 - Hide `(*Buffer) RefreshColor()`
 - Sub package: `tty10`: fix goroutine leak
