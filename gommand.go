@@ -185,7 +185,14 @@ func mojiAndStringToString(m Moji, s string) string {
 	return buffer.String()
 }
 
-func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
+type SelfInserter string
+
+func (s SelfInserter) String() string {
+	return string(s)
+}
+
+func (s SelfInserter) Call(ctx context.Context, this *Buffer) Result {
+	keys := string(s)
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
@@ -307,7 +314,7 @@ func cmdQuotedInsert(ctx context.Context, this *Buffer) Result {
 
 	this.Out.Flush()
 	if key, err := this.GetKey(); err == nil {
-		return keyFuncInsertSelf(ctx, this, key)
+		return SelfInserter(key).Call(ctx, this)
 	}
 	return CONTINUE
 }

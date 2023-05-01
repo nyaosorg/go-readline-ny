@@ -78,12 +78,7 @@ func (editor *Editor) getKeyFunction(key string) Command {
 	if f, ok := defaultKeyMap[code]; ok {
 		return f
 	}
-	return &GoCommand{
-		Func: func(ctx context.Context, this *Buffer) Result {
-			return keyFuncInsertSelf(ctx, this, key)
-		},
-		Name: key,
-	}
+	return SelfInserter(key)
 }
 
 // ReadLine calls LineEditor
