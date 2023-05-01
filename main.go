@@ -47,7 +47,7 @@ type Editor struct {
 func (editor *Editor) GetBindKey(key string) Command {
 	key = normWord(key)
 	if code, ok := name2code[key]; ok {
-		return editor.getKeyFunction(code.String())
+		return editor.loolupCommand(code.String())
 	}
 	return nil
 }
@@ -65,7 +65,7 @@ var CtrlC = errors.New("^C")
 
 var mu sync.Mutex
 
-func (editor *Editor) getKeyFunction(key string) Command {
+func (editor *Editor) loolupCommand(key string) Command {
 	code := keys.Code(key)
 	if editor.KeyMap.KeyMap != nil {
 		if f, ok := editor.KeyMap.KeyMap[code]; ok {
@@ -166,7 +166,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		mu.Lock()
 
-		f := editor.getKeyFunction(key)
+		f := editor.loolupCommand(key)
 
 		if fg, ok := f.(*GoCommand); !ok || fg.Func != nil {
 			io.WriteString(buffer.Out, ansiCursorOff)
