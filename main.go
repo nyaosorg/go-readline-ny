@@ -73,9 +73,6 @@ func (editor *Editor) loolupCommand(key string) Command {
 	if f, ok := GlobalKeyMap[code]; ok {
 		return f
 	}
-	if f, ok := defaultKeyMap[code]; ok {
-		return f
-	}
 	return SelfInserter(key)
 }
 

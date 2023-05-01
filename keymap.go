@@ -120,7 +120,11 @@ var name2code = map[string]keys.Code{
 	"UP":          keys.Up,
 }
 
-var defaultKeyMap = map[keys.Code]Command{
+// KeyMap is the class for key-bindings
+type KeyMap map[keys.Code]Command
+
+// GlobalKeyMap is the global keymap for users' customizing
+var GlobalKeyMap = KeyMap{
 	keys.AltB:         CmdBackwardWord,
 	keys.AltF:         CmdForwardWord,
 	keys.AltV:         CmdYank,
@@ -163,9 +167,6 @@ func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
-// KeyMap is the class for key-bindings
-type KeyMap map[keys.Code]Command
-
 func (km KeyMap) BindKey(key keys.Code, f Command) {
 	km[key] = f
 }
@@ -195,9 +196,6 @@ func (km KeyMap) GetBindKey(key string) Command {
 	}
 	return nil
 }
-
-// GlobalKeyMap is the global keymap for users' customizing
-var GlobalKeyMap KeyMap
 
 // GetFunc returns Command-object by name
 func GetFunc(name string) (Command, error) {
