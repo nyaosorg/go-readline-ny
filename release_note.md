@@ -1,6 +1,7 @@
 - Remove `(*Buffer) Write`
 - Hide `(*Buffer) RefreshColor()`
 - Sub package: `tty10`: fix goroutine leak
+- Add type: `AnonymousCommand` and `SelfInserter`
 
 v0.11.1
 =======
