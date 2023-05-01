@@ -190,9 +190,19 @@ func (km *KeyMap) BindKeyFunc(key string, f Command) error {
 	return fmt.Errorf("%s: no such keyname", key)
 }
 
+type AnonymousCommand func(context.Context, *Buffer) Result
+
+func (f AnonymousCommand) String() string {
+	return "anonymous"
+}
+
+func (f AnonymousCommand) Call(ctx context.Context, B *Buffer) Result {
+	return f(ctx, B)
+}
+
 // BindKeyClosure binds closure to key by name
 func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
-	return km.BindKeyFunc(name, &GoCommand{Func: f, Name: "annonymous"})
+	return km.BindKeyFunc(name, AnonymousCommand(f))
 }
 
 // GetBindKey returns the function assigned to given key
