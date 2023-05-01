@@ -144,20 +144,11 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		buffer.Cursor = len(buffer.Buffer)
 	}
 	buffer.RepaintAfterPrompt()
-
-	cursorOnSwitch := false
-
 	buffer.startChangeWidthEventLoop(buffer.termWidth, editor.Tty.GetResizeNotifier())
 
 	for {
-		mu.Lock()
-		if !cursorOnSwitch {
-			io.WriteString(buffer.Out, ansiCursorOn)
-			cursorOnSwitch = true
-		}
 		buffer.Out.Flush()
 
-		mu.Unlock()
 		key, err := buffer.GetKey()
 		if err != nil {
 			return "", err
@@ -166,19 +157,15 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 
 		f := editor.loolupCommand(key)
 
-		if fg, ok := f.(*GoCommand); !ok || fg.Func != nil {
-			io.WriteString(buffer.Out, ansiCursorOff)
-			cursorOnSwitch = false
-			buffer.Out.Flush()
-		}
+		io.WriteString(buffer.Out, ansiCursorOff)
+
 		rc := f.Call(ctx, &buffer)
+
+		io.WriteString(buffer.Out, ansiCursorOn)
+
 		if rc != CONTINUE {
 			buffer.LineFeed(rc)
 
-			if !cursorOnSwitch {
-				io.WriteString(buffer.Out, ansiCursorOn)
-			}
-			buffer.Out.Flush()
 			result := buffer.String()
 			mu.Unlock()
 			if rc == ENTER {
