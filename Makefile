@@ -8,9 +8,8 @@ endif
 .PHONY: all test
 
 all :
-	go fmt
+	$(foreach I,$(wildcard coloring examples nternal/* keys simplehistory test/* tty*),pushd "$(I)" && go fmt && popd && ) go fmt
 	go build
-	cd "test/unicodetest" && go fmt && go build
 
 try :
 	$(MAKE) all && "test/unicodetest/unicodetest"

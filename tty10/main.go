@@ -10,7 +10,7 @@ import (
 
 type Tty struct {
 	buffer [128]byte
-	key   []byte
+	key    []byte
 	done   chan struct{}
 	ticker *time.Ticker
 }
@@ -70,7 +70,7 @@ func (M *Tty) GetResizeNotifier() func() (int, int, bool) {
 		select {
 		case <-M.done:
 			M.ticker.Stop()
-			return 0,0, false
+			return 0, 0, false
 		case <-M.ticker.C:
 			w, h, err := M.Size()
 			return w, h, err == nil

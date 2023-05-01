@@ -11,7 +11,7 @@ type Tty struct {
 // New returns the instance for KeyGetter, which is the customized
 // version of go-tty.TTY
 func (t *Tty) Open() (err error) {
-	t.TTY,err = tty.Open()
+	t.TTY, err = tty.Open()
 	return err
 }
 

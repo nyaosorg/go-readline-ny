@@ -11,7 +11,7 @@ type Condition struct {
 }
 
 func New(ambiguousIsWide bool) Condition {
-	return Condition{ AmbiguousIsWide:ambiguousIsWide }
+	return Condition{AmbiguousIsWide: ambiguousIsWide}
 }
 
 func (C Condition) RuneWidth(r rune) int {
