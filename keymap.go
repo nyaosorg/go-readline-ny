@@ -121,58 +121,67 @@ var name2code = map[string]keys.Code{
 }
 
 // KeyMap is the class for key-bindings
-type KeyMap map[keys.Code]Command
 
 // GlobalKeyMap is the global keymap for users' customizing
-var GlobalKeyMap = KeyMap{
-	keys.AltB:         CmdBackwardWord,
-	keys.AltF:         CmdForwardWord,
-	keys.AltV:         CmdYank,
-	keys.AltY:         CmdYankWithQuote,
-	keys.Backspace:    CmdBackwardDeleteChar,
-	keys.CtrlA:        CmdBeginningOfLine,
-	keys.CtrlB:        CmdBackwardChar,
-	keys.CtrlC:        CmdInterrupt,
-	keys.CtrlD:        CmdDeleteOrAbort,
-	keys.CtrlE:        CmdEndOfLine,
-	keys.CtrlF:        CmdForwardChar,
-	keys.CtrlH:        CmdBackwardDeleteChar,
-	keys.CtrlK:        CmdKillLine,
-	keys.CtrlL:        CmdClearScreen,
-	keys.CtrlLeft:     CmdBackwardWord,
-	keys.CtrlM:        CmdAcceptLine,
-	keys.CtrlN:        CmdNextHistory,
-	keys.CtrlP:        CmdPreviousHistory,
-	keys.CtrlQ:        CmdQuotedInsert,
-	keys.CtrlR:        CmdISearchBackward,
-	keys.CtrlRight:    CmdForwardWord,
-	keys.CtrlT:        CmdSwapChar,
-	keys.CtrlU:        CmdUnixLineDiscard,
-	keys.CtrlUnderbar: CmdUndo,
-	keys.CtrlV:        CmdQuotedInsert,
-	keys.CtrlW:        CmdUnixWordRubout,
-	keys.CtrlY:        CmdYank,
-	keys.CtrlZ:        CmdUndo,
-	keys.Delete:       CmdDeleteChar,
-	keys.Down:         CmdNextHistory,
-	keys.End:          CmdEndOfLine,
-	keys.Escape:       CmdKillWholeLine,
-	keys.Home:         CmdBeginningOfLine,
-	keys.Left:         CmdBackwardChar,
-	keys.Right:        CmdForwardChar,
-	keys.Up:           CmdPreviousHistory,
+var GlobalKeyMap = &KeyMap{
+	KeyMap: map[keys.Code]Command{
+		keys.AltB:         CmdBackwardWord,
+		keys.AltF:         CmdForwardWord,
+		keys.AltV:         CmdYank,
+		keys.AltY:         CmdYankWithQuote,
+		keys.Backspace:    CmdBackwardDeleteChar,
+		keys.CtrlA:        CmdBeginningOfLine,
+		keys.CtrlB:        CmdBackwardChar,
+		keys.CtrlC:        CmdInterrupt,
+		keys.CtrlD:        CmdDeleteOrAbort,
+		keys.CtrlE:        CmdEndOfLine,
+		keys.CtrlF:        CmdForwardChar,
+		keys.CtrlH:        CmdBackwardDeleteChar,
+		keys.CtrlK:        CmdKillLine,
+		keys.CtrlL:        CmdClearScreen,
+		keys.CtrlLeft:     CmdBackwardWord,
+		keys.CtrlM:        CmdAcceptLine,
+		keys.CtrlN:        CmdNextHistory,
+		keys.CtrlP:        CmdPreviousHistory,
+		keys.CtrlQ:        CmdQuotedInsert,
+		keys.CtrlR:        CmdISearchBackward,
+		keys.CtrlRight:    CmdForwardWord,
+		keys.CtrlT:        CmdSwapChar,
+		keys.CtrlU:        CmdUnixLineDiscard,
+		keys.CtrlUnderbar: CmdUndo,
+		keys.CtrlV:        CmdQuotedInsert,
+		keys.CtrlW:        CmdUnixWordRubout,
+		keys.CtrlY:        CmdYank,
+		keys.CtrlZ:        CmdUndo,
+		keys.Delete:       CmdDeleteChar,
+		keys.Down:         CmdNextHistory,
+		keys.End:          CmdEndOfLine,
+		keys.Escape:       CmdKillWholeLine,
+		keys.Home:         CmdBeginningOfLine,
+		keys.Left:         CmdBackwardChar,
+		keys.Right:        CmdForwardChar,
+		keys.Up:           CmdPreviousHistory,
+	},
 }
 
 func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
-func (km KeyMap) BindKey(key keys.Code, f Command) {
-	km[key] = f
+// KeyMap is the class for key-bindings
+type KeyMap struct {
+	KeyMap map[keys.Code]Command
+}
+
+func (km *KeyMap) BindKey(key keys.Code, f Command) {
+	if km.KeyMap == nil {
+		km.KeyMap = map[keys.Code]Command{}
+	}
+	km.KeyMap[key] = f
 }
 
 // BindKeyFunc binds function to key
-func (km KeyMap) BindKeyFunc(key string, f Command) error {
+func (km *KeyMap) BindKeyFunc(key string, f Command) error {
 	key = normWord(key)
 	if code, ok := name2code[key]; ok {
 		km.BindKey(code, f)
@@ -182,16 +191,18 @@ func (km KeyMap) BindKeyFunc(key string, f Command) error {
 }
 
 // BindKeyClosure binds closure to key by name
-func (km KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
+func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
 	return km.BindKeyFunc(name, &GoCommand{Func: f, Name: "annonymous"})
 }
 
 // GetBindKey returns the function assigned to given key
-func (km KeyMap) GetBindKey(key string) Command {
+func (km *KeyMap) GetBindKey(key string) Command {
 	key = normWord(key)
 	if ch, ok := name2code[key]; ok {
-		if f, ok := km[ch]; ok {
-			return f
+		if km.KeyMap != nil {
+			if f, ok := km.KeyMap[ch]; ok {
+				return f
+			}
 		}
 	}
 	return nil
@@ -207,7 +218,7 @@ func GetFunc(name string) (Command, error) {
 }
 
 // BindKeySymbol assigns function to key by names.
-func (km KeyMap) BindKeySymbol(key, funcName string) error {
+func (km *KeyMap) BindKeySymbol(key, funcName string) error {
 	f, err := GetFunc(key)
 	if err != nil {
 		return err
