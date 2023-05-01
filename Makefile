@@ -11,8 +11,8 @@ all :
 	$(foreach I,$(wildcard coloring examples nternal/* keys simplehistory test/* tty*),pushd "$(I)" && go fmt && popd && ) go fmt
 	go build
 
-try :
-	$(MAKE) all && "test/unicodetest/unicodetest"
+demo :
+	go run test/unicodetest/main.go
 
 test :
 	go test -v
