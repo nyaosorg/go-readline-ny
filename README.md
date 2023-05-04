@@ -108,4 +108,11 @@ example3.go
 
 - [example3.go](./examples/example3.go)
 
+This is a sample to change key-bindings to diamond cursor.
+
+example4.go
+------------
+
+- [example4.go](./examples/example4.go)
+
 This is a sample that implements the function to start the text editor defined by the environment variable EDITOR and import the edited contents when the ESCAPE key is pressed.
