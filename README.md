@@ -102,3 +102,10 @@ func main() {
     }
 }
 ```
+
+example3.go
+------------
+
+- [example3.go](./examples/example3.go)
+
+This is a sample that implements the function to start the text editor defined by the environment variable EDITOR and import the edited contents when the ESCAPE key is pressed.
