@@ -10,6 +10,7 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
 func main() {
@@ -20,17 +21,17 @@ func main() {
 	}
 
 	enter_status := 0
-	editor.BindKeyClosure(readline.K_CTRL_P,
+	editor.BindKey(keys.CtrlP, readline.AnonymousCommand(
 		func(ctx context.Context, r *readline.Buffer) readline.Result {
 			enter_status = -1
 			return readline.ENTER
-		})
+		}))
 
-	editor.BindKeyClosure(readline.K_CTRL_N,
+	editor.BindKey(keys.CtrlN, readline.AnonymousCommand(
 		func(ctx context.Context, r *readline.Buffer) readline.Result {
 			enter_status = +1
 			return readline.ENTER
-		})
+		}))
 
 	text, err := editor.ReadLine(context.Background())
 	fmt.Printf("ENTER_STATUS=%d\n", enter_status)
