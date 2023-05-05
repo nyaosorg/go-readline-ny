@@ -1,4 +1,4 @@
-- `(*Editor)`: Add an new field `PromptWriter func(io.Writer)`
+- `(*Editor)`: Add an new field `PromptWriter func(io.Writer)(int,error)`
 
 v0.11.2
 =======
