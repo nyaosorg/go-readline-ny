@@ -57,6 +57,7 @@ package main
 import (
     "context"
     "fmt"
+    "io"
     "os"
     "os/exec"
     "strings"
@@ -72,7 +73,9 @@ func main() {
     history := simplehistory.New()
 
     editor := &readline.Editor{
-        Prompt:         func() (int, error) { return fmt.Print("$ ") },
+        PromptWriter: func(w io.Writer) (int, error) {
+            return io.WriteString(w, "\x1B[1;36m$ \x1B[0m") // print `$ ` with cyan
+        },
         Writer:         colorable.NewColorableStdout(),
         History:        history,
         Coloring:       &coloring.VimBatch{},
