@@ -1,3 +1,7 @@
+v0.11.3
+=======
+May 5, 2023
+
 - `(*Editor)`: Add an new field `PromptWriter func(io.Writer)(int,error)`
 
 v0.11.2
