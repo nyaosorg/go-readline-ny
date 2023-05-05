@@ -37,7 +37,7 @@ type Editor struct {
 	Writer         io.Writer
 	Out            *bufio.Writer
 	Prompt         func() (int, error)
-	PromptWriter   func(io.Writer)
+	PromptWriter   func(io.Writer) (int, error)
 	Default        string
 	Cursor         int
 	LineFeed       func(Result)

@@ -21,8 +21,8 @@ func main() {
 	history := simplehistory.New()
 
 	editor := &readline.Editor{
-		PromptWriter: func(w io.Writer) {
-			io.WriteString(w, "\x1B[1;36m$ \x1B[0m") // print `$ ` with cyan
+		PromptWriter: func(w io.Writer) (int, error) {
+			return io.WriteString(w, "\x1B[1;36m$ \x1B[0m") // print `$ ` with cyan
 		},
 		Writer:         colorable.NewColorableStdout(),
 		History:        history,
