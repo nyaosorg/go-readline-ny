@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 
 	//tty "github.com/nyaosorg/go-readline-ny/tty10"
+	"github.com/nyaosorg/go-readline-ny/internal/moji"
 	"github.com/nyaosorg/go-readline-ny/keys"
 	tty "github.com/nyaosorg/go-readline-ny/tty8"
 )
@@ -35,6 +37,7 @@ type Editor struct {
 	Writer         io.Writer
 	Out            *bufio.Writer
 	Prompt         func() (int, error)
+	PromptWriter   func(io.Writer)
 	Default        string
 	Cursor         int
 	LineFeed       func(Result)
@@ -69,6 +72,46 @@ func (editor *Editor) loolupCommand(key string) Command {
 	return SelfInserter(key)
 }
 
+func (editor *Editor) printSimplePrompt() (int, error) {
+	editor.Out.WriteString("\n> ")
+	return 2, nil
+}
+
+func cutEscapeSequenceAndOldLine(s string) string {
+	var buffer strings.Builder
+	esc := false
+	for i, end := 0, len(s); i < end; i++ {
+		r := s[i]
+		switch r {
+		case '\r', '\n':
+			buffer.Reset()
+		case '\x1B':
+			esc = true
+		default:
+			if esc {
+				if ('A' <= r && r <= 'Z') || ('a' <= r && r <= 'z') {
+					esc = false
+				}
+			} else {
+				buffer.WriteByte(r)
+			}
+		}
+	}
+	return buffer.String()
+}
+
+func (editor *Editor) callPromptWriter() (int, error) {
+	var buffer strings.Builder
+	editor.PromptWriter(&buffer)
+	prompt := buffer.String()
+	_, err := editor.Out.WriteString(prompt)
+	w := moji.WidthT(0)
+	for _, m := range StringToMoji(cutEscapeSequenceAndOldLine(prompt)) {
+		w += m.Width()
+	}
+	return int(w), err
+}
+
 // ReadLine calls LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
@@ -86,9 +129,10 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	}()
 
 	if editor.Prompt == nil {
-		editor.Prompt = func() (int, error) {
-			editor.Out.WriteString("\n> ")
-			return 2, nil
+		if editor.PromptWriter != nil {
+			editor.Prompt = editor.callPromptWriter
+		} else {
+			editor.Prompt = editor.printSimplePrompt
 		}
 	}
 	if editor.History == nil {
