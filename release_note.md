@@ -1,3 +1,5 @@
+- (#5) Fix Coloring is wrong on teraterm connecting to Ubuntu at executing `make demo`
+
 v0.11.4
 =======
 May 6, 2023
