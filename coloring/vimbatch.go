@@ -10,7 +10,7 @@ type VimBatch struct {
 
 func (s *VimBatch) Init() readline.ColorSequence {
 	s.bits = 0
-	return readline.DefaultForeGroundColor
+	return readline.ColorReset
 }
 
 const (

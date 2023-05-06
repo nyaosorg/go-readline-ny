@@ -20,6 +20,10 @@ const (
 )
 
 const (
+	ColorReset ColorSequence = 1 | 0
+)
+
+const (
 	Black ColorSequence = 3 | ((30 + iota) << colorCodeBitSize) | (49 << (colorCodeBitSize * 2)) | (1 << (colorCodeBitSize * 3))
 	Red
 	Green
@@ -41,6 +45,8 @@ const (
 	DarkMagenta
 	DarkCyan
 	DarkWhite
+	_
+	DarkDefaultForeGroundColor
 )
 
 type _MonoChrome struct{}
