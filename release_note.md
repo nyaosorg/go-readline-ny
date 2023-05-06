@@ -1,3 +1,7 @@
+v0.11.5
+=======
+May 7, 2023
+
 - (#5) Fix Coloring is wrong on teraterm connecting to Ubuntu at executing `make demo`
 
 v0.11.4
