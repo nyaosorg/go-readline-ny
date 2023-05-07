@@ -173,25 +173,34 @@ func AreZeroWidthJoin(s string) bool {
 }
 
 func StringToMoji(s string) []Moji {
-	runes := []rune(s)
-	mojis := make([]Moji, 0, len(runes))
-	for i := 0; i < len(runes); i++ {
-		if isZeroWidthJoin(runes[i]) && i > 0 && i+1 < len(runes) {
-			mojis[len(mojis)-1] =
-				_ZeroWidthJoinSequence(
-					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i+1])})
-			i++
-		} else if isVariationSelectorLike(runes[i]) && i > 0 {
-			mojis[len(mojis)-1] =
-				_VariationSequence(
-					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i])})
-		} else if isEmojiModifier(runes[i]) && i > 0 {
-			mojis[len(mojis)-1] =
-				_ModifierSequence(
-					[...]Moji{mojis[len(mojis)-1], _RawCodePoint(runes[i])})
-		} else {
-			mojis = append(mojis, rune2moji(runes[i]))
+	mojis := make([]Moji, 0, len(s))
+	var last Moji
+	for len(s) > 0 {
+		r, size := utf8.DecodeRuneInString(s)
+		s = s[size:]
+
+		if last != nil {
+			if isZeroWidthJoin(r) {
+				next, nextsize := utf8.DecodeRuneInString(s)
+				s = s[nextsize:]
+
+				last = _ZeroWidthJoinSequence([...]Moji{last, _RawCodePoint(next)})
+				mojis[len(mojis)-1] = last
+				continue
+			}
+			if isVariationSelectorLike(r) {
+				last = _VariationSequence([...]Moji{last, _RawCodePoint(r)})
+				mojis[len(mojis)-1] = last
+				continue
+			}
+			if isEmojiModifier(r) {
+				last = _ModifierSequence([...]Moji{last, _RawCodePoint(r)})
+				mojis[len(mojis)-1] = last
+				continue
+			}
 		}
+		last = rune2moji(r)
+		mojis = append(mojis, last)
 	}
 	return mojis
 }
