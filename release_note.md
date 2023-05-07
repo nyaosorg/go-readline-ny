@@ -1,3 +1,5 @@
+- Reduced memory allocation counts for functions StringToMoji and GetStringWidth
+
 v0.11.5
 =======
 May 7, 2023
