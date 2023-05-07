@@ -274,14 +274,8 @@ func StringToMoji(s string) []Moji {
 	return moji.StringToMoji(s)
 }
 
-// Deprecated: GetStringWidth returns the width of the string.
-// ( Used on github.com/nyaosorg/nyagos/internal/functions/prompt.go )
 func GetStringWidth(s string) WidthT {
-	width := WidthT(0)
-	for _, m := range StringToMoji(s) {
-		width += m.Width()
-	}
-	return width
+	return moji.GetStringWidth(s)
 }
 
 func ResetCharWidth() {

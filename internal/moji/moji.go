@@ -204,3 +204,43 @@ func StringToMoji(s string) []Moji {
 	}
 	return mojis
 }
+
+func GetStringWidth(s string) (width WidthT) {
+	var last Moji
+	var lastWidth WidthT
+	for len(s) > 0 {
+		r, size := utf8.DecodeRuneInString(s)
+		s = s[size:]
+
+		if last != nil {
+			if isZeroWidthJoin(r) {
+				next, nextsize := utf8.DecodeRuneInString(s)
+				s = s[nextsize:]
+
+				width -= lastWidth
+				last = _ZeroWidthJoinSequence([...]Moji{last, _RawCodePoint(next)})
+				lastWidth = last.Width()
+				width += lastWidth
+				continue
+			}
+			if isVariationSelectorLike(r) {
+				width -= lastWidth
+				last = _VariationSequence([...]Moji{last, _RawCodePoint(r)})
+				lastWidth = last.Width()
+				width += lastWidth
+				continue
+			}
+			if isEmojiModifier(r) {
+				width -= lastWidth
+				last = _ModifierSequence([...]Moji{last, _RawCodePoint(r)})
+				lastWidth = last.Width()
+				width += lastWidth
+				continue
+			}
+		}
+		last = rune2moji(r)
+		lastWidth = last.Width()
+		width += lastWidth
+	}
+	return
+}

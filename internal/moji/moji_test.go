@@ -88,12 +88,16 @@ func TestString2Moji(t *testing.T) {
 		mojis := StringToMoji(p.Source)
 
 		if result := len(mojis); result != p.Count {
-			t.Fatalf("Count of %s == %d (expect %d)",
+			t.Fatalf("StringToMoji: Count of %s == %d (expect %d)",
 				p.Title, result, p.Count)
 		}
 		if result := mojis[0].Width(); result != p.Width {
-			t.Fatalf("Width of %s == %d (expect %d)",
+			t.Fatalf("StringToMoji: Width of %s == %d (expect %d)",
 				p.Title, result, p.Width)
+		}
+		if w := GetStringWidth(p.Source); w != p.Width {
+			t.Fatalf("MojiCountInString: Count of %s == %d (expect %d)",
+				p.Title, w, p.Count)
 		}
 	}
 }

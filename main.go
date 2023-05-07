@@ -105,11 +105,7 @@ func (editor *Editor) callPromptWriter() (int, error) {
 	editor.PromptWriter(&buffer)
 	prompt := buffer.String()
 	_, err := editor.Out.WriteString(prompt)
-	w := moji.WidthT(0)
-	for _, m := range StringToMoji(cutEscapeSequenceAndOldLine(prompt)) {
-		w += m.Width()
-	}
-	return int(w), err
+	return int(moji.GetStringWidth(cutEscapeSequenceAndOldLine(prompt))), err
 }
 
 // ReadLine calls LineEditor
