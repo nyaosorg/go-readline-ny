@@ -1,3 +1,7 @@
+v0.11.6
+=======
+May 8, 2023
+
 - Reduced memory allocation counts for functions StringToMoji and GetStringWidth
 - Add an new function: MojiCountInString
 
