@@ -9,7 +9,7 @@ endif
 .PHONY: all test
 
 all :
-	$(foreach I,$(wildcard coloring examples internal/* keys simplehistory test/* tty*),pushd "$(I)" && go fmt && popd && ) go fmt
+	go fmt ./...
 	go build
 
 demo :
