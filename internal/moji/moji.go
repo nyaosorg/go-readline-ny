@@ -205,7 +205,7 @@ func StringToMoji(s string) []Moji {
 	return mojis
 }
 
-func GetStringWidth(s string) (width WidthT) {
+func MojiWidthAndCountInString(s string) (width WidthT, count int) {
 	var last Moji
 	var lastWidth WidthT
 	for len(s) > 0 {
@@ -241,6 +241,7 @@ func GetStringWidth(s string) (width WidthT) {
 		last = rune2moji(r)
 		lastWidth = last.Width()
 		width += lastWidth
+		count++
 	}
 	return
 }

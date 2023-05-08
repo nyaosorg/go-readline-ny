@@ -95,9 +95,9 @@ func TestString2Moji(t *testing.T) {
 			t.Fatalf("StringToMoji: Width of %s == %d (expect %d)",
 				p.Title, result, p.Width)
 		}
-		if w := GetStringWidth(p.Source); w != p.Width {
-			t.Fatalf("MojiCountInString: Count of %s == %d (expect %d)",
-				p.Title, w, p.Count)
+		if w, c := MojiWidthAndCountInString(p.Source); w != p.Width || c != p.Count {
+			t.Fatalf("MojiWidthAndCountInString: Widht and Count of %s == %d,%d (expect %d,%d)",
+				p.Title, w, c, p.Width, p.Count)
 		}
 	}
 }

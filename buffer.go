@@ -275,7 +275,13 @@ func StringToMoji(s string) []Moji {
 }
 
 func GetStringWidth(s string) WidthT {
-	return moji.GetStringWidth(s)
+	w, _ := moji.MojiWidthAndCountInString(s)
+	return w
+}
+
+func MojiCountInString(s string) int {
+	_, c := moji.MojiWidthAndCountInString(s)
+	return c
 }
 
 func ResetCharWidth() {
