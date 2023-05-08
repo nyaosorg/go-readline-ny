@@ -1,4 +1,5 @@
 - Reduced memory allocation counts for functions StringToMoji and GetStringWidth
+- Add an new function: MojiCountInString
 
 v0.11.5
 =======
