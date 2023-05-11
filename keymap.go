@@ -63,7 +63,11 @@ func (km *KeyMap) BindKey(key keys.Code, f Command) {
 	if km.KeyMap == nil {
 		km.KeyMap = map[keys.Code]Command{}
 	}
-	km.KeyMap[key] = f
+	if f == nil {
+		delete(km.KeyMap, key)
+	} else {
+		km.KeyMap[key] = f
+	}
 }
 
 type AnonymousCommand func(context.Context, *Buffer) Result
