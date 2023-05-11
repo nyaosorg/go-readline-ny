@@ -22,6 +22,12 @@ type Cell struct {
 	position int16
 }
 
+func (C Cell) String() string {
+	var buffer strings.Builder
+	C.Moji.WriteTo(&buffer)
+	return buffer.String()
+}
+
 // Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
