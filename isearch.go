@@ -50,7 +50,6 @@ func cmdISearchBackward(ctx context.Context, this *Buffer) Result {
 		}
 		this.eraseline()
 		io.WriteString(this.Out, ansiCursorOn)
-		this.Out.Flush()
 		key, err := this.GetKey()
 		if err != nil {
 			println(err.Error())

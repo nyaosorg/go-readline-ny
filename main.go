@@ -178,8 +178,6 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	buffer.startChangeWidthEventLoop(buffer.termWidth, editor.Tty.GetResizeNotifier())
 
 	for {
-		buffer.Out.Flush()
-
 		key, err := buffer.GetKey()
 		if err != nil {
 			return "", err

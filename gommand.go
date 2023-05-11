@@ -309,7 +309,6 @@ func cmdQuotedInsert(ctx context.Context, this *Buffer) Result {
 	io.WriteString(this.Out, ansiCursorOn)
 	defer io.WriteString(this.Out, ansiCursorOff)
 
-	this.Out.Flush()
 	if key, err := this.GetKey(); err == nil {
 		return SelfInserter(key).Call(ctx, this)
 	}
