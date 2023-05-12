@@ -40,7 +40,8 @@ type Editor struct {
 	PromptWriter   func(io.Writer) (int, error)
 	Default        string
 	Cursor         int
-	LineFeed       func(Result)
+	LineFeed       func(Result) // Deprecated. use LineFeedWriter
+	LineFeedWriter func(Result, io.Writer) (int, error)
 	Tty            ITty
 	Coloring       Coloring
 	HistoryCycling bool
@@ -134,11 +135,6 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	if editor.History == nil {
 		editor.History = _EmptyHistory{}
 	}
-	if editor.LineFeed == nil {
-		editor.LineFeed = func(Result) {
-			editor.Out.WriteByte('\n')
-		}
-	}
 	if editor.Tty == nil {
 		editor.Tty = &tty.Tty{}
 	}
@@ -192,7 +188,14 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		io.WriteString(buffer.Out, ansiCursorOn)
 
 		if rc != CONTINUE {
-			buffer.LineFeed(rc)
+			if buffer.LineFeed != nil {
+				buffer.LineFeed(rc)
+			} else if buffer.LineFeedWriter != nil {
+				buffer.LineFeedWriter(rc, buffer.Out)
+			} else {
+				buffer.Out.WriteByte('\n')
+			}
+			buffer.Out.Flush()
 
 			result := buffer.String()
 			editor.mutex.Unlock()
