@@ -7,6 +7,7 @@ go-readline-ny
 go-readline-ny is the readline library used in the command line shell [NYAGOS](https://github.com/nyaosorg/nyagos).
 
 - Emacs-like key-bindings
+- Completion
 - On Windows Terminal
     - Surrogate-pair
     - Emoji (via clipboard)
@@ -18,7 +19,7 @@ go-readline-ny is the readline library used in the command line shell [NYAGOS](h
 
 ![](./colorcmdline.png)
 
-example1.go
+[example1.go](./examples/example1.go)
 ----------
 
 The most simple sample.
@@ -46,10 +47,10 @@ func main() {
 
 If the target platform includes Windows, you have to import and use [go-colorable](https://github.com/mattn/go-colorable) like example2.go .
 
-example2.go
+[example2.go](./examples/example2.go)
 -----------
 
-Tiny Shell
+Tiny Shell. This is a sample of prompt change, colorization, filename completion and history browsing.
 
 ```examples/example2.go
 package main
@@ -66,6 +67,8 @@ import (
 
     "github.com/nyaosorg/go-readline-ny"
     "github.com/nyaosorg/go-readline-ny/coloring"
+    "github.com/nyaosorg/go-readline-ny/completion"
+    "github.com/nyaosorg/go-readline-ny/keys"
     "github.com/nyaosorg/go-readline-ny/simplehistory"
 )
 
@@ -81,6 +84,13 @@ func main() {
         Coloring:       &coloring.VimBatch{},
         HistoryCycling: true,
     }
+
+    editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
+        Completion: completion.File{},
+    })
+    // If you do not want to list files with double-tab-key,
+    // use `CmdCompletion` instead of `CmdCompletionOrList`
+
     fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
     for {
         text, err := editor.ReadLine(context.Background())
