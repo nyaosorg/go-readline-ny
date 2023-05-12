@@ -55,16 +55,11 @@ func commonPrefix(list []string) string {
 type Completion interface {
 	Delimiters() string
 	Enclosures() string
-	List(fields []*Field) (fullnames, basenames []string)
+	List(fields []string) (fullnames, basenames []string)
 }
 
 type CmdCompletion struct {
 	Completion
-}
-
-type Field struct {
-	Start int
-	Str   string
 }
 
 func removeQuotes(s, q string) string {
@@ -77,7 +72,7 @@ func removeQuotes(s, q string) string {
 	return buffer.String()
 }
 
-func split(quotes, del string, B *rl.Buffer) (tokens []*Field) {
+func split(quotes, del string, B *rl.Buffer) (fields []string, lastWordStart int) {
 	i := 0
 	const spaces = " \t\r\n\v\f"
 
@@ -101,31 +96,22 @@ func split(quotes, del string, B *rl.Buffer) (tokens []*Field) {
 				bits ^= (1 << j)
 			} else if bits == 0 {
 				if strings.Index(spaces, c) >= 0 {
-					tokens = append(tokens, &Field{
-						Start: start,
-						Str:   removeQuotes(B.SubString(start, i), quotes),
-					})
+					fields = append(fields, removeQuotes(B.SubString(start, i), quotes))
+					lastWordStart = start
 					break
 				}
 				if strings.Index(del, c) >= 0 {
-					tokens = append(tokens, &Field{
-						Start: start,
-						Str:   removeQuotes(B.SubString(start, i), quotes),
-					})
-					tokens = append(tokens, &Field{
-						Start: i,
-						Str:   c,
-					})
+					fields = append(fields, removeQuotes(B.SubString(start, i), quotes))
+					fields = append(fields, c)
+					lastWordStart = i
 					i++
 					break
 				}
 			}
 			i++
 			if i >= B.Cursor {
-				tokens = append(tokens, &Field{
-					Start: start,
-					Str:   removeQuotes(B.SubString(start, i), quotes),
-				})
+				fields = append(fields, removeQuotes(B.SubString(start, i), quotes))
+				lastWordStart = start
 				return
 			}
 		}
@@ -147,7 +133,7 @@ func hasToInsertQuotation(list []string, spaceAndSoOn string) bool {
 }
 
 func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
-	fields := split(quotes, del, B)
+	fields, lastWordStart := split(quotes, del, B)
 	list, baselist := C.List(fields)
 
 	if len(list) <= 0 {
@@ -155,25 +141,25 @@ func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 	}
 	if len(list) == 1 {
 		str := list[0]
-		if strings.EqualFold(fields[len(fields)-1].Str, str) {
+		if strings.EqualFold(fields[len(fields)-1], str) {
 			B.Out.WriteByte('\a')
 		} else {
 			if len(quotes) > 0 && len(del) > 0 && strings.ContainsAny(str, " \t\r\n\v\f"+del) {
 				str = string(quotes[0]) + str + string(quotes[0])
 			}
-			B.ReplaceAndRepaint(fields[len(fields)-1].Start, str)
+			B.ReplaceAndRepaint(lastWordStart, str)
 		}
 		return nil
 	}
 	prefix := commonPrefix(list)
-	if strings.EqualFold(fields[len(fields)-1].Str, prefix) {
+	if strings.EqualFold(fields[len(fields)-1], prefix) {
 		B.Out.WriteByte('\a')
 		return baselist
 	} else {
 		if len(quotes) > 0 && hasToInsertQuotation(list, " \t\r\n\v\f"+del) {
 			prefix = string(quotes[0]) + prefix
 		}
-		B.ReplaceAndRepaint(fields[len(fields)-1].Start, prefix)
+		B.ReplaceAndRepaint(lastWordStart, prefix)
 		return nil
 	}
 }

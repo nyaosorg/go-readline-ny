@@ -16,11 +16,11 @@ func (File) Delimiters() string {
 	return "&|><;"
 }
 
-func (File) List(list []*Field) (fullnames []string, basenames []string) {
-	if len(list) <= 0 {
+func (File) List(field []string) (fullnames []string, basenames []string) {
+	if len(field) <= 0 {
 		return
 	}
-	target := list[len(list)-1].Str
+	target := field[len(field)-1]
 	var dir, base string
 	if tail := target[len(target)-1]; tail == os.PathSeparator || tail == '/' {
 		dir = target[:len(target)-1]
