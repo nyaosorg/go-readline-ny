@@ -57,7 +57,7 @@ func (km *KeyMap) BindKeySymbol(key, funcName string) error {
 func (editor *Editor) GetBindKey(key string) Command {
 	key = keys.NormalizeName(key)
 	if code, ok := keys.NameToCode[key]; ok {
-		return editor.loolupCommand(code.String())
+		return editor.LookupCommand(code.String())
 	}
 	return nil
 }

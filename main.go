@@ -59,7 +59,7 @@ var CtrlC = errors.New("^C")
 
 var mu sync.Mutex
 
-func (editor *Editor) loolupCommand(key string) Command {
+func (editor *Editor) LookupCommand(key string) Command {
 	code := keys.Code(key)
 	if editor.KeyMap.KeyMap != nil {
 		if f, ok := editor.KeyMap.KeyMap[code]; ok {
@@ -184,7 +184,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		mu.Lock()
 
-		f := editor.loolupCommand(key)
+		f := editor.LookupCommand(key)
 
 		io.WriteString(buffer.Out, ansiCursorOff)
 
