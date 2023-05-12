@@ -1,4 +1,5 @@
-- Add sub-package `completion` and update example2.go
+- Reimported an improved subset of nyagos completion as a subpackage `completion`
+- Rewrite `examples/example2.go` to use the sub-package `completion`
 
 v0.11.7
 =======
