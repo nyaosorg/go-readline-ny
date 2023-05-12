@@ -1,3 +1,7 @@
+v0.11.7
+=======
+May 12, 2023
+
 - Change the global sync.Mutex variable to a field in an `Editor` instance. In a command bound to a key, it was imposible to create a new `Editor` instance and call `(*Editor) ReadLine`.
 - Rename `(*Editor) loolup(KEY)` to look up a command mapped to a KEY from both instance's table and global table to `LookUp` (exposed)
 - `(KeyMap) BindKey(KEY,nil)` now removes the function assigned to KEY
