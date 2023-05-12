@@ -29,28 +29,34 @@ func (File) List(field []string) (fullnames []string, basenames []string) {
 		dir = filepath.Dir(target)
 		base = filepath.Base(target)
 	}
-	dirEntries, err := os.ReadDir(dir)
-	if err != nil {
-		return
+	for {
+		dirEntries, err := os.ReadDir(dir)
+		if err != nil {
+			return
+		}
+		for _, d := range dirEntries {
+			name := d.Name()
+			if name == "." || name == ".." {
+				continue
+			}
+			if len(name) < len(base) {
+				continue
+			}
+			if !strings.EqualFold(base, name[:len(base)]) {
+				continue
+			}
+			full := filepath.Join(dir, name)
+			if (d.Type() & (os.ModeDir | os.ModeSymlink)) != 0 {
+				name += string(os.PathSeparator)
+				full += string(os.PathSeparator)
+			}
+			fullnames = append(fullnames, full)
+			basenames = append(basenames, name)
+		}
+		if len(fullnames) != 1 || fullnames[0][len(fullnames[0])-1] != os.PathSeparator {
+			return
+		}
+		dir = fullnames[0]
+		base = ""
 	}
-	for _, d := range dirEntries {
-		name := d.Name()
-		if name == "." || name == ".." {
-			continue
-		}
-		if len(name) < len(base) {
-			continue
-		}
-		if !strings.EqualFold(base, name[:len(base)]) {
-			continue
-		}
-		full := filepath.Join(dir, name)
-		if (d.Type() & (os.ModeDir | os.ModeSymlink)) != 0 {
-			name += string(os.PathSeparator)
-			full += string(os.PathSeparator)
-		}
-		fullnames = append(fullnames, full)
-		basenames = append(basenames, name)
-	}
-	return
 }
