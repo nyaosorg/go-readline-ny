@@ -45,7 +45,7 @@ func (File) List(list []*Field) (fullnames []string, basenames []string) {
 			continue
 		}
 		full := filepath.Join(dir, name)
-		if d.IsDir() {
+		if (d.Type() & (os.ModeDir | os.ModeSymlink)) != 0 {
 			name += string(os.PathSeparator)
 			full += string(os.PathSeparator)
 		}
