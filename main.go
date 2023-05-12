@@ -44,6 +44,7 @@ type Editor struct {
 	Tty            ITty
 	Coloring       Coloring
 	HistoryCycling bool
+	mutex          sync.Mutex
 }
 
 const (
@@ -56,8 +57,6 @@ const (
 
 // CtrlC is the error when Ctrl-C is pressed.
 var CtrlC = errors.New("^C")
-
-var mu sync.Mutex
 
 func (editor *Editor) LookupCommand(key string) Command {
 	code := keys.Code(key)
@@ -182,7 +181,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		mu.Lock()
+		editor.mutex.Lock()
 
 		f := editor.LookupCommand(key)
 
@@ -196,7 +195,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 			buffer.LineFeed(rc)
 
 			result := buffer.String()
-			mu.Unlock()
+			editor.mutex.Unlock()
 			if rc == ENTER {
 				return result, nil
 			} else if rc == INTR {
@@ -205,6 +204,6 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 				return result, io.EOF
 			}
 		}
-		mu.Unlock()
+		editor.mutex.Unlock()
 	}
 }

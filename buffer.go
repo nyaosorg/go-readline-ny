@@ -220,10 +220,10 @@ func (B *Buffer) startChangeWidthEventLoop(_lastw int, getResizeEvent func() (in
 				break
 			}
 			if lastw != w {
-				mu.Lock()
+				B.Editor.mutex.Lock()
 				B.termWidth = w
 				B.RepaintAfterPrompt()
-				mu.Unlock()
+				B.Editor.mutex.Unlock()
 				lastw = w
 			}
 		}
