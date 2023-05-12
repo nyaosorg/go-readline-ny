@@ -1,3 +1,5 @@
+- Add sub-package `completion` and update example2.go
+
 v0.11.7
 =======
 May 12, 2023
