@@ -147,7 +147,7 @@ func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 			if len(quotes) > 0 && len(del) > 0 && strings.ContainsAny(str, " \t\r\n\v\f"+del) {
 				str = string(quotes[0]) + str + string(quotes[0])
 			}
-			B.ReplaceAndRepaint(lastWordStart, str)
+			B.ReplaceAndRepaint(lastWordStart, str+" ")
 		}
 		return nil
 	}
