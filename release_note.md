@@ -1,5 +1,6 @@
 - Reimported an improved subset of nyagos completion as a subpackage `completion`
 - Rewrite `examples/example2.go` to use the sub-package `completion`
+- Add a field LineFeedWriter.
 
 v0.11.7
 =======
