@@ -1,9 +1,15 @@
+- Change the global sync.Mutex variable to a field in an `Editor` instance. In a command bound to a key, it was imposible to create a new `Editor` instance and call `(*Editor) ReadLine`.
+- Rename `(*Editor) loolup(KEY)` to look up a command mapped to a KEY from both instance's table and global table to `LookUp` (exposed)
+- `(KeyMap) BindKey(KEY,nil)` now removes the function assigned to KEY
+- Implement `(c Cell) String` that behaves equivalently to `b:=&strings.Builder{};c.Moji.WriteTo(b);b.String()`
+- `(*Buffer) GetKey` now calls `(*Buffer).Out.Flush`, so the user no longer needs to call `flush` explicitly.
+
 v0.11.6
 =======
 May 8, 2023
 
-- Reduced memory allocation counts for functions StringToMoji and GetStringWidth
-- Add an new function: MojiCountInString
+- Reduced memory allocation counts for functions `StringToMoji` and `GetStringWidth`
+- Implement a method `MojiCountInString` that counts the number of `Moji` in a string
 
 v0.11.5
 =======
