@@ -9,6 +9,12 @@ import (
 	rl "github.com/nyaosorg/go-readline-ny"
 )
 
+type Completion interface {
+	Delimiters() string
+	Enclosures() string
+	List(fields []string) (fullnames, basenames []string)
+}
+
 func commonPrefix(list []string) string {
 	if len(list) < 1 {
 		return ""
@@ -50,16 +56,6 @@ func commonPrefix(list []string) string {
 		}
 	}
 	return list[minimumIndex][:len(common)]
-}
-
-type Completion interface {
-	Delimiters() string
-	Enclosures() string
-	List(fields []string) (fullnames, basenames []string)
-}
-
-type CmdCompletion struct {
-	Completion
 }
 
 func removeQuotes(s, q string) string {
@@ -119,10 +115,6 @@ func split(quotes, del string, B *rl.Buffer) (fields []string, lastWordStart int
 	return
 }
 
-func (C CmdCompletion) String() string {
-	return "completion"
-}
-
 func hasToInsertQuotation(list []string, spaceAndSoOn string) bool {
 	for _, s := range list {
 		if strings.ContainsAny(s, spaceAndSoOn) {
@@ -164,6 +156,14 @@ func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 	}
 }
 
+type CmdCompletion struct {
+	Completion
+}
+
+func (C CmdCompletion) String() string {
+	return "COMPLETION"
+}
+
 func (C CmdCompletion) Call(ctx context.Context, B *rl.Buffer) rl.Result {
 	complete(C.Enclosures(), C.Delimiters(), B, C)
 	return rl.CONTINUE
@@ -174,7 +174,7 @@ type CmdCompletionOrList struct {
 }
 
 func (C CmdCompletionOrList) String() string {
-	return "completion or list"
+	return "COMPLETION_OR_LIST"
 }
 
 func (C CmdCompletionOrList) Call(ctx context.Context, B *rl.Buffer) rl.Result {
