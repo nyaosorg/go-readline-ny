@@ -1,3 +1,7 @@
+v0.12.0
+=======
+May 13, 2023
+
 - Reimported an improved subset of nyagos completion as a subpackage `completion`
 - Rewrite `examples/example2.go` to use the sub-package `completion`
 - Add a field LineFeedWriter.
