@@ -14,6 +14,8 @@ import (
 
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-readline-ny/coloring"
+	"github.com/nyaosorg/go-readline-ny/completion"
+	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/simplehistory"
 )
 
@@ -29,6 +31,13 @@ func main() {
 		Coloring:       &coloring.VimBatch{},
 		HistoryCycling: true,
 	}
+
+	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
+		Completion: completion.File{},
+	})
+	// If you do not want to list files with double-tab-key,
+	// use `CmdCompletion` instead of `CmdCompletionOrList`
+
 	fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
 	for {
 		text, err := editor.ReadLine(context.Background())
