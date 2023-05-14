@@ -137,6 +137,9 @@ func removeUnmatches(full, base []string, source string) (newFull, newBase []str
 func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 	fields, lastWordStart := split(quotes, del, B)
 	list, baselist := C.List(fields)
+	if baselist == nil || len(baselist) <= 0 {
+		baselist = list
+	}
 	list, baselist = removeUnmatches(list, baselist, fields[len(fields)-1])
 
 	if len(list) <= 0 {
