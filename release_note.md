@@ -1,3 +1,7 @@
+- CmdCompletion and CmdCompletionOrList narrows down candidates now. So Completion interface side does not have to do
+- Completion interface can now be omitted by setting basenames to nil
+- completion.File: Fixed: filename completion did not match anyone when ./ is included in the path
+
 v0.12.0
 =======
 May 13, 2023
