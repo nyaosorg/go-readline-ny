@@ -124,9 +124,20 @@ func hasToInsertQuotation(list []string, spaceAndSoOn string) bool {
 	return false
 }
 
+func removeUnmatches(full, base []string, source string) (newFull, newBase []string) {
+	for i, name := range full {
+		if len(name) >= len(source) && strings.EqualFold(source, name[:len(source)]) {
+			newFull = append(newFull, name)
+			newBase = append(newBase, base[i])
+		}
+	}
+	return
+}
+
 func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 	fields, lastWordStart := split(quotes, del, B)
 	list, baselist := C.List(fields)
+	list, baselist = removeUnmatches(list, baselist, fields[len(fields)-1])
 
 	if len(list) <= 0 {
 		return nil
