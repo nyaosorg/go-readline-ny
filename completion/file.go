@@ -16,6 +16,13 @@ func (File) Delimiters() string {
 	return "&|><;"
 }
 
+func zeroToOneDot(d string) string {
+	if d == "" {
+		return "."
+	}
+	return d
+}
+
 func (File) List(field []string) (fullnames []string, basenames []string) {
 	if len(field) <= 0 {
 		return
@@ -38,7 +45,7 @@ func (File) List(field []string) (fullnames []string, basenames []string) {
 	}
 
 	for {
-		dirEntries, err := os.ReadDir(dir)
+		dirEntries, err := os.ReadDir(zeroToOneDot(dir))
 		if err != nil {
 			return
 		}
@@ -49,7 +56,7 @@ func (File) List(field []string) (fullnames []string, basenames []string) {
 			// the completion is completed and the space will be appeneded.
 			// Then, It interferes with the subsequent file name input.
 			//
-			// To avoid that, we narrow down in advance here, 
+			// To avoid that, we narrow down in advance here,
 			// and when it is found  that there is only one directory,
 			// we add the files under it to the candidates
 			// so that completion does not end
