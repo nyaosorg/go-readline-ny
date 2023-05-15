@@ -1,3 +1,7 @@
+v0.12.3
+=======
+May 16, 2023
+
 - Add new method: `(*Editor) Init`
     - It replaces nil fields to default values.
       When we refer Editor's fields before calling `(*Editor) Readline`,
