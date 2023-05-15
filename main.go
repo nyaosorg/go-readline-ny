@@ -109,22 +109,16 @@ func (editor *Editor) callPromptWriter() (int, error) {
 	return int(w), err
 }
 
-// ReadLine calls LineEditor
-// - ENTER typed -> returns TEXT and nil
-// - CTRL-C typed -> returns "" and readline.CtrlC
-// - CTRL-D typed -> returns "" and io.EOF
-func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
+// Init replaces nil fields to default values.
+// When we refer them before calling Readline,
+// We have to call Init explicitly.
+func (editor *Editor) Init() {
 	if editor.Writer == nil {
 		editor.Writer = os.Stdout
 	}
 	if editor.Out == nil {
 		editor.Out = bufio.NewWriter(editor.Writer)
 	}
-	defer func() {
-		editor.Out.WriteString(ansiCursorOn)
-		editor.Out.Flush()
-	}()
-
 	if editor.Prompt == nil {
 		if editor.PromptWriter != nil {
 			editor.Prompt = editor.callPromptWriter
@@ -138,6 +132,22 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	if editor.Tty == nil {
 		editor.Tty = &tty.Tty{}
 	}
+	if editor.Coloring == nil {
+		editor.Coloring = _MonoChrome{}
+	}
+}
+
+// ReadLine calls LineEditor
+// - ENTER typed -> returns TEXT and nil
+// - CTRL-C typed -> returns "" and readline.CtrlC
+// - CTRL-D typed -> returns "" and io.EOF
+func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
+	editor.Init()
+	defer func() {
+		editor.Out.WriteString(ansiCursorOn)
+		editor.Out.Flush()
+	}()
+
 	buffer := Buffer{
 		Editor:         editor,
 		Buffer:         make([]Cell, 0, 20),

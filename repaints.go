@@ -8,9 +8,6 @@ import (
 )
 
 func (B *Buffer) refreshColor() ColorSequence {
-	if B.Coloring == nil {
-		B.Coloring = _MonoChrome{}
-	}
 	defaultColor := B.Coloring.Init()
 	position := int16(0)
 	for i, cell := range B.Buffer {
