@@ -1,3 +1,9 @@
+v0.12.2
+========
+May 15, 2023
+
+- Fix: completion.File failed when the path did not contain a directory
+
 v0.12.1
 ========
 May 15, 2023
