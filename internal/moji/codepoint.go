@@ -7,6 +7,27 @@ import (
 	"unicode/utf8"
 )
 
+type Tab struct {
+	pos int16
+}
+
+func (t *Tab) Width() WidthT {
+	return WidthT(4 - t.pos%4)
+}
+
+func (t *Tab) PrintTo(w io.Writer) {
+	io.WriteString(w, "    "[t.pos%4:])
+}
+
+func (t *Tab) WriteTo(w io.Writer) (int64, error) {
+	n, err := w.Write([]byte{'\t'})
+	return int64(n), err
+}
+
+func (t *Tab) SetPosition(pos int16) {
+	t.pos = pos
+}
+
 // _RawCodePoint is for the character to print as is.
 type _RawCodePoint rune
 
@@ -105,7 +126,9 @@ const (
 )
 
 func rune2moji(ch rune) Moji {
-	if ch < ' ' {
+	if ch == '\t' {
+		return &Tab{}
+	} else if ch < ' ' {
 		return _CtrlCodePoint(ch)
 	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && AmbiguousIsWide {
 		return _WavingWhiteFlagCodePoint(ch)

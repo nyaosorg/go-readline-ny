@@ -12,7 +12,10 @@ func (B *Buffer) refreshColor() ColorSequence {
 	position := int16(0)
 	for i, cell := range B.Buffer {
 		B.Buffer[i].position = position
-		if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
+		if tab, ok := cell.Moji.(*moji.Tab); ok {
+			tab.SetPosition(position)
+			B.Buffer[i].color = ColorSequence(B.Coloring.Next('\t'))
+		} else if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
 			B.Buffer[i].color = ColorSequence(B.Coloring.Next(codepoint))
 		} else {
 			B.Buffer[i].color = ColorSequence(B.Coloring.Next(utf8.RuneError))
