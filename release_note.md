@@ -1,3 +1,5 @@
+- Tab characters can now be represented by a few spaces up to every fourth position instead of ^I
+
 v0.12.3
 =======
 May 16, 2023
