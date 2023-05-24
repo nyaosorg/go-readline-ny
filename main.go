@@ -61,12 +61,10 @@ var CtrlC = errors.New("^C")
 
 func (editor *Editor) LookupCommand(key string) Command {
 	code := keys.Code(key)
-	if editor.KeyMap.KeyMap != nil {
-		if f, ok := editor.KeyMap.KeyMap[code]; ok {
-			return f
-		}
+	if f, ok := editor.KeyMap.Lookup(code); ok {
+		return f
 	}
-	if f, ok := GlobalKeyMap.KeyMap[code]; ok {
+	if f, ok := GlobalKeyMap.Lookup(code); ok {
 		return f
 	}
 	return SelfInserter(key)

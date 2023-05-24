@@ -14,7 +14,7 @@ type Command interface {
 
 // GlobalKeyMap is the global keymap for users' customizing
 var GlobalKeyMap = &KeyMap{
-	KeyMap: map[keys.Code]Command{
+	table: map[keys.Code]Command{
 		keys.AltB:         CmdBackwardWord,
 		keys.AltF:         CmdForwardWord,
 		keys.AltV:         CmdYank,
@@ -56,18 +56,26 @@ var GlobalKeyMap = &KeyMap{
 
 // KeyMap is the class for key-bindings
 type KeyMap struct {
-	KeyMap map[keys.Code]Command
+	table map[keys.Code]Command
 }
 
 func (km *KeyMap) BindKey(key keys.Code, f Command) {
-	if km.KeyMap == nil {
-		km.KeyMap = map[keys.Code]Command{}
+	if km.table == nil {
+		km.table = map[keys.Code]Command{}
 	}
 	if f == nil {
-		delete(km.KeyMap, key)
+		delete(km.table, key)
 	} else {
-		km.KeyMap[key] = f
+		km.table[key] = f
 	}
+}
+
+func (km *KeyMap) Lookup(key keys.Code) (Command, bool) {
+	if km.table == nil {
+		return nil, false
+	}
+	f, ok := km.table[key]
+	return f, ok
 }
 
 type AnonymousCommand func(context.Context, *Buffer) Result

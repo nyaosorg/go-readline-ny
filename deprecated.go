@@ -26,11 +26,8 @@ func (km *KeyMap) BindKeyClosure(name string, f func(context.Context, *Buffer) R
 func (km *KeyMap) GetBindKey(key string) Command {
 	key = keys.NormalizeName(key)
 	if ch, ok := keys.NameToCode[key]; ok {
-		if km.KeyMap != nil {
-			if f, ok := km.KeyMap[ch]; ok {
-				return f
-			}
-		}
+		f, _ := km.Lookup(ch)
+		return f
 	}
 	return nil
 }
