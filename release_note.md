@@ -1,3 +1,5 @@
+- Add new method: `(*KeyMap) Lookup`
+
 v0.13.0
 =======
 May 19, 2023
