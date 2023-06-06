@@ -1,3 +1,5 @@
+- Fix the literals that should be written as `\x` were `0x` on keys/code.go
+
 v0.13.1
 =======
 May 28, 2023
