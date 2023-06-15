@@ -61,7 +61,7 @@ func commonPrefix(list []string) string {
 func removeQuotes(s, q string) string {
 	var buffer strings.Builder
 	for _, c := range s {
-		if strings.IndexRune(q, c) < 0 {
+		if !strings.ContainsRune(q, c) {
 			buffer.WriteRune(c)
 		}
 	}
@@ -76,7 +76,7 @@ func split(quotes, del string, B *rl.Buffer) (fields []string, lastWordStart int
 		// skip space
 		for {
 			c := B.Buffer[i].String()
-			if strings.Index(spaces, c) < 0 {
+			if !strings.Contains(spaces, c) {
 				break
 			}
 			i++
@@ -91,12 +91,12 @@ func split(quotes, del string, B *rl.Buffer) (fields []string, lastWordStart int
 			if j := strings.Index(quotes, c); j >= 0 {
 				bits ^= (1 << j)
 			} else if bits == 0 {
-				if strings.Index(spaces, c) >= 0 {
+				if strings.Contains(spaces, c) {
 					fields = append(fields, removeQuotes(B.SubString(start, i), quotes))
 					lastWordStart = start
 					break
 				}
-				if strings.Index(del, c) >= 0 {
+				if strings.Contains(del, c) {
 					fields = append(fields, removeQuotes(B.SubString(start, i), quotes))
 					fields = append(fields, c)
 					lastWordStart = i
@@ -193,7 +193,7 @@ func (C CmdCompletionOrList) String() string {
 
 func (C CmdCompletionOrList) Call(ctx context.Context, B *rl.Buffer) rl.Result {
 	list := complete(C.Enclosures(), C.Delimiters(), B, C)
-	if list != nil && len(list) > 0 {
+	if len(list) > 0 {
 		B.Out.WriteByte('\n')
 		box.Print(ctx, list, B.Out)
 		B.RepaintAll()

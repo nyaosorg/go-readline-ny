@@ -336,7 +336,7 @@ func cmdYankWithQuote(ctx context.Context, this *Buffer) Result {
 	if err != nil {
 		return CONTINUE
 	}
-	if strings.IndexRune(text, ' ') >= 0 &&
+	if strings.ContainsRune(text, ' ') &&
 		!strings.HasPrefix(text, `"`) {
 
 		text = `"` + strings.Replace(text, `"`, `""`, -1) + `"`

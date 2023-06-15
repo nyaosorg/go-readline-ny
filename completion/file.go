@@ -38,10 +38,10 @@ func (File) List(field []string) (fullnames []string, basenames []string) {
 		dir = target[:len(target)-len(base)]
 	}
 	var sep string
-	if strings.Index(target, "/") < 0 {
-		sep = string(os.PathSeparator)
-	} else {
+	if strings.ContainsRune(target, '/') {
 		sep = "/"
+	} else {
+		sep = string(os.PathSeparator)
 	}
 
 	for {
