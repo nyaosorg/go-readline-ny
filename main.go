@@ -180,6 +180,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 	buffer.RepaintAfterPrompt()
 	buffer.startChangeWidthEventLoop(buffer.termWidth, editor.Tty.GetResizeNotifier())
 
+	io.WriteString(buffer.Out, ansiCursorOn)
 	for {
 		key, err := buffer.GetKey()
 		if err != nil {
