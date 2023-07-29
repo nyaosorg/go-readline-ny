@@ -1,3 +1,7 @@
+v0.13.2
+=======
+Jul 29, 2023
+
 - Fix the literals that should be written as `\x` were `0x` on keys/code.go
 - Fix cursor wouldn't appear on startup when called with cursor off
 
