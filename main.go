@@ -37,7 +37,7 @@ type Editor struct {
 	History        IHistory
 	Writer         io.Writer
 	Out            *bufio.Writer
-	Prompt         func() (int, error)
+	Prompt         func() (int, error) // Deprecated. use PromptWriter
 	PromptWriter   func(io.Writer) (int, error)
 	Default        string
 	Cursor         int
