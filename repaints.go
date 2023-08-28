@@ -2,6 +2,7 @@ package readline
 
 import (
 	"fmt"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
@@ -73,5 +74,18 @@ func (B *Buffer) RepaintAfterPrompt() {
 func (B *Buffer) RepaintAll() {
 	B.Out.Flush()
 	B.topColumn, _ = B.Prompt()
+	B.repaint()
+}
+
+// RepaintLastLine repaints the last line of the prompt and input-line.
+// IMPORTANT: This method requires setting valid Editor.PromptWriter
+func (B *Buffer) RepaintLastLine() {
+	B.Out.Flush()
+	var buffer strings.Builder
+	buffer.WriteByte('\r')
+	B.PromptWriter(&buffer)
+	prompt := buffer.String()
+	prompt = strings.ReplaceAll(prompt, "\n", "\r")
+	B.Out.WriteString(prompt)
 	B.repaint()
 }
