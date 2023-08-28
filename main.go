@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"unicode/utf8"
 
 	//tty "github.com/nyaosorg/go-readline-ny/tty10"
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
@@ -76,26 +77,38 @@ func (editor *Editor) printSimplePrompt() (int, error) {
 }
 
 func cutEscapeSequenceAndOldLine(s string) string {
-	var buffer strings.Builder
-	esc := false
+	buffer := make([]byte, 0, len(s)*2)
+	esc := false           // for ESC[...
+	titleSequence := false // for ESC]...\x07
 	for i, end := 0, len(s); i < end; i++ {
 		r := s[i]
 		switch r {
 		case '\r', '\n':
-			buffer.Reset()
+			buffer = buffer[:0]
 		case '\x1B':
 			esc = true
 		default:
-			if esc {
-				if ('A' <= r && r <= 'Z') || ('a' <= r && r <= 'z') {
+			if titleSequence {
+				if r == '\007' {
+					titleSequence = false
 					esc = false
 				}
+			} else if esc {
+				if r == ']' {
+					titleSequence = true
+				} else if ('A' <= r && r <= 'Z') || ('a' <= r && r <= 'z') {
+					esc = false
+				}
+			} else if r == '\b' {
+				if lastRune, siz := utf8.DecodeLastRune(buffer); lastRune != utf8.RuneError {
+					buffer = buffer[:len(buffer)-siz]
+				}
 			} else {
-				buffer.WriteByte(r)
+				buffer = append(buffer, r)
 			}
 		}
 	}
-	return buffer.String()
+	return string(buffer)
 }
 
 func (editor *Editor) callPromptWriter() (int, error) {
