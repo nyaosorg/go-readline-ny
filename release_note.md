@@ -1,3 +1,7 @@
+v0.14.0
+=======
+Oct 28, 2023
+
 - Even if `(*Editor) PromptWriter` outputs `Ctrl-H` or `ESC]...\007`, count the width of the prompt correctly now
 - Implement `(*Buffer) RepaintLastLine()` that outputs the last line of the prompt and user input-text. It outputs prompt in which `\n` are replaced to `\r`.
 
