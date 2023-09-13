@@ -1,3 +1,9 @@
+- Publish the function GetKey(*tty*)
+    - The parameter *tty* is expected to be set to a type of '[go-tty.TTY]' or a compatible type. It must have methods: Raw(), ReadRune(), and Buffered().
+- Set `Deprecated` comment on the field `Editor.Prompt`
+
+[go-tty.TTY]: https://pkg.go.dev/github.com/mattn/go-tty#TTY
+
 v0.14.0
 =======
 Oct 28, 2023
