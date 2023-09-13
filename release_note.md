@@ -1,3 +1,7 @@
+v0.14.1
+=======
+Sep 13, 2023
+
 - Publish the function GetKey(*tty*)
     - The parameter *tty* is expected to be set to a type of '[go-tty.TTY]' or a compatible type. It must have methods: Raw(), ReadRune(), and Buffered().
 - Set `Deprecated` comment on the field `Editor.Prompt`
