@@ -112,6 +112,13 @@ func cutEscapeSequenceAndOldLine(s string) string {
 }
 
 func (editor *Editor) callPromptWriter() (int, error) {
+	if editor.PromptWriter == nil {
+		if editor.Prompt != nil {
+			return editor.Prompt()
+		}
+		_, err := editor.Out.WriteString("\n> ")
+		return 2, err
+	}
 	var buffer strings.Builder
 	editor.PromptWriter(&buffer)
 	prompt := buffer.String()
@@ -129,13 +136,6 @@ func (editor *Editor) Init() {
 	}
 	if editor.Out == nil {
 		editor.Out = bufio.NewWriter(editor.Writer)
-	}
-	if editor.Prompt == nil {
-		if editor.PromptWriter != nil {
-			editor.Prompt = editor.callPromptWriter
-		} else {
-			editor.Prompt = editor.printSimplePrompt
-		}
 	}
 	if editor.History == nil {
 		editor.History = _EmptyHistory{}
@@ -176,7 +176,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
 	}
 
-	buffer.topColumn, err = editor.Prompt()
+	buffer.topColumn, err = editor.callPromptWriter()
 	if err != nil {
 		// unable to get prompt-string.
 		fmt.Fprintf(buffer.Out, "%s\n$ ", err.Error())

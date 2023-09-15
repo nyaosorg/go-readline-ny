@@ -73,7 +73,7 @@ func (B *Buffer) RepaintAfterPrompt() {
 // RepaintAll repaints the all characters in the editline including prompt.
 func (B *Buffer) RepaintAll() {
 	B.Out.Flush()
-	B.topColumn, _ = B.Prompt()
+	B.topColumn, _ = B.callPromptWriter()
 	B.repaint()
 }
 
