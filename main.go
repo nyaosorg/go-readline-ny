@@ -71,11 +71,6 @@ func (editor *Editor) LookupCommand(key string) Command {
 	return SelfInserter(key)
 }
 
-func (editor *Editor) printSimplePrompt() (int, error) {
-	editor.Out.WriteString("\n> ")
-	return 2, nil
-}
-
 func cutEscapeSequenceAndOldLine(s string) string {
 	buffer := make([]byte, 0, len(s)*2)
 	esc := false           // for ESC[...
