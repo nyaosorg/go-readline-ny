@@ -2,35 +2,10 @@ package moji
 
 import (
 	"io"
-	"os"
 	"unicode"
 	"unicode/utf8"
-)
 
-var isVsCodeTerminal = os.Getenv("VSCODE_PID") != ""
-var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != "" && !isVsCodeTerminal
-var isWezTerm = os.Getenv("TERM_PROGRAM") == "WezTerm"
-var isContour = os.Getenv("TERMINAL_NAME") == "contour"
-
-var (
-	// SurrogatePairOk is true when the surrogated pair unicode is supported
-	// If it is false, <NNNN> is displayed instead.
-	SurrogatePairOk = isWindowsTerminal || isWezTerm || isContour
-
-	// ZeroWidthJoinSequenceOk is true when ZWJ(U+200D) is supported.
-	// If it is false, <NNNN> is displayed instead.
-	ZeroWidthJoinSequenceOk = isWindowsTerminal || isWezTerm || isContour
-
-	// VariationSequenceOk is true when Variation Sequences are supported.
-	// If it is false, <NNNN> is displayed instead.
-	VariationSequenceOk = isWindowsTerminal || isWezTerm || isContour
-
-	// ModifierSequenceOk is false, SkinTone sequence are treated as two
-	// character
-	ModifierSequenceOk = isWindowsTerminal || isWezTerm
-
-	// AmbiguousIsWide is true, EastAsianAmbiguous are treated as two width
-	AmbiguousIsWide = !isWindowsTerminal
+	"github.com/nyaosorg/go-readline-ny/internal/termcheck"
 )
 
 // Moji is the interface for minimum unit to edit in readline
@@ -83,14 +58,14 @@ func (s _ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 type _ModifierSequence [2]Moji
 
 func isEmojiModifier(ch rune) bool {
-	if !ModifierSequenceOk {
+	if !termcheck.ModifierSequenceOk {
 		return false
 	}
 	return '\U0001F3FB' <= ch && ch <= '\U0001F3FF'
 }
 
 func AreEmojiModifier(s string) bool {
-	if !ModifierSequenceOk {
+	if !termcheck.ModifierSequenceOk {
 		return false
 	}
 	u, _ := utf8.DecodeRuneInString(s)
@@ -161,11 +136,11 @@ func (s _VariationSequence) PrintTo(w io.Writer) {
 const zeroWidthJoinRune = '\u200D'
 
 func isZeroWidthJoin(r rune) bool {
-	return ZeroWidthJoinSequenceOk && unicode.Is(unicode.Join_Control, r)
+	return termcheck.ZeroWidthJoinSequenceOk && unicode.Is(unicode.Join_Control, r)
 }
 
 func AreZeroWidthJoin(s string) bool {
-	if !ZeroWidthJoinSequenceOk {
+	if !termcheck.ZeroWidthJoinSequenceOk {
 		return false
 	}
 	r, _ := utf8.DecodeRuneInString(s)
