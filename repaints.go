@@ -81,11 +81,16 @@ func (B *Buffer) RepaintAll() {
 // IMPORTANT: This method requires setting valid Editor.PromptWriter
 func (B *Buffer) RepaintLastLine() {
 	B.Out.Flush()
-	var buffer strings.Builder
-	buffer.WriteByte('\r')
-	B.PromptWriter(&buffer)
-	prompt := buffer.String()
-	prompt = strings.ReplaceAll(prompt, "\n", "\r")
+	var prompt string
+	if B.PromptWriter == nil {
+		prompt = "\r> "
+	} else {
+		var buffer strings.Builder
+		buffer.WriteByte('\r')
+		B.PromptWriter(&buffer)
+		prompt = buffer.String()
+		prompt = strings.ReplaceAll(prompt, "\n", "\r")
+	}
 	B.Out.WriteString(prompt)
 	B.repaint()
 }
