@@ -6,7 +6,6 @@ import (
 	"unicode"
 
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
-	"github.com/nyaosorg/go-readline-ny/internal/termcheck"
 )
 
 const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
@@ -301,9 +300,9 @@ func SetCharWidth(c rune, width int) {
 }
 
 func EnableSurrogatePair(value bool) {
-	termcheck.SurrogatePairOk = value
+	moji.SurrogatePairOk = value
 }
 
 func IsSurrogatePairEnabled() bool {
-	return termcheck.SurrogatePairOk
+	return moji.SurrogatePairOk
 }

@@ -15,7 +15,11 @@ all :
 demo :
 	go run test/unicodetest/main.go
 
+demo-future :
+	go run -tags=tty10,orgxwidth test/unicodetest/main.go
+
 test :
+	pushd "internal/moji" && go test -v && popd
 	go test -v
 
 get :

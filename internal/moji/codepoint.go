@@ -5,8 +5,6 @@ import (
 	"io"
 	"unicode"
 	"unicode/utf8"
-
-	"github.com/nyaosorg/go-readline-ny/internal/termcheck"
 )
 
 type Tab struct {
@@ -132,7 +130,7 @@ func rune2moji(ch rune, pos int) Moji {
 		return &Tab{pos: int16(pos)}
 	} else if ch < ' ' {
 		return _CtrlCodePoint(ch)
-	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && termcheck.AmbiguousIsWide {
+	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && AmbiguousIsWide {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else if isToBeEscaped(ch) {
 		return _EscCodePoint(ch)

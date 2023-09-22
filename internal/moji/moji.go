@@ -4,8 +4,6 @@ import (
 	"io"
 	"unicode"
 	"unicode/utf8"
-
-	"github.com/nyaosorg/go-readline-ny/internal/termcheck"
 )
 
 // Moji is the interface for minimum unit to edit in readline
@@ -58,14 +56,14 @@ func (s _ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 type _ModifierSequence [2]Moji
 
 func isEmojiModifier(ch rune) bool {
-	if !termcheck.ModifierSequenceOk {
+	if !ModifierSequenceOk {
 		return false
 	}
 	return '\U0001F3FB' <= ch && ch <= '\U0001F3FF'
 }
 
 func AreEmojiModifier(s string) bool {
-	if !termcheck.ModifierSequenceOk {
+	if !ModifierSequenceOk {
 		return false
 	}
 	u, _ := utf8.DecodeRuneInString(s)
@@ -136,11 +134,11 @@ func (s _VariationSequence) PrintTo(w io.Writer) {
 const zeroWidthJoinRune = '\u200D'
 
 func isZeroWidthJoin(r rune) bool {
-	return termcheck.ZeroWidthJoinSequenceOk && unicode.Is(unicode.Join_Control, r)
+	return ZeroWidthJoinSequenceOk && unicode.Is(unicode.Join_Control, r)
 }
 
 func AreZeroWidthJoin(s string) bool {
-	if !termcheck.ZeroWidthJoinSequenceOk {
+	if !ZeroWidthJoinSequenceOk {
 		return false
 	}
 	r, _ := utf8.DecodeRuneInString(s)

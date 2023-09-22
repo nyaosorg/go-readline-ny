@@ -1,4 +1,4 @@
-package termcheck
+package moji
 
 import (
 	"os"

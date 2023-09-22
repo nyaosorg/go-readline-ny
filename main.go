@@ -11,10 +11,8 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	//tty "github.com/nyaosorg/go-readline-ny/tty10"
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 	"github.com/nyaosorg/go-readline-ny/keys"
-	tty "github.com/nyaosorg/go-readline-ny/tty8"
 )
 
 // Result is the type for readline's result.
@@ -136,7 +134,7 @@ func (editor *Editor) Init() {
 		editor.History = _EmptyHistory{}
 	}
 	if editor.Tty == nil {
-		editor.Tty = &tty.Tty{}
+		editor.Tty = &defaultTty{}
 	}
 	if editor.Coloring == nil {
 		editor.Coloring = _MonoChrome{}
