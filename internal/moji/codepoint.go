@@ -127,9 +127,9 @@ const (
 	boxDrawingEnd                = 0x257F
 )
 
-func rune2moji(ch rune) Moji {
+func rune2moji(ch rune, pos int) Moji {
 	if ch == '\t' {
-		return &Tab{}
+		return &Tab{pos: int16(pos)}
 	} else if ch < ' ' {
 		return _CtrlCodePoint(ch)
 	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && termcheck.AmbiguousIsWide {

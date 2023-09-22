@@ -26,7 +26,7 @@ func TestCodePointPut(t *testing.T) {
 	termcheck.VariationSequenceOk = false
 
 	source := "1\b\t\x7F\u908A\U000E0104"
-	expect := "1^H^I<7F>\u908A<E0104>"
+	expect := "1^H <7F>\u908A<E0104>"
 	mojis := StringToMoji(source)
 
 	var buffer strings.Builder

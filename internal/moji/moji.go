@@ -150,6 +150,7 @@ func AreZeroWidthJoin(s string) bool {
 func StringToMoji(s string) []Moji {
 	mojis := make([]Moji, 0, len(s))
 	var last Moji
+	pos := 0
 	for len(s) > 0 {
 		r, size := utf8.DecodeRuneInString(s)
 		s = s[size:]
@@ -174,7 +175,8 @@ func StringToMoji(s string) []Moji {
 				continue
 			}
 		}
-		last = rune2moji(r)
+		last = rune2moji(r, pos)
+		pos += int(last.Width())
 		mojis = append(mojis, last)
 	}
 	return mojis
@@ -213,7 +215,7 @@ func MojiWidthAndCountInString(s string) (width WidthT, count int) {
 				continue
 			}
 		}
-		last = rune2moji(r)
+		last = rune2moji(r, int(width))
 		lastWidth = last.Width()
 		width += lastWidth
 		count++
