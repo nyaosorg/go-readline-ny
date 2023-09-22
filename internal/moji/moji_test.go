@@ -3,6 +3,8 @@ package moji
 import (
 	"strings"
 	"testing"
+
+	"github.com/nyaosorg/go-readline-ny/internal/termcheck"
 )
 
 const emojiMan = '\U0001F468'
@@ -19,9 +21,9 @@ func TestZeroWidthJoinSequenceWidth(t *testing.T) {
 }
 
 func TestCodePointPut(t *testing.T) {
-	SurrogatePairOk = false
-	ZeroWidthJoinSequenceOk = false
-	VariationSequenceOk = false
+	termcheck.SurrogatePairOk = false
+	termcheck.ZeroWidthJoinSequenceOk = false
+	termcheck.VariationSequenceOk = false
 
 	source := "1\b\t\x7F\u908A\U000E0104"
 	expect := "1^H^I<7F>\u908A<E0104>"
@@ -47,9 +49,9 @@ func TestCodePointPut(t *testing.T) {
 }
 
 func TestString2Moji(t *testing.T) {
-	SurrogatePairOk = true
-	ZeroWidthJoinSequenceOk = true
-	VariationSequenceOk = true
+	termcheck.SurrogatePairOk = true
+	termcheck.ZeroWidthJoinSequenceOk = true
+	termcheck.VariationSequenceOk = true
 
 	var table = []struct {
 		Source string
