@@ -29,7 +29,7 @@ func (K *GoCommand) Call(ctx context.Context, buffer *Buffer) Result {
 	return K.Func(ctx, buffer)
 }
 
-var name2func = map[string]Command{}
+var NameToFunc = map[string]Command{}
 
 // NewGoCommand creates an instance of GoCommand with a name and an function.
 func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *GoCommand {
@@ -37,7 +37,7 @@ func NewGoCommand(name string, f func(context.Context, *Buffer) Result) *GoComma
 		Name: name,
 		Func: f,
 	}
-	name2func[name] = instance
+	NameToFunc[name] = instance
 	return instance
 }
 
