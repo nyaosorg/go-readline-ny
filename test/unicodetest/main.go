@@ -21,7 +21,7 @@ func mains() error {
 
 	editor := readline.Editor{
 		PromptWriter: func(w io.Writer) (int, error) {
-			return io.WriteString(w,"  0123456789ABCDEF\n$ ")
+			return io.WriteString(w, "  0123456789ABCDEF\n$ ")
 		},
 		Coloring: &coloring.VimBatch{},
 		Writer: io.MultiWriter(

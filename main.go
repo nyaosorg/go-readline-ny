@@ -38,7 +38,6 @@ type Editor struct {
 	PromptWriter   func(io.Writer) (int, error)
 	Default        string
 	Cursor         int
-	LineFeed       func(Result) // Deprecated. use LineFeedWriter
 	LineFeedWriter func(Result, io.Writer) (int, error)
 	Tty            ITty
 	Coloring       Coloring
@@ -199,9 +198,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		io.WriteString(buffer.Out, ansiCursorOn)
 
 		if rc != CONTINUE {
-			if buffer.LineFeed != nil {
-				buffer.LineFeed(rc)
-			} else if buffer.LineFeedWriter != nil {
+			if buffer.LineFeedWriter != nil {
 				buffer.LineFeedWriter(rc, buffer.Out)
 			} else {
 				buffer.Out.WriteByte('\n')
