@@ -35,7 +35,6 @@ type Editor struct {
 	History        IHistory
 	Writer         io.Writer
 	Out            *bufio.Writer
-	Prompt         func() (int, error) // Deprecated. use PromptWriter
 	PromptWriter   func(io.Writer) (int, error)
 	Default        string
 	Cursor         int
@@ -106,9 +105,6 @@ func cutEscapeSequenceAndOldLine(s string) string {
 
 func (editor *Editor) callPromptWriter() (int, error) {
 	if editor.PromptWriter == nil {
-		if editor.Prompt != nil {
-			return editor.Prompt()
-		}
 		_, err := editor.Out.WriteString("\n> ")
 		return 2, err
 	}

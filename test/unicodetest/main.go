@@ -20,9 +20,8 @@ func mains() error {
 	defer logWriter.Close()
 
 	editor := readline.Editor{
-		Prompt: func() (int, error) {
-			print("  0123456789ABCDEF\n$ ")
-			return 2, nil
+		PromptWriter: func(w io.Writer) (int, error) {
+			return io.WriteString(w,"  0123456789ABCDEF\n$ ")
 		},
 		Coloring: &coloring.VimBatch{},
 		Writer: io.MultiWriter(

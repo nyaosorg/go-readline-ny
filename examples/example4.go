@@ -63,7 +63,9 @@ func cmdStartEditor(ctx context.Context, B *readline.Buffer) readline.Result {
 func main() {
 	var editor readline.Editor
 	editor.Writer = colorable.NewColorableStdout()
-	editor.Prompt = func() (int, error) { return io.WriteString(editor.Out, "\r> ") }
+	editor.PromptWriter = func(w io.Writer) (int, error) {
+		return io.WriteString(w, "\r> ")
+	}
 
 	enter_status := 0
 	editor.BindKey(keys.Escape, &readline.GoCommand{
