@@ -1,3 +1,7 @@
+v0.15.0
+=======
+Sep 29, 2023
+
 - Remove the deprecated fields, methods and functions for v1.0.0
     - `KeyGoFuncT`. Use `GoCommand` instead
     - `moji.GetCharWidth`
