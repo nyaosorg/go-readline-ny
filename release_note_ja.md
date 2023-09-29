@@ -1,3 +1,15 @@
+- v1.0.0 に向けて、非推奨としていたフィールド、メソッド、関数を削除しました
+    - `KeyGoFuncT`. `GoCommand` をかわりに使ってください
+    - `moji.GetCharWidth`
+    - `GetFunc`. `nameutils.GetFunc` をかわりに使ってください
+    - `(*Editor) LineFeed`. `(*Editor) LineFeedWriter` をかわりに使ってください
+    - `(*Editor) Prompt`. `(*Editor) PromptWriter` をかわりに使ってください
+    - `(*Editor) GetBindKey`
+    - `(*KeyMap) BindKeyFunc`. `nameutils.BindKeyFunc()` をかわりに使ってください
+    - `(*KeyMap) BindKeyClosure`
+    - `(*KeyMap) GetBindKey`
+    - `(*KeyMap) BindKeySymbol`. `nameutils.BindKeySymbol` をかわりに使ってください
+
 v0.14.1
 =======
 Sep 13 2023

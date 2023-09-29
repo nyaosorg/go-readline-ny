@@ -1,3 +1,15 @@
+- Remove the deprecated fields, methods and functions for v1.0.0
+    - `KeyGoFuncT`. Use `GoCommand` instead
+    - `moji.GetCharWidth`
+    - `GetFunc`. Use `nameutils.GetFunc` instead
+    - `(*Editor) LineFeed`. use `(*Editor) LineFeedWriter` instead
+    - `(*Editor) Prompt`. use `(*Editor) PromptWriter` instead
+    - `(*Editor) GetBindKey`
+    - `(*KeyMap) BindKeyFunc`. Use `nameutils.BindKeyFunc()` instead
+    - `(*KeyMap) BindKeyClosure`
+    - `(*KeyMap) GetBindKey`
+    - `(*KeyMap) BindKeySymbol`. Use `nameutils.BindKeySymbol` instead
+
 v0.14.1
 =======
 Sep 13, 2023
