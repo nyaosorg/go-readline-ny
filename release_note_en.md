@@ -1,3 +1,7 @@
+v0.15.1
+=======
+Oct 01, 2023
+
 - Implement `(ColorSequence) Add`
 - `Coloring.Next` recieves CursorPositionDummyRune(U+E000) on the cursor position now
 

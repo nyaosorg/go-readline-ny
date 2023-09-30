@@ -1,3 +1,7 @@
+v0.15.1
+=======
+Oct 01, 2023
+
 - `(ColorSequence) Add` を作成
 - カーソル位置で、`Coloring.Next` は CursorPositionDummyRune(U+E000) を受けとるようにした
 
