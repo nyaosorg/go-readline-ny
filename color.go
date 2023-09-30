@@ -19,6 +19,11 @@ const (
 	colorCodeMask    = (1<<colorCodeBitSize - 1)
 )
 
+func (c ColorSequence) Add(value int) ColorSequence {
+	n := (c & colorCodeMask) + 1
+	return (c&^colorCodeMask | n) | (ColorSequence(value) << (n * colorCodeBitSize))
+}
+
 const (
 	ColorReset ColorSequence = 1 | 0
 )
