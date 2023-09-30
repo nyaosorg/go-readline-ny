@@ -8,10 +8,17 @@ import (
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
+const (
+	CursorPositionDummyRune = '\uE000'
+)
+
 func (B *Buffer) refreshColor() ColorSequence {
 	defaultColor := B.Coloring.Init()
 	position := int16(0)
 	for i, cell := range B.Buffer {
+		if i == B.Cursor {
+			B.Coloring.Next(CursorPositionDummyRune)
+		}
 		B.Buffer[i].position = position
 		if tab, ok := cell.Moji.(*moji.Tab); ok {
 			tab.SetPosition(position)
