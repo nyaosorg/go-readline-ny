@@ -1,19 +1,30 @@
 [![GoDoc](https://godoc.org/github.com/nyaosorg/go-readline-ny?status.svg)](https://godoc.org/github.com/nyaosorg/go-readline-ny)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nyaosorg/go-readline-ny)](https://goreportcard.com/report/github.com/nyaosorg/go-readline-ny)
 
-go-readline-ny
+Go-Readline-Ny
 ==============
 
-go-readline-ny is the readline library used in the command line shell [NYAGOS](https://github.com/nyaosorg/nyagos).
+The Go-Readline-Ny is a powerful Readline library written in the programming language Go. It has been running inside the command line shell "[NYAGOS]" for a long time.
+
+[NYAGOS]: https://github.com/nyaosorg/nyagos
 
 - Emacs-like key-bindings
-- Completion
-- On Windows Terminal
+- History
+- Word Completion (file names, command names, or any names in given array)
+- Syntax Highlighting
+- Supported OS: Windows and Linux
+- Suported Unicode (UTF8)
     - Surrogate-pair
     - Emoji (via clipboard)
     - Zero-Width-Joiner (via clipboard)
     - Variation Selector (via clipboard pasted by Ctrl-Y)
-- Colored commandline
+- Add-Ons:
+    - [SKK] (Japanese method editor)
+    - [Multi-lines Editing][go-multiline-ny]
+- MIT License
+
+[SKK]: https://github.com/nyaosorg/go-readline-skk
+[go-multiline-ny]: https://github.com/hymkor/go-multiline-ny
 
 ![Zero-Width-Joiner sample on Windows-Terminal](./emoji.png)
 
