@@ -30,6 +30,9 @@ func (B *Buffer) refreshColor() ColorSequence {
 		}
 		position += int16(cell.Moji.Width())
 	}
+	if len(B.Buffer) == B.Cursor {
+		B.Coloring.Next(CursorPositionDummyRune)
+	}
 	return defaultColor
 }
 
