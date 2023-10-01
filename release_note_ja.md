@@ -1,3 +1,7 @@
+v0.15.2
+=======
+Oct 02, 2023
+
 - カーソルが末尾にある時、`Coloring.Next` が CursorPositionDummyRune(U+E000) を受けとれない問題を修正
 - `(ColorSequence) Chain` を追加 (二つのColorSequenceを連結する)
 

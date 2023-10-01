@@ -1,3 +1,7 @@
+v0.15.2
+=======
+Oct 02, 2023
+
 - Fix: Coloring.Next(CursorPositionDummyRune) was not called when the cursor is at the end of the string
 - Add `(ColorSequence) Chain` that joins two instances of `ColorSequence`
 
