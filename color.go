@@ -24,6 +24,14 @@ func (c ColorSequence) Add(value int) ColorSequence {
 	return (c&^colorCodeMask | n) | (ColorSequence(value) << (n * colorCodeBitSize))
 }
 
+func (c ColorSequence) Chain(value ColorSequence) ColorSequence {
+	for n := (value & colorCodeMask); n > 0; n-- {
+		value >>= colorCodeBitSize
+		c = c.Add(int(value & colorCodeMask))
+	}
+	return c
+}
+
 const (
 	ColorReset ColorSequence = 1 | 0
 )
