@@ -1,3 +1,9 @@
+v1.0.0
+======
+Oct 06, 2023
+
+- Just changed the version to v1.0.0
+
 v0.15.2
 =======
 Oct 02, 2023
