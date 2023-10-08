@@ -3,7 +3,6 @@ package readline
 import (
 	"fmt"
 	"strings"
-	"unicode/utf8"
 
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
@@ -15,6 +14,7 @@ const (
 func (B *Buffer) refreshColor() ColorSequence {
 	defaultColor := B.Coloring.Init()
 	position := int16(0)
+	var tmpbuf strings.Builder
 	for i, cell := range B.Buffer {
 		if i == B.Cursor {
 			B.Coloring.Next(CursorPositionDummyRune)
@@ -26,7 +26,13 @@ func (B *Buffer) refreshColor() ColorSequence {
 		} else if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
 			B.Buffer[i].color = ColorSequence(B.Coloring.Next(codepoint))
 		} else {
-			B.Buffer[i].color = ColorSequence(B.Coloring.Next(utf8.RuneError))
+			cell.Moji.PrintTo(&tmpbuf)
+			var cs ColorSequence
+			for _, c := range tmpbuf.String() {
+				cs = ColorSequence(B.Coloring.Next(c))
+			}
+			B.Buffer[i].color = cs
+			tmpbuf.Reset()
 		}
 		position += int16(cell.Moji.Width())
 	}
