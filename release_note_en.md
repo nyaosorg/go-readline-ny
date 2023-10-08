@@ -1,3 +1,5 @@
+- Fix: the color can not be changed where the charactor is not simple codepoint such as ZERO WIDTH JOIN SEQUENCE, VARIATION SELECTOR SEQUENCE...
+
 v1.0.0
 ======
 Oct 06, 2023
