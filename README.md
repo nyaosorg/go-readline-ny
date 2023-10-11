@@ -1,10 +1,10 @@
 [![GoDoc](https://godoc.org/github.com/nyaosorg/go-readline-ny?status.svg)](https://godoc.org/github.com/nyaosorg/go-readline-ny)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nyaosorg/go-readline-ny)](https://goreportcard.com/report/github.com/nyaosorg/go-readline-ny)
 
-Go-Readline-Ny
-==============
+The New Yet another Readline for Go (go-readline-ny)
+====================================================
 
-The Go-Readline-Ny is a powerful Readline library written in the programming language Go. It has been running inside the command line shell "[NYAGOS]" for a long time.
+**The New Yet another Readline for Go (go-readline-ny)** is a one-line input library for CUI applications written in Go that is extensible for different needs.  It has been running inside the command line shell "[NYAGOS]" for a long time.
 
 [NYAGOS]: https://github.com/nyaosorg/nyagos
 
