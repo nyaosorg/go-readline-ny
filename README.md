@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/nyaosorg/go-readline-ny?status.svg)](https://godoc.org/github.com/nyaosorg/go-readline-ny)
+[![Go Reference](https://pkg.go.dev/badge/github.com/nyaosorg/go-readline-ny.svg)](https://pkg.go.dev/github.com/nyaosorg/go-readline-ny)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nyaosorg/go-readline-ny)](https://goreportcard.com/report/github.com/nyaosorg/go-readline-ny)
 
 The New Yet another Readline for Go (go-readline-ny)
