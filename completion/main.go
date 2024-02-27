@@ -134,7 +134,7 @@ func removeUnmatches(full, base []string, source string) (newFull, newBase []str
 	return
 }
 
-func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
+func complete(quotes, del string, B *rl.Buffer, C Completion, postfix string) []string {
 	fields, lastWordStart := split(quotes, del, B)
 	list, baselist := C.List(fields)
 	if baselist == nil || len(baselist) <= 0 {
@@ -153,7 +153,7 @@ func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 			if len(quotes) > 0 && len(del) > 0 && strings.ContainsAny(str, " \t\r\n\v\f"+del) {
 				str = string(quotes[0]) + str + string(quotes[0])
 			}
-			B.ReplaceAndRepaint(lastWordStart, str+" ")
+			B.ReplaceAndRepaint(lastWordStart, str+postfix)
 		}
 		return nil
 	}
@@ -172,6 +172,7 @@ func complete(quotes, del string, B *rl.Buffer, C Completion) []string {
 
 type CmdCompletion struct {
 	Completion
+	Postfix string
 }
 
 func (C CmdCompletion) String() string {
@@ -179,12 +180,13 @@ func (C CmdCompletion) String() string {
 }
 
 func (C CmdCompletion) Call(ctx context.Context, B *rl.Buffer) rl.Result {
-	complete(C.Enclosures(), C.Delimiters(), B, C)
+	complete(C.Enclosures(), C.Delimiters(), B, C, C.Postfix)
 	return rl.CONTINUE
 }
 
 type CmdCompletionOrList struct {
 	Completion
+	Postfix string
 }
 
 func (C CmdCompletionOrList) String() string {
@@ -192,7 +194,7 @@ func (C CmdCompletionOrList) String() string {
 }
 
 func (C CmdCompletionOrList) Call(ctx context.Context, B *rl.Buffer) rl.Result {
-	list := complete(C.Enclosures(), C.Delimiters(), B, C)
+	list := complete(C.Enclosures(), C.Delimiters(), B, C, C.Postfix)
 	if len(list) > 0 {
 		B.Out.WriteByte('\n')
 		box.Print(ctx, list, B.Out)
