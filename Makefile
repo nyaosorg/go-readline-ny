@@ -1,28 +1,40 @@
 ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     SET=set
+    NUL=NUL
+    WHICH=where.exe
 else
     SHELL=bash
     SET=export
+    NUL=/dev/null
+    WHICH=which
+endif
+
+ifndef GO
+    SUPPORTGO=go1.20.14
+    GO:=$(shell $(WHICH) $(SUPPORTGO) 2>$(NUL)|| echo go)
 endif
 
 .PHONY: all test
 
 all :
-	go fmt ./...
-	go build
+	$(GO) fmt ./...
+	$(GO) build
 
 demo :
-	go run test/unicodetest/main.go
+	$(GO) run test/unicodetest/main.go
 
 demo-future :
-	go run -tags=tty10,orgxwidth test/unicodetest/main.go
+	$(GO) run -tags=tty10,orgxwidth test/unicodetest/main.go
 
 test :
-	pushd "internal/moji" && go test -v && popd
-	go test -v
+	pushd "internal/moji" && $(GO) test -v && popd
+	$(GO) test -v
 
 get :
-	go get -u all
-	go mod tidy
+	$(GO) get -u all
+	$(GO) mod tidy
 
+$(SUPPORTGO):
+	go install golang.org/dl/$(SUPPORTGO)@latest
+	$(SUPPORTGO) download
