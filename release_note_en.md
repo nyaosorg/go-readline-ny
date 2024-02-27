@@ -1,3 +1,5 @@
+- "completion": Append the value of CmdCompletion.Postfix or CmdCompletionOrList.Postfix instead of one space when there is only one candidate. (The default value is empty string)
+
 v1.0.1
 ======
 Oct 08, 2023
