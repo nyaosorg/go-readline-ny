@@ -21,7 +21,7 @@ const (
 
 func (c ColorSequence) Add(value int) ColorSequence {
 	n := (c & colorCodeMask) + 1
-	return (c&^colorCodeMask | n) | (ColorSequence(value) << (n * colorCodeBitSize))
+	return ((c &^ colorCodeMask) | n) | (ColorSequence(value) << (n * colorCodeBitSize))
 }
 
 func (c ColorSequence) Chain(value ColorSequence) ColorSequence {
