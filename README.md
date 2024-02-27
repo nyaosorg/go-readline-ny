@@ -100,6 +100,7 @@ func main() {
 
     editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
         Completion: completion.File{},
+        Postfix:    " ",
     })
     // If you do not want to list files with double-tab-key,
     // use `CmdCompletion` instead of `CmdCompletionOrList`
