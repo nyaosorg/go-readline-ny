@@ -1,3 +1,7 @@
+v1.1.0
+======
+Feb 27, 2024
+
 - "completion": 1候補に絞れた時に空白を追加していたが、空白のかわりに CmdCompletion.Postfix や CmdCompletionOrList.Postfix で指定できるようにした (デフォルトは0文字)
 
 v1.0.1
