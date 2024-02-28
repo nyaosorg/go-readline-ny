@@ -1,3 +1,5 @@
+- "keys": Key name constants are now untyped (originally `keys.Code`)
+
 v1.1.0
 ======
 Feb 27, 2024
