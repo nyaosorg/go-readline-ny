@@ -2,10 +2,6 @@ package keys
 
 type Code string
 
-func (c Code) String() string {
-	return string(c)
-}
-
 const (
 	Backspace     = "\x7F"
 	CtrlA         = "\x01"
