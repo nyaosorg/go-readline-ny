@@ -1,3 +1,5 @@
+- Add constant: keys.ShiftTAB = "\x1B[Z"
+
 v1.2.0
 ======
 Feb 29, 2024
