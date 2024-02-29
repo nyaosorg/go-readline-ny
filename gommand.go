@@ -442,17 +442,12 @@ func cmdUndo(ctx context.Context, this *Buffer) Result {
 
 	this.GotoHead()
 	if u.del > 0 {
-		copy(this.Buffer[u.pos:], this.Buffer[u.pos+u.del:])
-		this.Buffer = this.Buffer[:len(this.Buffer)-u.del]
+		this.Buffer = sliceDelete(this.Buffer, u.pos, u.del)
 	}
 	if u.text != "" {
-		t := mojis2cells(StringToMoji(u.text))
-		// widen buffer
-		this.Buffer = append(this.Buffer, t...)
-		// make area
-		copy(this.Buffer[u.pos+len(t):], this.Buffer[u.pos:])
-		copy(this.Buffer[u.pos:], t)
-		this.Cursor = u.pos + len(t)
+		cells := mojis2cells(StringToMoji(u.text))
+		this.Buffer = sliceInsert(this.Buffer, u.pos, cells...)
+		this.Cursor = u.pos + len(cells)
 	} else {
 		this.Cursor = u.pos
 	}

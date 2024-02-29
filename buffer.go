@@ -65,14 +65,7 @@ func (B *Buffer) view2() (all _Range, before _Range) {
 }
 
 func (B *Buffer) insert(csrPos int, insStr []Cell) {
-	// expand buffer
-	B.Buffer = append(B.Buffer, insStr...)
-
-	// shift original string to make area
-	copy(B.Buffer[csrPos+len(insStr):], B.Buffer[csrPos:])
-
-	// insert insStr
-	copy(B.Buffer[csrPos:csrPos+len(insStr)], insStr)
+	B.Buffer = sliceInsert(B.Buffer, csrPos, insStr...)
 
 	u := &_Undo{
 		pos: csrPos,
@@ -115,8 +108,7 @@ func (B *Buffer) Delete(pos int, n int) WidthT {
 	B.undoes = append(B.undoes, u)
 
 	delw := B.GetWidthBetween(pos, pos+n)
-	copy(B.Buffer[pos:], B.Buffer[pos+n:])
-	B.Buffer = B.Buffer[:len(B.Buffer)-n]
+	B.Buffer = sliceDelete(B.Buffer, pos, n)
 	return delw
 }
 
