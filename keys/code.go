@@ -106,4 +106,5 @@ const (
 	CtrlRight     = "\x1B[1;5C"
 	Up            = "\x1B[A"
 	CtrlUp        = "\x1B[1;5A"
+	ShiftTab      = "\x1B[Z"
 )
