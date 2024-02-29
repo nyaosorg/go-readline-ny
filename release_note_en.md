@@ -1,3 +1,7 @@
+v1.2.0
+======
+Feb 29, 2024
+
 - "keys": Key name constants are now untyped (originally `keys.Code`)
 
 v1.1.0
