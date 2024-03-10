@@ -33,7 +33,7 @@ func (c ColorSequence) Chain(value ColorSequence) ColorSequence {
 }
 
 const (
-	ColorReset ColorSequence = 1 | 0
+	ColorReset ColorSequence = 1
 )
 
 const (

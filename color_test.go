@@ -18,7 +18,4 @@ func TestColorSequenceAdd(t *testing.T) {
 	if c != 0x0201020104 {
 		t.Fatalf("Chain() failed(%x)", int64(c))
 	}
-
-	c = c.Chain(0)
-
 }
