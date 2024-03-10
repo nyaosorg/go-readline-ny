@@ -29,6 +29,13 @@ const (
 	INTR Result = iota
 )
 
+type ITty interface {
+	Open(onSize func(int)) error
+	GetKey() (string, error)
+	Size() (int, int, error)
+	Close() error
+}
+
 // Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
@@ -129,7 +136,7 @@ func (editor *Editor) Init() {
 		editor.History = _EmptyHistory{}
 	}
 	if editor.Tty == nil {
-		editor.Tty = &defaultTty{}
+		editor.Tty = &_Tty{}
 	}
 	if editor.Coloring == nil {
 		editor.Coloring = _MonoChrome{}
@@ -153,15 +160,23 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		historyPointer: editor.History.Len(),
 	}
 
-	if err := editor.Tty.Open(); err != nil {
-		return "", fmt.Errorf("go-tty.Open: %s", err.Error())
+	onResize := func(w int) {
+		editor.mutex.Lock()
+		buffer.termWidth = w
+		buffer.ResetViewStart()
+		buffer.RepaintLastLine()
+		editor.mutex.Unlock()
+	}
+
+	if err := editor.Tty.Open(onResize); err != nil {
+		return "", err
 	}
 	defer editor.Tty.Close()
 
 	var err error
 	buffer.termWidth, _, err = editor.Tty.Size()
 	if err != nil {
-		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
+		return "", err
 	}
 
 	buffer.topColumn, err = editor.callPromptWriter()
@@ -179,7 +194,6 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		buffer.Cursor = len(buffer.Buffer)
 	}
 	buffer.RepaintAfterPrompt()
-	buffer.startChangeWidthEventLoop(buffer.termWidth, editor.Tty.GetResizeNotifier())
 
 	io.WriteString(buffer.Out, ansiCursorOn)
 	for {

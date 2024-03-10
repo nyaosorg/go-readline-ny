@@ -12,15 +12,6 @@ type XTty interface {
 	Buffered() bool
 }
 
-// ITty is the interface of tty to use Readline method.
-type ITty interface {
-	XTty
-	Open() error
-	Close() error
-	Size() (int, int, error)
-	GetResizeNotifier() func() (int, int, bool)
-}
-
 // GetKey reads one-key from *tty*.
 // The *tty* object must have Raw(),ReadRune(), and Buffered() method.
 func GetKey(tty XTty) (string, error) {

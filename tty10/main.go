@@ -3,77 +3,72 @@ package tty10
 import (
 	"os"
 	"time"
-	"unicode/utf8"
 
 	"golang.org/x/term"
 )
 
 type Tty struct {
-	buffer [128]byte
-	key    []byte
-	done   chan struct{}
-	ticker *time.Ticker
+	done    chan struct{}
+	disable func()
 }
 
-func (M *Tty) Open() error {
+func (M *Tty) Open(onSize func(int)) error {
+	var err error
+
+	stdin := int(os.Stdin.Fd())
+	M.disable, err = enable(stdin)
+	if err != nil {
+		return err
+	}
+
 	M.done = make(chan struct{})
-	M.ticker = time.NewTicker(time.Second)
+	go func() {
+		ticker := time.NewTicker(time.Second)
+		for {
+			select {
+			case <-M.done:
+				ticker.Stop()
+				return
+			case <-ticker.C:
+				w, _, err := M.Size()
+				if err == nil {
+					onSize(w)
+				}
+			}
+		}
+	}()
+
 	return nil
 }
 
-func (*Tty) Raw() (func() error, error) {
+func (M *Tty) GetKey() (string, error) {
 	stdin := int(os.Stdin.Fd())
 	oldState, err := term.MakeRaw(stdin)
 	if err != nil {
-		return func() error { return nil }, err
+		return "", err
 	}
-	disable, err := enable(stdin)
+	defer term.Restore(stdin, oldState)
+
+	var buffer [100]byte
+	n, err := os.Stdin.Read(buffer[:])
 	if err != nil {
-		return func() error { return nil }, err
+		return "", err
 	}
-	return func() error {
-		disable()
-		term.Restore(stdin, oldState)
-		return nil
-	}, nil
-}
-
-func (M *Tty) ReadRune() (rune, error) {
-	if M.key == nil || len(M.key) <= 0 {
-		n, err := os.Stdin.Read(M.buffer[:])
-		if err != nil {
-			return 0, err
-		}
-		M.key = M.buffer[:n]
-	}
-	r, size := utf8.DecodeRune(M.key)
-	M.key = M.key[size:]
-
-	return r, nil
-}
-
-func (M *Tty) Buffered() bool {
-	return len(M.key) > 0
+	return string(buffer[:n]), nil
 }
 
 func (M *Tty) Close() error {
-	M.done <- struct{}{}
+	if M.done != nil {
+		M.done <- struct{}{}
+		close(M.done)
+	}
+	if M.disable != nil {
+		M.disable()
+		M.disable = nil
+	}
 	return nil
 }
 
 func (M *Tty) Size() (int, int, error) {
-	return term.GetSize(int(os.Stdout.Fd()))
-}
-
-func (M *Tty) GetResizeNotifier() func() (int, int, bool) {
-	return func() (int, int, bool) {
-		select {
-		case <-M.done:
-			M.ticker.Stop()
-			return 0, 0, false
-		case <-M.ticker.C:
-			w, h, err := M.Size()
-			return w, h, err == nil
-		}
-	}
+	return term.GetSize(int(os.Stderr.Fd()))
 }

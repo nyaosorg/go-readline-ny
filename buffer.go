@@ -204,28 +204,10 @@ func (B *Buffer) joinUndo() {
 	B.undoes = B.undoes[:len(B.undoes)-1]
 }
 
-func (B *Buffer) startChangeWidthEventLoop(_lastw int, getResizeEvent func() (int, int, bool)) {
-	go func(lastw int) {
-		for {
-			w, _, ok := getResizeEvent()
-			if !ok {
-				break
-			}
-			if lastw != w {
-				B.Editor.mutex.Lock()
-				B.termWidth = w
-				B.RepaintAfterPrompt()
-				B.Editor.mutex.Unlock()
-				lastw = w
-			}
-		}
-	}(_lastw)
-}
-
 // GetKey reads one-key from Tty.
 func (B *Buffer) GetKey() (string, error) {
 	B.Out.Flush()
-	return GetKey(B.Tty)
+	return B.Tty.GetKey()
 }
 
 func (B *Buffer) eraseline() {
