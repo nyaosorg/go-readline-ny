@@ -1,4 +1,5 @@
 - Add constant: keys.ShiftTAB = "\x1B[Z"
+- Simplify the terminal interface and implements (Compatibility around `ITty` is broken)
 
 v1.2.0
 ======
