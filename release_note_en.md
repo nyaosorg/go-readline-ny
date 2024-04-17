@@ -1,3 +1,7 @@
+v1.3.0
+======
+Apr 17, 2024
+
 - Add constant: keys.ShiftTAB = "\x1B[Z"
 - Simplify the terminal interface and implements (Compatibility around `ITty` is broken)
 
