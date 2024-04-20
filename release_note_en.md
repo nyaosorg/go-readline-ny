@@ -1,3 +1,7 @@
+v1.3.1
+======
+Apr 21, 2024
+
 - [#6] Fix: Sub package completion fails on empty field  
   (Thanks [@glejeune])
 
