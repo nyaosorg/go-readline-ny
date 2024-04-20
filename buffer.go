@@ -31,13 +31,14 @@ func (C Cell) String() string {
 // Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
-	Buffer         []Cell
-	ViewStart      int
-	termWidth      int // == topColumn + termWidth + forbiddenWidth
-	topColumn      int // == width of Prompt
-	historyPointer int
-	undoes         []*_Undo
-	pending        string
+	Buffer          []Cell
+	ViewStart       int
+	termWidth       int // == topColumn + termWidth + forbiddenWidth
+	topColumn       int // == width of Prompt
+	historyPointer  int
+	undoes          []*_Undo
+	pending         string
+	modifiedHistory map[int]string
 }
 
 // ViewWidth returns the cell-width screen can show in the one-line.
