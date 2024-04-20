@@ -39,3 +39,11 @@ func (m *_Tty) Open(onResize func(int)) error {
 func (m *_Tty) GetKey() (string, error) {
 	return GetKey(m.TTY)
 }
+
+func (m *_Tty) Close() error {
+	if m.TTY != nil {
+		m.TTY.Close()
+		m.TTY = nil
+	}
+	return nil
+}
