@@ -1,3 +1,9 @@
+- [#6] Fix: Sub package completion fails on empty field  
+  (Thanks [@glejeune])
+
+[#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
+[@glejeune]: https://github.com/glejeune
+
 v1.3.0
 ======
 Apr 17, 2024

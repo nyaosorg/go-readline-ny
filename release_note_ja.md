@@ -1,3 +1,9 @@
+- [#6] サブパッケージ completion で、空状態で補完するとクラッシュする不具合を修正  
+  (Thanks [@glejeune])
+
+[#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
+[@glejeune]: https://github.com/glejeune
+
 v1.3.0
 ======
 Apr 17, 2024
