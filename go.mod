@@ -8,9 +8,9 @@ require (
 	github.com/mattn/go-runewidth v0.0.15
 	github.com/mattn/go-tty v0.0.5
 	github.com/nyaosorg/go-box/v2 v2.1.4
-	golang.org/x/sys v0.19.0
+	golang.org/x/sys v0.21.0
 	golang.org/x/term v0.7.0
-	golang.org/x/text v0.14.0
+	golang.org/x/text v0.16.0
 )
 
 require (
