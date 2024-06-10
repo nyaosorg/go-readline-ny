@@ -1,3 +1,7 @@
+v1.4.0
+======
+Jun 16, 2024
+
 - Ctrl-P/N: save the modified entry when switching history, and restore when switching again, until Enter is pressed
 
 v1.3.1
