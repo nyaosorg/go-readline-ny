@@ -281,3 +281,7 @@ func EnableSurrogatePair(value bool) {
 func IsSurrogatePairEnabled() bool {
 	return moji.SurrogatePairOk
 }
+
+func SetZWJSWidthGetter(f func(w1, w2 int) int) {
+	moji.GetZWJSWidth = f
+}

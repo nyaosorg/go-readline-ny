@@ -17,12 +17,16 @@ type Moji interface {
 	PrintTo(io.Writer)
 }
 
+var GetZWJSWidth = func(w1, w2 int) int {
+	return w1 + 1 + w2 // WindowsTerminal until 1.21
+}
+
 type _ZeroWidthJoinSequence [2]Moji
 
 func (s _ZeroWidthJoinSequence) Width() WidthT {
 	// runewidth.StringWidth should not be used because the width that it gives
 	// has no compatible with WindowsTerminal's.
-	return s[0].Width() + 1 + s[1].Width()
+	return WidthT(GetZWJSWidth(int(s[0].Width()), int(s[1].Width())))
 }
 
 func (s _ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {

@@ -19,6 +19,16 @@ func mains() error {
 	}
 	defer logWriter.Close()
 
+	if _, ok := os.LookupEnv("ZWJS"); ok {
+		// for WindowsTerminal 1.22
+		readline.SetZWJSWidthGetter(func(w1, w2 int) int {
+			if w2 > w1 {
+				return w2
+			}
+			return w1
+		})
+	}
+
 	editor := readline.Editor{
 		PromptWriter: func(w io.Writer) (int, error) {
 			return io.WriteString(w, "  0123456789ABCDEF\n$ ")
