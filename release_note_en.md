@@ -1,3 +1,5 @@
+- Enable to replace the function to calcurate the width of Zero-Width-Join-Sequence for WindowsTerminal 1.22 (SetZWJSWidthGetter)
+
 v1.4.0
 ======
 Jun 16, 2024
