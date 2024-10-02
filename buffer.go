@@ -56,7 +56,7 @@ func (B *Buffer) view() _Range {
 			return view[:i]
 		}
 	}
-	return _Range(view)
+	return view
 }
 
 func (B *Buffer) view2() (all _Range, before _Range) {
