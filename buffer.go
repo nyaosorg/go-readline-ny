@@ -32,6 +32,7 @@ func (C Cell) String() string {
 type Buffer struct {
 	*Editor
 	Buffer          []Cell
+	suffix          []Moji
 	ViewStart       int
 	termWidth       int // == topColumn + termWidth + forbiddenWidth
 	topColumn       int // == width of Prompt
@@ -41,28 +42,59 @@ type Buffer struct {
 	modifiedHistory map[int]string
 }
 
+func (B *Buffer) Suffix() []Moji {
+	if B.PredictColor[0] == "" {
+		return nil
+	}
+	if B.Cursor != len(B.Buffer) {
+		return nil
+	}
+	return B.suffix
+}
+
+func (B *Buffer) updateSuffix() {
+	if B.PredictColor[0] == "" {
+		return
+	}
+	if len(B.Buffer) <= 0 {
+		B.suffix = nil
+		return
+	}
+	current := B.String()
+
+	for i := B.History.Len() - 1; i >= 0; i-- {
+		h := B.History.At(i)
+		if strings.HasPrefix(h, current) {
+			B.suffix = moji.StringToMoji(h[len(current):])
+			return
+		}
+	}
+	B.suffix = nil
+}
+
 // ViewWidth returns the cell-width screen can show in the one-line.
 func (B *Buffer) ViewWidth() WidthT {
 	return WidthT(B.termWidth) - WidthT(B.topColumn) - forbiddenWidth
 }
 
-func (B *Buffer) view() _Range {
+func (B *Buffer) getView() (_Range, WidthT) {
 	view := B.Buffer[B.ViewStart:]
 	width := B.ViewWidth()
 	w := WidthT(0)
 	for i, c := range view {
+		_w := w
 		w += c.Moji.Width()
 		if w >= width {
-			return view[:i]
+			return view[:i], _w
 		}
 	}
-	return view
+	return view, w
 }
 
-func (B *Buffer) view2() (all _Range, before _Range) {
-	v := B.view()
+func (B *Buffer) getView2() (all _Range, before _Range, w WidthT) {
+	v, w := B.getView()
 	x := B.Cursor - B.ViewStart
-	return v, v[:x]
+	return v, v[:x], w
 }
 
 func (B *Buffer) insert(csrPos int, insStr []Cell) {

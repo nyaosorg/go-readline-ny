@@ -121,6 +121,13 @@ var CmdForwardChar = NewGoCommand("FORWARD_CHAR", cmdForwardChar)
 
 func cmdForwardChar(ctx context.Context, this *Buffer) Result {
 	if this.Cursor >= len(this.Buffer) {
+		if len(this.suffix) > 0 {
+			var s strings.Builder
+			for _, c := range this.suffix {
+				c.WriteTo(&s)
+			}
+			this.InsertAndRepaint(s.String())
+		}
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)

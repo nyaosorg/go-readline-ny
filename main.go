@@ -50,6 +50,7 @@ type Editor struct {
 	Coloring       Coloring
 	HistoryCycling bool
 	mutex          sync.Mutex
+	PredictColor   [2]string
 }
 
 const (
@@ -158,6 +159,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		Editor:         editor,
 		Buffer:         make([]Cell, 0, 20),
 		historyPointer: editor.History.Len(),
+		suffix:         nil, // moji.StringToMoji("$"),
 	}
 
 	onResize := func(w int) {

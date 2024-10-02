@@ -82,7 +82,7 @@ func cmdISearchBackward(ctx context.Context, this *Buffer) Result {
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
 		case "\x03", "\x07", "\x1B":
-			all, left := this.view2()
+			all, left, _ := this.getView2()
 			this.puts(all)
 			this.eraseline()
 			this.GotoHead()

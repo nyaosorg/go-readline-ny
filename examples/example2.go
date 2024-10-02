@@ -30,6 +30,7 @@ func main() {
 		History:        history,
 		Coloring:       &coloring.VimBatch{},
 		HistoryCycling: true,
+		PredictColor:   [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
 	}
 
 	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
