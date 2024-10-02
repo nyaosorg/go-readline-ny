@@ -1,3 +1,7 @@
+v1.4.1
+======
+Oct 2, 2024
+
 - WindowsTerminal 1.22 向けに、Zero Width Join Sequence の文字幅の計算関数を差し替えられるようにした(SetZWJSWidthGetter)
 
 v1.4.0
