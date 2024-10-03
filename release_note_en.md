@@ -1,3 +1,13 @@
+- Implement the prediction like PowerShell
+
+It is enabled with setting the escape sequences at starting and ending for drawing predicted text
+
+```
+editor := &readline.Editor{
+    PredictColor: [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
+}
+```
+
 v1.4.1
 ======
 Oct 2, 2024
