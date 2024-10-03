@@ -56,6 +56,10 @@ func (B *Buffer) GotoHead() {
 
 func (B *Buffer) repaint() {
 	B.updateSuffix()
+	B.repaintWithoutUpdateSuffix()
+}
+
+func (B *Buffer) repaintWithoutUpdateSuffix() {
 	all, left, w := B.getView2()
 	B.GotoHead()
 	B.puts(all)

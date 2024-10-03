@@ -214,6 +214,10 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		io.WriteString(buffer.Out, ansiCursorOn)
 
 		if rc != CONTINUE {
+			if buffer.suffix != nil {
+				buffer.suffix = nil
+				buffer.repaintWithoutUpdateSuffix()
+			}
 			if buffer.LineFeedWriter != nil {
 				buffer.LineFeedWriter(rc, buffer.Out)
 			} else {
