@@ -1,4 +1,8 @@
-- Implement the prediction like PowerShell
+v1.5.0
+======
+Oct 6, 2024
+
+- Implement the prediction like PowerShell 7
 
 It is enabled with setting the escape sequences at starting and ending for drawing predicted text
 
