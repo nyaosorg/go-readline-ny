@@ -61,6 +61,8 @@ const (
 	ansiCursorOn = "\x1B[?25h\x1B[s\x1B[u"
 )
 
+var PredictColorBlueItalic = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
+
 // CtrlC is the error when Ctrl-C is pressed.
 var CtrlC = (errors.New("^C"))
 
