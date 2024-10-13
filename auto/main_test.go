@@ -10,7 +10,7 @@ import (
 
 func TestDummyIn(t *testing.T) {
 	editor := &readline.Editor{
-		Pilot: &Pilot{Text: []string{"a", "i", "u", "\b", "\x1B[D", "e"}},
+		Tty: &Pilot{Text: []string{"a", "i", "u", "\b", "\x1B[D", "e"}},
 	}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil && err != io.EOF {
