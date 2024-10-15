@@ -52,6 +52,17 @@ func (B *Buffer) Suffix() []Moji {
 	return B.suffix
 }
 
+func predictByHistory(B *Buffer) string {
+	current := B.String()
+	for i := B.History.Len() - 1; i >= 0; i-- {
+		h := B.History.At(i)
+		if strings.HasPrefix(h, current) {
+			return h[len(current):]
+		}
+	}
+	return ""
+}
+
 func (B *Buffer) updateSuffix() {
 	if B.PredictColor[0] == "" {
 		return
@@ -60,16 +71,7 @@ func (B *Buffer) updateSuffix() {
 		B.suffix = nil
 		return
 	}
-	current := B.String()
-
-	for i := B.History.Len() - 1; i >= 0; i-- {
-		h := B.History.At(i)
-		if strings.HasPrefix(h, current) {
-			B.suffix = moji.StringToMoji(h[len(current):])
-			return
-		}
-	}
-	B.suffix = nil
+	B.suffix = moji.StringToMoji(B.Predictor(B))
 }
 
 // ViewWidth returns the cell-width screen can show in the one-line.

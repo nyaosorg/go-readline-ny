@@ -51,6 +51,7 @@ type Editor struct {
 	HistoryCycling bool
 	mutex          sync.Mutex
 	PredictColor   [2]string
+	Predictor      func(*Buffer) string
 }
 
 const (
@@ -143,6 +144,9 @@ func (editor *Editor) Init() {
 	}
 	if editor.Coloring == nil {
 		editor.Coloring = _MonoChrome{}
+	}
+	if editor.Predictor == nil {
+		editor.Predictor = predictByHistory
 	}
 }
 
