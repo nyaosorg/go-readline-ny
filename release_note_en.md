@@ -1,3 +1,5 @@
+- Enable to replace the function to predict (`(*Editor) Predictor = ...`)
+
 v1.5.0
 ======
 Oct 6, 2024
