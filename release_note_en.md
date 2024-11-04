@@ -1,3 +1,7 @@
+v1.6.0
+======
+Nov 4, 2024
+
 - Enable to replace the function to predict (`(*Editor) Predictor = ...`)
 
 v1.5.0
