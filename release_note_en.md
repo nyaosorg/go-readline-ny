@@ -1,3 +1,7 @@
+v1.6.1
+======
+Nov 8, 2024
+
 - Fix: some text was missing when pasting multi-lines using the terminal feature of Linux Desktop
 
 v1.6.0
