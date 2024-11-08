@@ -2,7 +2,7 @@ v1.6.1
 ======
 Nov 8, 2024
 
-- Fix: some text was missing when pasting multi-lines using the terminal feature of Linux Desktop
+- Fix: some text was missing when pasting multi-lines using the terminal feature of Linux Desktop (for [hymkor/go-multiline-ny v0.16.2](https://github.com/hymkor/go-multiline-ny/releases/tag/v0.16.2))
 
 v1.6.0
 ======

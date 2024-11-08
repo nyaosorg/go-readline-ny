@@ -2,7 +2,7 @@ v1.6.1
 ======
 Nov 8, 2024
 
-- UNIX系デスクトップのターミナルの機能で、複数行を貼り付けた時、一部のテキストが消える不具合を修正
+- UNIX系デスクトップのターミナルの機能で、複数行を貼り付けた時、一部のテキストをとりこぼす不具合を修正 ([hymkor/go-multiline-ny v0.16.2](https://github.com/hymkor/go-multiline-ny/releases/tag/v0.16.2) 向け修正)
 
 v1.6.0
 ======
