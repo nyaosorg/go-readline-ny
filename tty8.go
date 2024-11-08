@@ -8,6 +8,7 @@ import (
 
 type _Tty struct {
 	*tty.TTY
+	buf []string
 }
 
 func (m *_Tty) Open(onResize func(int)) error {
@@ -37,7 +38,16 @@ func (m *_Tty) Open(onResize func(int)) error {
 }
 
 func (m *_Tty) GetKey() (string, error) {
-	return GetKey(m.TTY)
+	if len(m.buf) <= 0 {
+		var err error
+		m.buf, err = GetKeys(m.TTY)
+		if err != nil || len(m.buf) <= 0 {
+			return "", err
+		}
+	}
+	var top string
+	top, m.buf = m.buf[0], m.buf[1:]
+	return top, nil
 }
 
 func (m *_Tty) Close() error {
