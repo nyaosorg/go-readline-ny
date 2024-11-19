@@ -1,3 +1,7 @@
+v1.6.2
+======
+Nov 20, 2024
+
 - Fix: in incremental search on UNIX-like platforms, Backspace-key `\x7F` did not work to remove the previous character (though Ctrl-H worked)
 
 v1.6.1
