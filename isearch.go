@@ -58,7 +58,7 @@ func cmdISearchBackward(ctx context.Context, this *Buffer) Result {
 		io.WriteString(this.Out, ansiCursorOff)
 		this.GotoHead()
 		switch key {
-		case "\b":
+		case "\b", "\x7F":
 			searchBuf.Reset()
 			// chop last char
 			var lastchar rune
