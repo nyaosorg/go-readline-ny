@@ -1,3 +1,5 @@
+- Prevent from nesting too many bufio.Writer
+
 v1.6.2
 ======
 Nov 20, 2024
