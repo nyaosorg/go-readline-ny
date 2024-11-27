@@ -134,7 +134,11 @@ func (editor *Editor) Init() {
 		editor.Writer = os.Stdout
 	}
 	if editor.Out == nil {
-		editor.Out = bufio.NewWriter(editor.Writer)
+		if br,ok := editor.Writer.(*bufio.Writer) ; ok {
+			editor.Out = br
+		} else {
+			editor.Out = bufio.NewWriter(editor.Writer)
+		}
 	}
 	if editor.History == nil {
 		editor.History = _EmptyHistory{}
