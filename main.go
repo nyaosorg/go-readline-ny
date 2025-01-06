@@ -134,7 +134,7 @@ func (editor *Editor) Init() {
 		editor.Writer = os.Stdout
 	}
 	if editor.Out == nil {
-		if br,ok := editor.Writer.(*bufio.Writer) ; ok {
+		if br, ok := editor.Writer.(*bufio.Writer); ok {
 			editor.Out = br
 		} else {
 			editor.Out = bufio.NewWriter(editor.Writer)
