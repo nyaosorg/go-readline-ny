@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -17,5 +18,16 @@ func TestColorSequenceAdd(t *testing.T) {
 	c = c.Chain(c)
 	if c != 0x0201020104 {
 		t.Fatalf("Chain() failed(%x)", int64(c))
+	}
+}
+
+func TestDarkDefaultForeGroundColor(t *testing.T) {
+	var buffer strings.Builder
+	DarkDefaultForeGroundColor.WriteTo(&buffer)
+	result := buffer.String()
+	expect := "\x1B[39;22;49m"
+
+	if result != expect {
+		t.Fatalf("Expect ESC %s, but ESC %s", expect[1:], result[1:])
 	}
 }
