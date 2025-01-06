@@ -65,11 +65,11 @@ const (
 type _MonoChrome struct{}
 
 func (_MonoChrome) Init() ColorSequence {
-	return DefaultForeGroundColor
+	return 0
 }
 
 func (_MonoChrome) Next(rune) ColorSequence {
-	return DefaultForeGroundColor
+	return 0
 }
 
 func SGR1(n1 int) ColorSequence {
