@@ -1,4 +1,5 @@
 - Prevent from nesting too many bufio.Writer
+- Fixed: default color setting was incorrectly set to bold.
 
 v1.6.2
 ======
