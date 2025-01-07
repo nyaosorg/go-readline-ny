@@ -1,3 +1,7 @@
+v1.6.3
+======
+Jan 7, 2025
+
 - Prevent from nesting too many bufio.Writer
 - Fixed: default color setting was incorrectly set to bold.
 
