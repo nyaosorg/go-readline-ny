@@ -346,9 +346,16 @@ v0.6.3
 ======
 Dec 29, 2021
 
-- (#2,#3) Add flag: Editor.HistoryCycling
+- ([#2],[#3]) Add flag: Editor.HistoryCycling
 - Color: support Multi SelectGraphcReition Parameters (on v0.6.2)
 - Implement short function SGR1,SGR2,SGR3,SGR4 for color setting
+
+[#2]: https://github.com/nyaosorg/go-readline-ny/issues/2
+[#3]: https://github.com/nyaosorg/go-readline-ny/issues/3
+
+Thanks to [@ram-on]
+
+[@ram-on]: https://github.com/ram-on
 
 v0.6.1
 ======

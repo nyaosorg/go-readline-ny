@@ -368,6 +368,10 @@ Dec 29 2021
 [#2]: https://github.com/nyaosorg/go-readline-ny/issues/2
 [#3]: https://github.com/nyaosorg/go-readline-ny/issues/2
 
+Thanks to [@ram-on]
+
+[@ram-on]: https://github.com/ram-on
+
 v0.6.1
 =======
 Dec 10 2021
