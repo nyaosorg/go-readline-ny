@@ -144,3 +144,27 @@ example4.go
 - [example4.go](./examples/example4.go)
 
 This is a sample that implements the function to start the text editor defined by the environment variable EDITOR and import the edited contents when the ESCAPE key is pressed.
+
+License
+=======
+
+MIT License
+
+Acknowledgements
+================
+
+- [@masamitsu-murase](https://github.com/masamitsu-murase) [#1]
+- [@ram-on](https://github.com/ram-on) [#2]
+- [@glejeune](https://github.com/glejeune) [#6]
+- [@brammeleman](https://github.com/brammeleman) [#8]
+
+[#1]: https://github.com/nyaosorg/go-readline-ny/pull/1
+[#2]: https://github.com/nyaosorg/go-readline-ny/issues/2
+[#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
+[#8]: https://github.com/nyaosorg/go-readline-ny/issues/8
+
+Release notes
+=============
+
+- [Release notes (English)](release_note_en.md)
+- [Release notes (Japanese)](release_note_ja.md)
