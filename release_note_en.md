@@ -3,7 +3,12 @@ v1.6.3
 Jan 7, 2025
 
 - Adjusted: Avoided double nesting of `bufio.Writer`.
-- Fixed: default color setting was incorrectly set to bold.
+- Fixed: default color setting was incorrectly set to bold. [#8]
+
+Thanks to [@brammeleman]
+
+[@brammeleman]: https://github.com/brammeleman
+[#8]: https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.6.3
 
 v1.6.2
 ======

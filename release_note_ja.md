@@ -3,7 +3,12 @@ v1.6.3
 Jan 7, 2025
 
 - bufio.Writer の過剰なネストをさせないようにした
-- デフォルトの色設定が誤って太字に設定されていた問題を修正
+- デフォルトの色設定が誤って太字に設定されていた問題を修正 [#8]
+
+Thanks to [@brammeleman]
+
+[@brammeleman]: https://github.com/brammeleman
+[#8]: https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.6.3
 
 v1.6.2
 ======
