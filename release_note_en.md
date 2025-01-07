@@ -413,7 +413,6 @@ Apr 14, 2021
 
 - WAVING WHITE FLAG and its variations (U+1F3F3 &amp; U+1F3F3 U+FE0F / &#x1F3F3; &amp; &#x1F3F3;&#xFE0F;)
 
-
 v0.4.7
 =======
 Apr 14, 2021
@@ -489,3 +488,95 @@ v0.2.6
 Nov 15, 2020
 
 - Temporarily replace mattn/go-tty by zetamatta/go-tty for https://github.com/zetamatta/nyagos/issues/393
+
+v0.2.4
+=======
+Nov 14, 2020
+
+- Ctrl-Y: trim the last CRLF on pasting
+
+v0.2.3
+======
+Oct 23, 2020
+
+- Incremental Search: compare case-insensitively
+
+v0.2.2
+=======
+Oct 9, 2020
+
+- Fix the cursor position broken on the unicode VARIATION SELECTOR-1..16
+
+v0.2.1
+=======
+Oct 6, 2020
+
+Support Zero-Width-Join Sequence.
+
+v0.1.10
+=======
+Sep 29, 2020
+
+Refer to https://github.com/mattn/go-tty/commit/b0f19ff1ae2faa49f3be9c0f304009b2cde03b97
+
+v0.1.9
+=======
+Sep 27, 2020
+
+Refer zetamatta/go-tty (fork of mattn/go-tty on Sep.22,2020 )
+( Revert to v0.1.5 )
+
+v0.1.8
+=======
+Sep 27, 2020
+
+Remove go-tty-fork2290922's go.mod / go.sum
+
+v0.1.7
+=======
+Sep 27, 2020
+
+Add TreatAmbiguousWidthAsNarrow And IsSurrogatePairOk again.
+
+v0.1.6
+=======
+Sep 27, 2020
+
+Embed fork of go-tty
+
+v0.1.5
+=======
+Sep 23, 2020
+
+Regard Ambiguous width character as 1 cell on Windows Terminal
+
+v0.1.4
+=======
+Sep 23, 2020
+
+Support surrogat pair
+
+v0.1.3
+======
+Sep 22, 2020
+
+Use zetamatta/go-tty instead of mattn/go-tty temporary
+
+v0.1.2
+======
+May 24, 2020
+
+Fix width of '<7F>' (when Ctrl-V and Ctrl-H are typed)
+
+v0.1.1
+======
+May 24, 2020
+
+Support SurrogatePaired Letter on WindowsTerminal
+
+v0.1.0
+======
+Mar 21, 2020
+
+
+Copy from github.com/zetamatta/nyagos/readline
