@@ -32,8 +32,10 @@ The New Yet another Readline for Go (go-readline-ny)
 
 ![](./colorcmdline.png)
 
-[example1.go](./examples/example1.go)
-----------
+examples
+--------
+
+### [example1.go](./examples/example1.go)
 
 The most simple sample.
 
@@ -60,8 +62,7 @@ func main() {
 
 If the target platform includes Windows, you have to import and use [go-colorable](https://github.com/mattn/go-colorable) like example2.go .
 
-[example2.go](./examples/example2.go)
------------
+### [example2.go](./examples/example2.go)
 
 Tiny Shell. This is a sample of prompt change, colorization, filename completion and history browsing.
 
@@ -131,27 +132,20 @@ func main() {
 }
 ```
 
-example3.go
-------------
+### example3.go
 
 - [example3.go](./examples/example3.go)
 
 This is a sample to change key-bindings to diamond cursor.
 
-example4.go
-------------
+### example4.go
 
 - [example4.go](./examples/example4.go)
 
 This is a sample that implements the function to start the text editor defined by the environment variable EDITOR and import the edited contents when the ESCAPE key is pressed.
 
-License
-=======
-
-MIT License
-
 Acknowledgements
-================
+----------------
 
 - [@masamitsu-murase](https://github.com/masamitsu-murase) [#1]
 - [@ram-on](https://github.com/ram-on) [#2]
@@ -164,7 +158,12 @@ Acknowledgements
 [#8]: https://github.com/nyaosorg/go-readline-ny/issues/8
 
 Release notes
-=============
+-------------
 
 - [Release notes (English)](release_note_en.md)
 - [Release notes (Japanese)](release_note_ja.md)
+
+License
+-------
+
+MIT License
