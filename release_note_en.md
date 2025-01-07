@@ -2,7 +2,7 @@ v1.6.3
 ======
 Jan 7, 2025
 
-- Prevent from nesting too many bufio.Writer
+- Adjusted: Avoided double nesting of `bufio.Writer`.
 - Fixed: default color setting was incorrectly set to bold.
 
 v1.6.2
