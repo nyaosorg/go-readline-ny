@@ -459,7 +459,13 @@ v0.4.0
 =======
 Feb 11, 2021
 
-temporaly replace go-tty with forked version to support emoji in WindowsTerminal 1.5
+- temporaly replace go-tty with forked version to support emoji in WindowsTerminal 1.5
+- [#1] Support Alt-/ key bind
+
+Thanks to [@masamitsu-murase]
+
+[@masamitsu-murase]: https://github.com/masamitsu-murase
+[#1]: https://github.com/nyaosorg/go-readline-ny/pull/1
 
 v0.3.0
 =======
