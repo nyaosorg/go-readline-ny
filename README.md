@@ -6,24 +6,23 @@
 The New Yet another Readline for Go (go-readline-ny)
 ====================================================
 
-**The New Yet another Readline for Go (go-readline-ny)** is a one-line input library for CUI applications written in Go that is extensible for different needs.  It has been running inside the command line shell "[NYAGOS]" for a long time.
+**go-readline-ny** is a one-line input library for CUI applications written in Go. It is designed to be extensible to meet diverse needs and has been used in the command-line shell [NYAGOS] for a long time.
 
 [NYAGOS]: https://github.com/nyaosorg/nyagos
 
 - Emacs-like key-bindings
-- History
-- Word Completion (file names, command names, or any names in given array)
-- Syntax Highlighting
-- Supported OS: Windows and Linux
-- Suported Unicode (UTF8)
+- Input history
+- Word completion (file names, command names, or any names in given array)
+- Syntax highlighting
+- Supported platforms: Windows and Linux
+- Full Unicode (UTF8) support, including:
     - Surrogate-pair
-    - Emoji (via clipboard)
-    - Zero-Width-Joiner (via clipboard)
-    - Variation Selector (via clipboard pasted by Ctrl-Y)
+    - Emojis (via clipboard)
+    - Zero-width joiner (via clipboard)
+    - Variation selectors (via clipboard pasted with Ctrl-Y)
 - Add-Ons:
-    - [SKK] (Japanese method editor)
+    - [SKK] (Japanese input method editor)
     - [Multi-lines Editing][go-multiline-ny]
-- MIT License
 
 [SKK]: https://github.com/nyaosorg/go-readline-skk
 [go-multiline-ny]: https://github.com/hymkor/go-multiline-ny
