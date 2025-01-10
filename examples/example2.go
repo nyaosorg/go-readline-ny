@@ -37,7 +37,7 @@ func main() {
 			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[37;41;22m"},
 		},
 		HistoryCycling: true,
-		PredictColor:   readline.PredictColorBlueItalic,
+		PredictColor:   [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
 	}
 
 	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
