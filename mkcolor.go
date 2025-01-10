@@ -2,12 +2,11 @@ package readline
 
 import (
 	"io"
-	"regexp"
 	"unicode/utf8"
 )
 
 type Highlight struct {
-	Pattern *regexp.Regexp
+	Pattern interface{ FindAllStringIndex(string, int) [][]int }
 	EscSeq  string
 }
 
