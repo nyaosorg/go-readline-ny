@@ -8,12 +8,12 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/nyaosorg/go-readline-ny/coloring"
 	"github.com/nyaosorg/go-readline-ny/completion"
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/simplehistory"
@@ -24,11 +24,18 @@ func main() {
 
 	editor := &readline.Editor{
 		PromptWriter: func(w io.Writer) (int, error) {
-			return io.WriteString(w, "\x1B[1;36m$ \x1B[0m") // print `$ ` with cyan
+			return io.WriteString(w, "\x1B[36;22m$ ") // print `$ ` with cyan
 		},
-		Writer:         colorable.NewColorableStdout(),
-		History:        history,
-		Coloring:       &coloring.VimBatch{},
+		Writer:  colorable.NewColorableStdout(),
+		History: history,
+		Highlight: []readline.Highlight{
+			{Pattern: readline.ResetColor, Sequence: "\x1B[0m"},
+			{Pattern: readline.DefaultColor, Sequence: "\x1B[33;49;1m"},
+			{Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
+			{Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[35;49;22m"},
+			{Pattern: regexp.MustCompile(`%[^%]*%`), Sequence: "\x1B[36;49;1m"},
+			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[37;41;22m"},
+		},
 		HistoryCycling: true,
 		PredictColor:   readline.PredictColorBlueItalic,
 	}
