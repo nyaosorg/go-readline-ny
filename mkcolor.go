@@ -1,36 +1,36 @@
 package readline
 
 import (
+	"io"
 	"regexp"
 	"unicode/utf8"
 )
 
 type Highlight struct {
 	Pattern *regexp.Regexp
-
-	// Sgr is the array of the Select Graphic Redition parameters.
-	// []int{0,34,1} represents "ESC[0;34;1m"
-	Sgr []int
+	EscSeq  string
 }
 
-func newColorSequence(sgr []int) ColorSequence {
-	var colSeq ColorSequence
-	for i := len(sgr) - 1; i >= 0; i-- {
-		colSeq |= ColorSequence(sgr[i])
-		colSeq <<= 8
-	}
-	colSeq |= ColorSequence(len(sgr))
-	return colSeq
+type escapeSequenceType string
+
+func (e escapeSequenceType) WriteTo(w io.Writer) (int64, error) {
+	n, err := io.WriteString(w, string(e))
+	return int64(n), err
+}
+
+func (e escapeSequenceType) Equals(other colorInterface) bool {
+	o, ok := other.(escapeSequenceType)
+	return ok && o == e
 }
 
 type highlightColorSequence struct {
-	sgrs  []ColorSequence
-	index int
+	colorMap []escapeSequenceType
+	index    int
 }
 
 func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
-	colorMap := make([]ColorSequence, len(input))
-	resetSeq := ColorSequence(1)
+	colorMap := make([]escapeSequenceType, len(input))
+	resetSeq := escapeSequenceType("\x1B[0m")
 	for i := range colorMap {
 		colorMap[i] = resetSeq
 	}
@@ -39,29 +39,40 @@ func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
 		if positions == nil {
 			continue
 		}
-		colSeq := newColorSequence(h.Sgr)
 		for _, p := range positions {
 			for i := p[0]; i < p[1]; i++ {
-				colorMap[i] = colSeq
+				colorMap[i] = escapeSequenceType(h.EscSeq)
 			}
 		}
 	}
 	return &highlightColorSequence{
-		sgrs:  colorMap,
-		index: 0,
+		colorMap: colorMap,
+		index:    0,
 	}
 }
 
-func (H *highlightColorSequence) Init() ColorSequence {
+func (H *highlightColorSequence) Init() colorInterface {
 	H.index = 0
-	return 1 // == "ESC[0m"
+	return escapeSequenceType("\x1B[0m")
 }
 
-func (H *highlightColorSequence) Next(r rune) ColorSequence {
+func (H *highlightColorSequence) Next(r rune) colorInterface {
 	if r == CursorPositionDummyRune {
-		return 0
+		return escapeSequenceType("")
 	}
-	rv := H.sgrs[H.index]
+	rv := escapeSequenceType(H.colorMap[H.index])
 	H.index += utf8.RuneLen(r)
 	return rv
+}
+
+type colorBridge struct {
+	base Coloring
+}
+
+func (c *colorBridge) Init() colorInterface {
+	return c.base.Init()
+}
+
+func (c *colorBridge) Next(r rune) colorInterface {
+	return c.base.Next(r)
 }

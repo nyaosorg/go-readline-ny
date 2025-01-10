@@ -12,28 +12,34 @@ const (
 	CursorPositionDummyRune = '\uE000'
 )
 
-func (B *Buffer) refreshColor() ColorSequence {
-	if B.Highlight != nil {
-		B.Coloring = highlightToColoring(B.String(), B.Highlight)
+func (B *Buffer) refreshColor() colorInterface {
+	var ci interface {
+		Init() colorInterface
+		Next(rune) colorInterface
 	}
-	defaultColor := B.Coloring.Init()
+	if B.Highlight != nil {
+		ci = highlightToColoring(B.String(), B.Highlight)
+	} else {
+		ci = &colorBridge{base: B.Coloring}
+	}
+	var defaultColor colorInterface = ci.Init()
 	position := int16(0)
 	var tmpbuf strings.Builder
 	for i, cell := range B.Buffer {
 		if i == B.Cursor {
-			B.Coloring.Next(CursorPositionDummyRune)
+			ci.Next(CursorPositionDummyRune)
 		}
 		B.Buffer[i].position = position
 		if tab, ok := cell.Moji.(*moji.Tab); ok {
 			tab.SetPosition(position)
-			B.Buffer[i].color = B.Coloring.Next('\t')
+			B.Buffer[i].color = ci.Next('\t')
 		} else if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
-			B.Buffer[i].color = B.Coloring.Next(codepoint)
+			B.Buffer[i].color = ci.Next(codepoint)
 		} else {
 			cell.Moji.PrintTo(&tmpbuf)
-			var cs ColorSequence
+			var cs colorInterface
 			for _, c := range tmpbuf.String() {
-				cs = B.Coloring.Next(c)
+				cs = ci.Next(c)
 			}
 			B.Buffer[i].color = cs
 			tmpbuf.Reset()
@@ -41,7 +47,7 @@ func (B *Buffer) refreshColor() ColorSequence {
 		position += int16(cell.Moji.Width())
 	}
 	if len(B.Buffer) == B.Cursor {
-		B.Coloring.Next(CursorPositionDummyRune)
+		ci.Next(CursorPositionDummyRune)
 	}
 	return defaultColor
 }

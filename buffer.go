@@ -257,7 +257,7 @@ func (B *Buffer) eraseline() {
 type _Range []Cell
 
 func (B *Buffer) puts(s []Cell) _Range {
-	defaultColor := ColorSequence(B.refreshColor())
+	defaultColor := B.refreshColor()
 	var color colorInterface = ColorSequence(-1)
 	for _, ch := range s {
 		if !ch.color.Equals(color) {
@@ -266,7 +266,7 @@ func (B *Buffer) puts(s []Cell) _Range {
 		}
 		ch.Moji.PrintTo(B.Out)
 	}
-	if color != defaultColor {
+	if !color.Equals(defaultColor) {
 		defaultColor.WriteTo(B.Out)
 	}
 	return _Range(s)
