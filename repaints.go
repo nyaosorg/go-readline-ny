@@ -18,7 +18,7 @@ func (B *Buffer) refreshColor() colorInterface {
 		Next(rune) colorInterface
 	}
 	if B.Highlight != nil {
-		ci = highlightToColoring(B.String(), B.Highlight)
+		ci = highlightToColoring(B.String(), B.ResetColor, B.DefaultColor, B.Highlight)
 	} else {
 		ci = &colorBridge{base: B.Coloring}
 	}

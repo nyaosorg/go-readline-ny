@@ -10,16 +10,6 @@ type Highlight struct {
 	Sequence string
 }
 
-type _DefaultColor struct{}
-
-func (_DefaultColor) FindAllStringIndex(s string, n int) [][]int {
-	return [][]int{[]int{0, len(s)}}
-}
-
-var DefaultColor = _DefaultColor{}
-
-var ResetColor interface{ FindAllStringIndex(string, int) [][]int } = nil
-
 type escapeSequenceType string
 
 func (e escapeSequenceType) WriteTo(w io.Writer) (int64, error) {
@@ -35,17 +25,15 @@ func (e escapeSequenceType) Equals(other colorInterface) bool {
 type highlightColorSequence struct {
 	colorMap []escapeSequenceType
 	index    int
-	resetSeq string
+	resetSeq escapeSequenceType
 }
 
-func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
+func highlightToColoring(input string, resetColor, defaultColor string, H []Highlight) *highlightColorSequence {
 	colorMap := make([]escapeSequenceType, len(input))
-	resetSeq := ""
+	for i := 0; i < len(input); i++ {
+		colorMap[i] = escapeSequenceType(defaultColor)
+	}
 	for _, h := range H {
-		if h.Pattern == nil {
-			resetSeq = h.Sequence
-			continue
-		}
 		positions := h.Pattern.FindAllStringIndex(input, -1)
 		if positions == nil {
 			continue
@@ -58,8 +46,7 @@ func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
 	}
 	return &highlightColorSequence{
 		colorMap: colorMap,
-		index:    0,
-		resetSeq: resetSeq,
+		resetSeq: escapeSequenceType(resetColor),
 	}
 }
 

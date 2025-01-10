@@ -38,13 +38,13 @@ func mains() error {
 			colorable.NewColorableStdout(),
 			logWriter),
 		Highlight: []readline.Highlight{
-			{Pattern: readline.ResetColor, Sequence: "\x1B[0m"},
-			{Pattern: readline.DefaultColor, Sequence: "\x1B[33;49;1m"},
 			{Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
 			{Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[31;49;22m"},
 			{Pattern: regexp.MustCompile(`%[^%]*%`), Sequence: "\x1B[36;49;1m"},
 			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[37;41;22m"},
 		},
+		ResetColor:   "\x1B[0m",
+		DefaultColor: "\x1B[33;49;1m",
 	}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {

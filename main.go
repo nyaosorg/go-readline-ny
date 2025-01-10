@@ -47,12 +47,15 @@ type Editor struct {
 	Cursor         int
 	LineFeedWriter func(Result, io.Writer) (int, error)
 	Tty            ITty
-	Coloring       Coloring
-	Highlight      []Highlight
 	HistoryCycling bool
 	mutex          sync.Mutex
-	PredictColor   [2]string
-	Predictor      func(*Buffer) string
+
+	Coloring     Coloring // deprecated
+	Highlight    []Highlight
+	ResetColor   string
+	DefaultColor string
+	PredictColor [2]string
+	Predictor    func(*Buffer) string
 }
 
 const (

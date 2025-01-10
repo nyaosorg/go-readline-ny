@@ -29,8 +29,6 @@ func main() {
 		Writer:  colorable.NewColorableStdout(),
 		History: history,
 		Highlight: []readline.Highlight{
-			{Pattern: readline.ResetColor, Sequence: "\x1B[0m"},
-			{Pattern: readline.DefaultColor, Sequence: "\x1B[33;49;1m"},
 			{Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
 			{Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[35;49;22m"},
 			{Pattern: regexp.MustCompile(`%[^%]*%`), Sequence: "\x1B[36;49;1m"},
@@ -38,6 +36,8 @@ func main() {
 		},
 		HistoryCycling: true,
 		PredictColor:   [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
+		ResetColor:     "\x1B[0m",
+		DefaultColor:   "\x1B[33;49;1m",
 	}
 
 	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
