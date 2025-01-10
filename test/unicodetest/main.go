@@ -38,7 +38,8 @@ func mains() error {
 			colorable.NewColorableStdout(),
 			logWriter),
 		Highlight: []readline.Highlight{
-			{Pattern: readline.DefaultColor, EscSeq: "\x1B[0m"},
+			{Pattern: readline.ResetColor, EscSeq: "\x1B[0m"},
+			{Pattern: readline.DefaultColor, EscSeq: "\x1B[33;49;1m"},
 			{Pattern: regexp.MustCompile("&"), EscSeq: "\x1B[33;49;22m"},
 			{Pattern: regexp.MustCompile(`"[^"]*"`), EscSeq: "\x1B[31;49;22m"},
 			{Pattern: regexp.MustCompile(`%[^%]*%`), EscSeq: "\x1B[36;49;1m"},
