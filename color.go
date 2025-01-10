@@ -98,6 +98,11 @@ func SGR4(n1, n2, n3, n4 int) ColorSequence {
 		(ColorSequence(n4) << (colorCodeBitSize * 4))
 }
 
+func (c ColorSequence) Equals(other colorInterface) bool {
+	o, ok := other.(ColorSequence)
+	return ok && o == c
+}
+
 func (c ColorSequence) WriteTo(w io.Writer) (int64, error) {
 	if c <= 0 {
 		return 0, nil

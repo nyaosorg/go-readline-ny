@@ -16,9 +16,14 @@ type _Undo struct {
 	text string
 }
 
+type colorInterface interface {
+	io.WriterTo
+	Equals(colorInterface) bool
+}
+
 type Cell struct {
 	Moji     Moji
-	color    ColorSequence
+	color    colorInterface
 	position int16
 }
 
@@ -253,9 +258,9 @@ type _Range []Cell
 
 func (B *Buffer) puts(s []Cell) _Range {
 	defaultColor := ColorSequence(B.refreshColor())
-	color := ColorSequence(-1)
+	var color colorInterface = ColorSequence(-1)
 	for _, ch := range s {
-		if ch.color != color {
+		if !ch.color.Equals(color) {
 			color = ch.color
 			color.WriteTo(B.Out)
 		}
