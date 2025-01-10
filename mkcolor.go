@@ -6,8 +6,8 @@ import (
 )
 
 type Highlight struct {
-	Pattern interface{ FindAllStringIndex(string, int) [][]int }
-	EscSeq  string
+	Pattern  interface{ FindAllStringIndex(string, int) [][]int }
+	Sequence string
 }
 
 type _DefaultColor struct{}
@@ -43,7 +43,7 @@ func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
 	resetSeq := ""
 	for _, h := range H {
 		if h.Pattern == nil {
-			resetSeq = h.EscSeq
+			resetSeq = h.Sequence
 			continue
 		}
 		positions := h.Pattern.FindAllStringIndex(input, -1)
@@ -52,7 +52,7 @@ func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
 		}
 		for _, p := range positions {
 			for i := p[0]; i < p[1]; i++ {
-				colorMap[i] = escapeSequenceType(h.EscSeq)
+				colorMap[i] = escapeSequenceType(h.Sequence)
 			}
 		}
 	}
