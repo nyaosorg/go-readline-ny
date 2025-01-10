@@ -10,6 +10,14 @@ type Highlight struct {
 	EscSeq  string
 }
 
+type _DefaultColor struct{}
+
+func (_DefaultColor) FindAllStringIndex(s string, n int) [][]int {
+	return [][]int{[]int{0, len(s)}}
+}
+
+var DefaultColor = _DefaultColor{}
+
 type escapeSequenceType string
 
 func (e escapeSequenceType) WriteTo(w io.Writer) (int64, error) {
@@ -29,10 +37,6 @@ type highlightColorSequence struct {
 
 func highlightToColoring(input string, H []Highlight) *highlightColorSequence {
 	colorMap := make([]escapeSequenceType, len(input))
-	resetSeq := escapeSequenceType("\x1B[0m")
-	for i := range colorMap {
-		colorMap[i] = resetSeq
-	}
 	for _, h := range H {
 		positions := h.Pattern.FindAllStringIndex(input, -1)
 		if positions == nil {
