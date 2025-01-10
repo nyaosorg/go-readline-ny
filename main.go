@@ -48,6 +48,7 @@ type Editor struct {
 	LineFeedWriter func(Result, io.Writer) (int, error)
 	Tty            ITty
 	Coloring       Coloring
+	Highlight      []Highlight
 	HistoryCycling bool
 	mutex          sync.Mutex
 	PredictColor   [2]string

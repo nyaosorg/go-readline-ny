@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/nyaosorg/go-readline-ny/coloring"
 )
 
 func mains() error {
@@ -33,10 +33,16 @@ func mains() error {
 		PromptWriter: func(w io.Writer) (int, error) {
 			return io.WriteString(w, "  0123456789ABCDEF\n$ ")
 		},
-		Coloring: &coloring.VimBatch{},
+		// Coloring: &coloring.VimBatch{},
 		Writer: io.MultiWriter(
 			colorable.NewColorableStdout(),
 			logWriter),
+		Highlight: []readline.Highlight{
+			{regexp.MustCompile("&"), []int{33, 49, 22}},
+			{regexp.MustCompile(`"[^"]*"`), []int{31, 49, 22}},
+			{regexp.MustCompile(`%[^%]*%`), []int{36, 49, 1}},
+			{regexp.MustCompile("\u3000"), []int{37, 41, 22}},
+		},
 	}
 	text, err := editor.ReadLine(context.Background())
 	if err != nil {

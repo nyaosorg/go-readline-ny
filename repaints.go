@@ -13,6 +13,9 @@ const (
 )
 
 func (B *Buffer) refreshColor() ColorSequence {
+	if B.Highlight != nil {
+		B.Coloring = highlightToColoring(B.String(), B.Highlight)
+	}
 	defaultColor := B.Coloring.Init()
 	position := int16(0)
 	var tmpbuf strings.Builder
