@@ -26,14 +26,14 @@ func (B *Buffer) refreshColor() ColorSequence {
 		B.Buffer[i].position = position
 		if tab, ok := cell.Moji.(*moji.Tab); ok {
 			tab.SetPosition(position)
-			B.Buffer[i].color = ColorSequence(B.Coloring.Next('\t'))
+			B.Buffer[i].color = B.Coloring.Next('\t')
 		} else if codepoint, ok := moji.MojiToRune(cell.Moji); ok {
-			B.Buffer[i].color = ColorSequence(B.Coloring.Next(codepoint))
+			B.Buffer[i].color = B.Coloring.Next(codepoint)
 		} else {
 			cell.Moji.PrintTo(&tmpbuf)
 			var cs ColorSequence
 			for _, c := range tmpbuf.String() {
-				cs = ColorSequence(B.Coloring.Next(c))
+				cs = B.Coloring.Next(c)
 			}
 			B.Buffer[i].color = cs
 			tmpbuf.Reset()
