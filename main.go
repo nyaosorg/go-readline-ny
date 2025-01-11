@@ -50,12 +50,13 @@ type Editor struct {
 	HistoryCycling bool
 	mutex          sync.Mutex
 
-	Coloring     Coloring // deprecated
 	Highlight    []Highlight
 	ResetColor   string
 	DefaultColor string
 	PredictColor [2]string
 	Predictor    func(*Buffer) string
+	// Deprecated: use Highlight
+	Coloring     Coloring
 }
 
 const (

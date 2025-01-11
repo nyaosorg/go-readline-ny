@@ -4,6 +4,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 )
 
+// Deprecated: use Highlight instead
 type VimBatch struct {
 	bits int
 }

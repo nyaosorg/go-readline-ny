@@ -5,6 +5,7 @@ import (
 	"io"
 )
 
+// Deprecated: use Highlight instead
 type Coloring interface {
 	// Reset has to initialize receiver's fields and return default color.
 	Init() ColorSequence
