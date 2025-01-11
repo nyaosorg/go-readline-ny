@@ -1,3 +1,24 @@
+- Introduced a new interface for syntax highlighting.
+    - Pattern specifies the range to which the highlight is applied. A `regexp.Regexp` is acceptable, but any type is sufficient as long as it has `FindAllStringIndex(string, int) [][]int`.
+    - `Sequence` specifies the escape sequence to apply to the `Pattern` parts.
+    - `DefaultColor` specifies the sequence used for parts where no highlight is applied.
+    - `ResetColor` specifies the sequence used when completing the output of the input text.
+    - The existing syntax highlighting interface, `Coloring`, is planned to be deprecated.
+
+```go
+editor := &readline.Editor{
+    // :
+    Highlight: []readline.Highlight{
+        {Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
+        {Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[35;49;22m"},
+        {Pattern: regexp.MustCompile(`%[^%]*%`), Sequence: "\x1B[36;49;1m"},
+        {Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[37;41;22m"},
+    },
+    ResetColor:     "\x1B[0m",
+    DefaultColor:   "\x1B[33;49;1m",
+}
+```
+
 v1.6.3
 ======
 Jan 7, 2025

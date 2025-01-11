@@ -1,3 +1,24 @@
+- シンタックスハイライトの新しいインターフェイスを用意した。
+    - `Pattern` はハイライトを適用する範囲を指定する。`regexp.Regexp` でよいが、`FindAllStringIndex(string, int) [][]int` を持つ型なら何でもよい
+    - `Sequence` は `Pattern` の部分に適用するエスケープシーケンスを指定する
+    - `DefaultColor` はハイライトが適用されていない部分に使うシーケンスを指定する
+    - `ResetColor` は入力テキスト出力を終える時に使うシーケンスを指定する
+    - 従来のシンタックスハイライトのインターフェイス: `Coloring` は廃止予定です 
+
+```go
+editor := &readline.Editor{
+    // :
+    Highlight: []readline.Highlight{
+        {Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
+        {Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[35;49;22m"},
+        {Pattern: regexp.MustCompile(`%[^%]*%`), Sequence: "\x1B[36;49;1m"},
+        {Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[37;41;22m"},
+    },
+    ResetColor:     "\x1B[0m",
+    DefaultColor:   "\x1B[33;49;1m",
+}
+```
+
 v1.6.3
 ======
 Jan 7, 2025
