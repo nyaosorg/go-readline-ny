@@ -1,3 +1,7 @@
+v1.7.0
+======
+Jan 12, 2025
+
 - シンタックスハイライトの新しいインターフェイスを用意した。
     - `Pattern` はハイライトを適用する範囲を指定する。`regexp.Regexp` でよいが、`FindAllStringIndex(string, int) [][]int` を持つ型なら何でもよい
     - `Sequence` は `Pattern` の部分に適用するエスケープシーケンスを指定する

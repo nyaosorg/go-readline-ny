@@ -1,3 +1,7 @@
+v1.7.0
+======
+Jan 12, 2025
+
 - Introduced a new interface for syntax highlighting.
     - Pattern specifies the range to which the highlight is applied. A `regexp.Regexp` is acceptable, but any type is sufficient as long as it has `FindAllStringIndex(string, int) [][]int`.
     - `Sequence` specifies the escape sequence to apply to the `Pattern` parts.
