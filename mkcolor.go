@@ -10,56 +10,73 @@ type Highlight struct {
 	Sequence string
 }
 
-type escapeSequenceType string
+type escapeSequenceId uint
 
-func (e escapeSequenceType) WriteTo(w io.Writer) (int64, error) {
-	n, err := io.WriteString(w, string(e))
+var (
+	escapeSequences          = []string{}
+	escapeSequenceStringToId = map[string]escapeSequenceId{}
+)
+
+func newEscapeSequenceId(s string) escapeSequenceId {
+	if code, ok := escapeSequenceStringToId[s]; ok {
+		return code
+	}
+	code := escapeSequenceId(len(escapeSequences))
+	escapeSequences = append(escapeSequences, s)
+	escapeSequenceStringToId[s] = code
+	return code
+}
+
+func (e escapeSequenceId) WriteTo(w io.Writer) (int64, error) {
+	n, err := io.WriteString(w, escapeSequences[e])
 	return int64(n), err
 }
 
-func (e escapeSequenceType) Equals(other colorInterface) bool {
-	o, ok := other.(escapeSequenceType)
+func (e escapeSequenceId) Equals(other colorInterface) bool {
+	o, ok := other.(escapeSequenceId)
 	return ok && o == e
 }
 
 type highlightColorSequence struct {
-	colorMap []escapeSequenceType
+	colorMap []escapeSequenceId
 	index    int
-	resetSeq escapeSequenceType
+	resetSeq escapeSequenceId
 }
 
 func highlightToColoring(input string, resetColor, defaultColor string, H []Highlight) *highlightColorSequence {
-	colorMap := make([]escapeSequenceType, len(input))
+	colorMap := make([]escapeSequenceId, len(input))
+	defaultSeq := newEscapeSequenceId(defaultColor)
 	for i := 0; i < len(input); i++ {
-		colorMap[i] = escapeSequenceType(defaultColor)
+		colorMap[i] = defaultSeq
 	}
 	for _, h := range H {
 		positions := h.Pattern.FindAllStringIndex(input, -1)
 		if positions == nil {
 			continue
 		}
+		seq := newEscapeSequenceId(h.Sequence)
 		for _, p := range positions {
 			for i := p[0]; i < p[1]; i++ {
-				colorMap[i] = escapeSequenceType(h.Sequence)
+				colorMap[i] = seq
 			}
 		}
 	}
 	return &highlightColorSequence{
 		colorMap: colorMap,
-		resetSeq: escapeSequenceType(resetColor),
+		resetSeq: newEscapeSequenceId(resetColor),
 	}
 }
 
 func (H *highlightColorSequence) Init() colorInterface {
 	H.index = 0
-	return escapeSequenceType(H.resetSeq)
+	return H.resetSeq
 }
 
 func (H *highlightColorSequence) Next(r rune) colorInterface {
 	if r == CursorPositionDummyRune {
-		return escapeSequenceType("")
+		return newEscapeSequenceId("")
 	}
-	rv := escapeSequenceType(H.colorMap[H.index])
+	rv := H.colorMap[H.index]
 	H.index += utf8.RuneLen(r)
 	return rv
 }
