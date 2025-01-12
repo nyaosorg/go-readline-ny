@@ -63,16 +63,6 @@ const (
 	DarkDefaultForeGroundColor
 )
 
-type _MonoChrome struct{}
-
-func (_MonoChrome) Init() ColorSequence {
-	return 0
-}
-
-func (_MonoChrome) Next(rune) ColorSequence {
-	return 0
-}
-
 func SGR1(n1 int) ColorSequence {
 	return ColorSequence(1) |
 		(ColorSequence(n1) << colorCodeBitSize)

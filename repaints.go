@@ -17,10 +17,10 @@ func (B *Buffer) refreshColor() colorInterface {
 		Init() colorInterface
 		Next(rune) colorInterface
 	}
-	if B.Highlight != nil {
-		ci = highlightToColoring(B.String(), B.ResetColor, B.DefaultColor, B.Highlight)
-	} else {
+	if B.Coloring != nil {
 		ci = &colorBridge{base: B.Coloring}
+	} else {
+		ci = highlightToColoring(B.String(), B.ResetColor, B.DefaultColor, B.Highlight)
 	}
 	var defaultColor colorInterface = ci.Init()
 	position := int16(0)

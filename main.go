@@ -56,7 +56,7 @@ type Editor struct {
 	PredictColor [2]string
 	Predictor    func(*Buffer) string
 	// Deprecated: use Highlight
-	Coloring     Coloring
+	Coloring Coloring
 }
 
 const (
@@ -150,9 +150,6 @@ func (editor *Editor) Init() {
 	}
 	if editor.Tty == nil {
 		editor.Tty = &_Tty{}
-	}
-	if editor.Coloring == nil {
-		editor.Coloring = _MonoChrome{}
 	}
 	if editor.Predictor == nil {
 		editor.Predictor = predictByHistory
