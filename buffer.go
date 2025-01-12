@@ -47,7 +47,8 @@ type Buffer struct {
 	modifiedHistory map[int]string
 }
 
-func (B *Buffer) Suffix() []Moji {
+// getSuffix returns the text that should be displayed after the edit text
+func (B *Buffer) getSuffix() []Moji {
 	if B.PredictColor[0] == "" {
 		return nil
 	}
