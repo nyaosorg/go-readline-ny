@@ -52,7 +52,7 @@ func getOneKey(tty XTty) (string, error) {
 	}
 }
 
-func GetKeys(tty XTty) ([]string, error) {
+func getKeys(tty XTty) ([]string, error) {
 	clean, err := tty.Raw()
 	if err != nil {
 		return nil, err
