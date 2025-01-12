@@ -1,3 +1,6 @@
+- Deprecated the `GetKey` function.
+- Unexported the `GetKeys` and `GetRawKey` functions.
+
 v1.7.0
 ======
 Jan 12, 2025
