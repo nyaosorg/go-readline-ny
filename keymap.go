@@ -78,6 +78,7 @@ func (km *KeyMap) Lookup(key keys.Code) (Command, bool) {
 	return f, ok
 }
 
+// AnonymousCommand is a type that defines an unnamed command.
 type AnonymousCommand func(context.Context, *Buffer) Result
 
 func (f AnonymousCommand) String() string {

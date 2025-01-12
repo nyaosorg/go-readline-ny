@@ -189,6 +189,7 @@ func mojiAndStringToString(m Moji, s string) string {
 	return buffer.String()
 }
 
+// SelfInserter is a command object that inserts the string itself.
 type SelfInserter string
 
 func (s SelfInserter) String() string {
