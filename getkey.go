@@ -20,10 +20,10 @@ func GetKey(tty XTty) (string, error) {
 	}
 	defer clean()
 
-	return GetRawKey(tty)
+	return getOneKey(tty)
 }
 
-func GetRawKey(tty XTty) (string, error) {
+func getOneKey(tty XTty) (string, error) {
 	var buffer strings.Builder
 	escape := false
 	var surrogated rune = 0
@@ -62,7 +62,7 @@ func GetKeys(tty XTty) ([]string, error) {
 	keys := []string{}
 
 	for {
-		key1, err := GetRawKey(tty)
+		key1, err := getOneKey(tty)
 		if err != nil {
 			return nil, err
 		}
