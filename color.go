@@ -13,6 +13,7 @@ type Coloring interface {
 	Next(rune) ColorSequence
 }
 
+// Deprecated: use Highlight instead
 type ColorSequence int64
 
 const (
@@ -63,17 +64,20 @@ const (
 	DarkDefaultForeGroundColor
 )
 
+// Deprecated: use Highlight instead
 func SGR1(n1 int) ColorSequence {
 	return ColorSequence(1) |
 		(ColorSequence(n1) << colorCodeBitSize)
 }
 
+// Deprecated: use Highlight instead
 func SGR2(n1, n2 int) ColorSequence {
 	return ColorSequence(2) |
 		(ColorSequence(n1) << colorCodeBitSize) |
 		(ColorSequence(n2) << (colorCodeBitSize * 2))
 }
 
+// Deprecated: use Highlight instead
 func SGR3(n1, n2, n3 int) ColorSequence {
 	return ColorSequence(3) |
 		(ColorSequence(n1) << colorCodeBitSize) |
@@ -81,6 +85,7 @@ func SGR3(n1, n2, n3 int) ColorSequence {
 		(ColorSequence(n3) << (colorCodeBitSize * 3))
 }
 
+// Deprecated: use Highlight instead
 func SGR4(n1, n2, n3, n4 int) ColorSequence {
 	return ColorSequence(4) |
 		(ColorSequence(n1) << colorCodeBitSize) |
