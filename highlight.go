@@ -76,6 +76,9 @@ func (H *highlightColorSequence) Next(r rune) colorInterface {
 	if r == CursorPositionDummyRune {
 		return newEscapeSequenceId("")
 	}
+	if H.index >= len(H.colorMap) {
+		return H.resetSeq
+	}
 	rv := H.colorMap[H.index]
 	H.index += utf8.RuneLen(r)
 	return rv
