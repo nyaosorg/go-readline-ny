@@ -1,3 +1,7 @@
+v1.7.1
+======
+Jan 18, 2025
+
 - Fixed a panic in the syntax highlighting code when Japanese characters were entered using go-readline-skk.
 - Deprecated the `GetKey` function.
 - Unexported the `GetKeys` and `GetRawKey` functions.
