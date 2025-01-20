@@ -20,9 +20,12 @@ func (B *Buffer) refreshColor() colorInterface {
 	if B.Coloring != nil {
 		ci = &colorBridge{base: B.Coloring}
 	} else {
-		ci = highlightToColoring(B.String(), B.ResetColor, B.DefaultColor, B.Highlight)
+		ci = highlightToColoring(B.PrefixForColor+B.String()+B.PostfixForColor, B.ResetColor, B.DefaultColor, B.Highlight)
 	}
 	var defaultColor colorInterface = ci.Init()
+	for _, c := range B.PrefixForColor {
+		ci.Next(c)
+	}
 	position := int16(0)
 	var tmpbuf strings.Builder
 	for i, cell := range B.Buffer {
