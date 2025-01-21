@@ -12,17 +12,17 @@ const (
 	CursorPositionDummyRune = '\uE000'
 )
 
-func (B *Buffer) refreshColor() colorInterface {
+func (B *Buffer) refreshColor() ColorInterface {
 	var ci interface {
-		Init() colorInterface
-		Next(rune) colorInterface
+		Init() ColorInterface
+		Next(rune) ColorInterface
 	}
 	if B.Coloring != nil {
 		ci = &colorBridge{base: B.Coloring}
 	} else {
-		ci = highlightToColoring(B.PrefixForColor+B.String()+B.PostfixForColor, B.ResetColor, B.DefaultColor, B.Highlight)
+		ci = HighlightToColoring(B.PrefixForColor+B.String()+B.PostfixForColor, B.ResetColor, B.DefaultColor, B.Highlight)
 	}
-	var defaultColor colorInterface = ci.Init()
+	var defaultColor ColorInterface = ci.Init()
 	for _, c := range B.PrefixForColor {
 		ci.Next(c)
 	}
@@ -40,7 +40,7 @@ func (B *Buffer) refreshColor() colorInterface {
 			B.Buffer[i].color = ci.Next(codepoint)
 		} else {
 			cell.Moji.PrintTo(&tmpbuf)
-			var cs colorInterface
+			var cs ColorInterface
 			for _, c := range tmpbuf.String() {
 				cs = ci.Next(c)
 			}

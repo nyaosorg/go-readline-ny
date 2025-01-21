@@ -10,42 +10,42 @@ type Highlight struct {
 	Sequence string
 }
 
-type escapeSequenceId uint
+type EscapeSequenceId uint
 
 var (
 	escapeSequences          = []string{}
-	escapeSequenceStringToId = map[string]escapeSequenceId{}
+	escapeSequenceStringToId = map[string]EscapeSequenceId{}
 )
 
-func newEscapeSequenceId(s string) escapeSequenceId {
+func NewEscapeSequenceId(s string) EscapeSequenceId {
 	if code, ok := escapeSequenceStringToId[s]; ok {
 		return code
 	}
-	code := escapeSequenceId(len(escapeSequences))
+	code := EscapeSequenceId(len(escapeSequences))
 	escapeSequences = append(escapeSequences, s)
 	escapeSequenceStringToId[s] = code
 	return code
 }
 
-func (e escapeSequenceId) WriteTo(w io.Writer) (int64, error) {
+func (e EscapeSequenceId) WriteTo(w io.Writer) (int64, error) {
 	n, err := io.WriteString(w, escapeSequences[e])
 	return int64(n), err
 }
 
-func (e escapeSequenceId) Equals(other colorInterface) bool {
-	o, ok := other.(escapeSequenceId)
+func (e EscapeSequenceId) Equals(other ColorInterface) bool {
+	o, ok := other.(EscapeSequenceId)
 	return ok && o == e
 }
 
-type highlightColorSequence struct {
-	colorMap []escapeSequenceId
+type HighlightColorSequence struct {
+	colorMap []EscapeSequenceId
 	index    int
-	resetSeq escapeSequenceId
+	resetSeq EscapeSequenceId
 }
 
-func highlightToColoring(input string, resetColor, defaultColor string, H []Highlight) *highlightColorSequence {
-	colorMap := make([]escapeSequenceId, len(input))
-	defaultSeq := newEscapeSequenceId(defaultColor)
+func HighlightToColoring(input string, resetColor, defaultColor string, H []Highlight) *HighlightColorSequence {
+	colorMap := make([]EscapeSequenceId, len(input))
+	defaultSeq := NewEscapeSequenceId(defaultColor)
 	for i := 0; i < len(input); i++ {
 		colorMap[i] = defaultSeq
 	}
@@ -54,27 +54,27 @@ func highlightToColoring(input string, resetColor, defaultColor string, H []High
 		if positions == nil {
 			continue
 		}
-		seq := newEscapeSequenceId(h.Sequence)
+		seq := NewEscapeSequenceId(h.Sequence)
 		for _, p := range positions {
 			for i := p[0]; i < p[1]; i++ {
 				colorMap[i] = seq
 			}
 		}
 	}
-	return &highlightColorSequence{
+	return &HighlightColorSequence{
 		colorMap: colorMap,
-		resetSeq: newEscapeSequenceId(resetColor),
+		resetSeq: NewEscapeSequenceId(resetColor),
 	}
 }
 
-func (H *highlightColorSequence) Init() colorInterface {
+func (H *HighlightColorSequence) Init() ColorInterface {
 	H.index = 0
 	return H.resetSeq
 }
 
-func (H *highlightColorSequence) Next(r rune) colorInterface {
+func (H *HighlightColorSequence) Next(r rune) ColorInterface {
 	if r == CursorPositionDummyRune {
-		return newEscapeSequenceId("")
+		return NewEscapeSequenceId("")
 	}
 	if H.index >= len(H.colorMap) {
 		return H.resetSeq
@@ -88,10 +88,10 @@ type colorBridge struct {
 	base Coloring
 }
 
-func (c *colorBridge) Init() colorInterface {
+func (c *colorBridge) Init() ColorInterface {
 	return c.base.Init()
 }
 
-func (c *colorBridge) Next(r rune) colorInterface {
+func (c *colorBridge) Next(r rune) ColorInterface {
 	return c.base.Next(r)
 }
