@@ -1,3 +1,7 @@
+v1.7.2
+======
+Jan 22, 2025
+
 - Made the following changes for go-multiline-ny:
     - Added a hook: `Editor.AfterCommand`, which is called after executing commands.
     - Exported previously unexported types and functions: NewEscapeSequenceId, EscapeSequenceId, HighlightToColoring, HighlightColorSequence, and ColorInterface.

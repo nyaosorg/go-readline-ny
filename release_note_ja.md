@@ -1,3 +1,7 @@
+v1.7.2
+======
+Jan 22, 2025
+
 - go-multiline-ny のために以下の変更を行った
     - 各コマンドが動作した後に呼ばれるフック: `Editor.AfterCommand` を追加
     - 非公開であった型・関数を公開: NewEscapeSequenceId, EscapeSequenceId, HighlightToColoring, HighlightColorSequence, and ColorInterface
