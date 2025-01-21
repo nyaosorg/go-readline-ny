@@ -1,3 +1,8 @@
+- Made the following changes for go-multiline-ny:
+    - Added a hook: `Editor.AfterCommand`, which is called after executing commands.
+    - Added new fields: `Editor.PrefixForHighlight` and `Editor.PostfixForHighlight`, which are appended before and after the edit text when evaluating syntax highlighting.
+    - Exported previously unexported types and functions: NewEscapeSequenceId, EscapeSequenceId, HighlightToColoring, HighlightColorSequence, and ColorInterface.
+
 v1.7.1
 ======
 Jan 18, 2025
