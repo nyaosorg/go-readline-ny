@@ -55,8 +55,9 @@ type Editor struct {
 	DefaultColor    string
 	PredictColor    [2]string
 	Predictor       func(*Buffer) string
-	PrefixForColor  string // An experimental field
-	PostfixForColor string // An experimental field
+	PrefixForColor  string        // An experimental field
+	PostfixForColor string        // An experimental field
+	AfterCommand    func(*Buffer) // An experimental field
 	// Deprecated: use Highlight
 	Coloring Coloring
 }
@@ -224,6 +225,9 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		io.WriteString(buffer.Out, ansiCursorOff)
 
 		rc := f.Call(ctx, &buffer)
+		if editor.AfterCommand != nil {
+			editor.AfterCommand(&buffer)
+		}
 
 		io.WriteString(buffer.Out, ansiCursorOn)
 
