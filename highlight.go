@@ -38,9 +38,9 @@ func (e EscapeSequenceId) Equals(other ColorInterface) bool {
 }
 
 type HighlightColorSequence struct {
-	colorMap []EscapeSequenceId
-	index    int
-	resetSeq EscapeSequenceId
+	ColorMap []EscapeSequenceId
+	Index    int
+	ResetSeq EscapeSequenceId
 }
 
 func HighlightToColoring(input string, resetColor, defaultColor string, H []Highlight) *HighlightColorSequence {
@@ -62,25 +62,25 @@ func HighlightToColoring(input string, resetColor, defaultColor string, H []High
 		}
 	}
 	return &HighlightColorSequence{
-		colorMap: colorMap,
-		resetSeq: NewEscapeSequenceId(resetColor),
+		ColorMap: colorMap,
+		ResetSeq: NewEscapeSequenceId(resetColor),
 	}
 }
 
 func (H *HighlightColorSequence) Init() ColorInterface {
-	H.index = 0
-	return H.resetSeq
+	H.Index = 0
+	return H.ResetSeq
 }
 
 func (H *HighlightColorSequence) Next(r rune) ColorInterface {
 	if r == CursorPositionDummyRune {
 		return NewEscapeSequenceId("")
 	}
-	if H.index >= len(H.colorMap) {
-		return H.resetSeq
+	if H.Index >= len(H.ColorMap) {
+		return H.ResetSeq
 	}
-	rv := H.colorMap[H.index]
-	H.index += utf8.RuneLen(r)
+	rv := H.ColorMap[H.Index]
+	H.Index += utf8.RuneLen(r)
 	return rv
 }
 
