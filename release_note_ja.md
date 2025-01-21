@@ -1,6 +1,5 @@
 - go-multiline-ny のために以下の変更を行った
     - 各コマンドが動作した後に呼ばれるフック: `Editor.AfterCommand` を追加
-    - シンタックスハイライトを評価する時に前後に付加するテキストを指定できるフィールド`Editor.PrefixForHighlight`, `Editor.PostfixForHighlight` を追加
     - 非公開であった型・関数を公開: NewEscapeSequenceId, EscapeSequenceId, HighlightToColoring, HighlightColorSequence, and ColorInterface
 
 v1.7.1
