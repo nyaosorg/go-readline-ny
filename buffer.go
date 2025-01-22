@@ -258,19 +258,25 @@ func (B *Buffer) eraseline() {
 type _Range []Cell
 
 func (B *Buffer) puts(s []Cell) _Range {
+	return B.newPrinter()(s)
+}
+
+func (B *Buffer) newPrinter() func(s []Cell) _Range {
 	defaultColor := B.refreshColor()
-	var color ColorInterface = ColorSequence(-1)
-	for _, ch := range s {
-		if !ch.color.Equals(color) {
-			color = ch.color
-			color.WriteTo(B.Out)
+	return func(s []Cell) _Range {
+		var color ColorInterface = ColorSequence(-1)
+		for _, ch := range s {
+			if !ch.color.Equals(color) {
+				color = ch.color
+				color.WriteTo(B.Out)
+			}
+			ch.Moji.PrintTo(B.Out)
 		}
-		ch.Moji.PrintTo(B.Out)
+		if !color.Equals(defaultColor) {
+			defaultColor.WriteTo(B.Out)
+		}
+		return _Range(s)
 	}
-	if !color.Equals(defaultColor) {
-		defaultColor.WriteTo(B.Out)
-	}
-	return _Range(s)
 }
 
 func (s _Range) Width() (w WidthT) {

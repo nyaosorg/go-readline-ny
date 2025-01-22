@@ -71,7 +71,8 @@ func (B *Buffer) repaint() {
 func (B *Buffer) repaintWithoutUpdateSuffix() {
 	all, left, w := B.getView2()
 	B.GotoHead()
-	B.puts(all)
+	puts := B.newPrinter()
+	puts(all)
 	if B.PredictColor[0] != "" && len(B.suffix) > 0 {
 		io.WriteString(B.Out, B.PredictColor[0]) // "\x1B[3;22;39m"
 		for _, c := range B.getSuffix() {
@@ -85,7 +86,7 @@ func (B *Buffer) repaintWithoutUpdateSuffix() {
 	}
 	B.eraseline()
 	B.GotoHead()
-	B.puts(left)
+	puts(left)
 }
 
 // DrawFromHead draw all text in viewarea and
