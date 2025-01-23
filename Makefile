@@ -15,7 +15,7 @@ ifndef GO
     GO:=$(shell $(WHICH) $(SUPPORTGO) 2>$(NUL)|| echo go)
 endif
 
-.PHONY: all test
+.PHONY: all test bench
 
 all :
 	$(GO) fmt ./...
@@ -38,3 +38,6 @@ get :
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	$(SUPPORTGO) download
+
+bench :
+	cd test/bench && lispect time.lsp
