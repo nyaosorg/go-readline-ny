@@ -1,3 +1,5 @@
+- Improved processing time when the syntax highlighting evaluation function is slow by reducing the number of its calls
+
 v1.7.2
 ======
 Jan 22, 2025
