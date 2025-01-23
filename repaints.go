@@ -20,7 +20,15 @@ func (B *Buffer) refreshColor() ColorInterface {
 	if B.Coloring != nil {
 		ci = &colorBridge{base: B.Coloring}
 	} else {
-		ci = HighlightToColoring(B.String(), B.ResetColor, B.DefaultColor, B.Highlight)
+		str := B.String()
+		if B.memoHighlightSource == str && B.memoHighlightResult != nil {
+			ci = B.memoHighlightResult
+		} else {
+			result := HighlightToColoring(str, B.ResetColor, B.DefaultColor, B.Highlight)
+			B.memoHighlightSource = str
+			B.memoHighlightResult = result
+			ci = result
+		}
 	}
 	var defaultColor ColorInterface = ci.Init()
 	position := int16(0)

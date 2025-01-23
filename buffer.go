@@ -36,15 +36,17 @@ func (C Cell) String() string {
 // Buffer is ReadLine's internal data structure
 type Buffer struct {
 	*Editor
-	Buffer          []Cell
-	suffix          []Moji
-	ViewStart       int
-	termWidth       int // == topColumn + termWidth + forbiddenWidth
-	topColumn       int // == width of Prompt
-	historyPointer  int
-	undoes          []*_Undo
-	pending         string
-	modifiedHistory map[int]string
+	Buffer              []Cell
+	suffix              []Moji
+	ViewStart           int
+	termWidth           int // == topColumn + termWidth + forbiddenWidth
+	topColumn           int // == width of Prompt
+	historyPointer      int
+	undoes              []*_Undo
+	pending             string
+	modifiedHistory     map[int]string
+	memoHighlightSource string
+	memoHighlightResult *HighlightColorSequence
 }
 
 // getSuffix returns the text that should be displayed after the edit text
