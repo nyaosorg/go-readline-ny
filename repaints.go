@@ -21,10 +21,15 @@ func (B *Buffer) refreshColor() ColorInterface {
 		ci = &colorBridge{base: B.Coloring}
 	} else {
 		str := B.String()
+		cursorPos := 0
+		for i := 0; i < B.Cursor; i++ {
+			n, _ := B.Buffer[i].Moji.WriteTo(io.Discard)
+			cursorPos += int(n)
+		}
 		if B.memoHighlightSource == str && B.memoHighlightResult != nil {
 			ci = B.memoHighlightResult
 		} else {
-			result := HighlightToColoring(str, B.ResetColor, B.DefaultColor, B.Highlight)
+			result := HighlightToColorSequence(str, B.ResetColor, B.DefaultColor, B.Highlight, -1-cursorPos)
 			B.memoHighlightSource = str
 			B.memoHighlightResult = result
 			ci = result

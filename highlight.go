@@ -43,14 +43,19 @@ type HighlightColorSequence struct {
 	ResetSeq EscapeSequenceId
 }
 
+// Deprecated: use HighlightToColorSequence instead
 func HighlightToColoring(input string, resetColor, defaultColor string, H []Highlight) *HighlightColorSequence {
+	return HighlightToColorSequence(input, resetColor, defaultColor, H, -1)
+}
+
+func HighlightToColorSequence(input string, resetColor, defaultColor string, H []Highlight, N int) *HighlightColorSequence {
 	colorMap := make([]EscapeSequenceId, len(input))
 	defaultSeq := NewEscapeSequenceId(defaultColor)
 	for i := 0; i < len(input); i++ {
 		colorMap[i] = defaultSeq
 	}
 	for _, h := range H {
-		positions := h.Pattern.FindAllStringIndex(input, -1)
+		positions := h.Pattern.FindAllStringIndex(input, N)
 		if positions == nil {
 			continue
 		}
