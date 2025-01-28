@@ -1,3 +1,7 @@
+v1.7.4
+======
+Jan 28, 2025
+
 - Experimental change: The value `-1 - (the byte position of the cursor)` is now given as the second parameter instead of `-1` when calling the `FindAllStringIndex` method of the `Pattern` field in the syntax highlighting structure.
 
 v1.7.3
