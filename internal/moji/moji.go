@@ -15,6 +15,7 @@ type Moji interface {
 	Width() WidthT
 	WriteTo(io.Writer) (int64, error)
 	PrintTo(io.Writer)
+	Len() int
 }
 
 var GetZWJSWidth = func(w1, w2 int) int {
@@ -22,6 +23,10 @@ var GetZWJSWidth = func(w1, w2 int) int {
 }
 
 type _ZeroWidthJoinSequence [2]Moji
+
+func (s _ZeroWidthJoinSequence) Len() int {
+	return s[0].Len() + len(string(zeroWidthJoinRune)) + s[1].Len()
+}
 
 func (s _ZeroWidthJoinSequence) Width() WidthT {
 	// runewidth.StringWidth should not be used because the width that it gives
@@ -74,6 +79,10 @@ func AreEmojiModifier(s string) bool {
 	return isEmojiModifier(u)
 }
 
+func (s _ModifierSequence) Len() int {
+	return s[0].Len() + s[1].Len()
+}
+
 func (s _ModifierSequence) Width() WidthT {
 	return s[0].Width() + s[1].Width()
 }
@@ -92,6 +101,10 @@ func (s _ModifierSequence) PrintTo(w io.Writer) {
 }
 
 type _VariationSequence [2]Moji
+
+func (s _VariationSequence) Len() int {
+	return s[0].Len() + s[1].Len()
+}
 
 func (s _VariationSequence) Width() WidthT {
 	switch s0 := s[0].(type) {

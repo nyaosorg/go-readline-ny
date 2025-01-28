@@ -23,8 +23,7 @@ func (B *Buffer) refreshColor() ColorInterface {
 		str := B.String()
 		cursorPos := 0
 		for i := 0; i < B.Cursor; i++ {
-			n, _ := B.Buffer[i].Moji.WriteTo(io.Discard)
-			cursorPos += int(n)
+			cursorPos += B.Buffer[i].Moji.Len()
 		}
 		if B.memoHighlightSource == str && B.memoHighlightResult != nil {
 			ci = B.memoHighlightResult

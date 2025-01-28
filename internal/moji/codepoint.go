@@ -11,6 +11,10 @@ type Tab struct {
 	pos int16
 }
 
+func (t *Tab) Len() int {
+	return 1
+}
+
 func (t *Tab) Width() WidthT {
 	return WidthT(4 - t.pos%4)
 }
@@ -30,6 +34,10 @@ func (t *Tab) SetPosition(pos int16) {
 
 // _RawCodePoint is for the character to print as is.
 type _RawCodePoint rune
+
+func (c _RawCodePoint) Len() int {
+	return utf8.RuneLen(rune(c))
+}
 
 func (c _RawCodePoint) Width() WidthT {
 	return getWidth(rune(c))
@@ -53,6 +61,10 @@ func (c _RawCodePoint) PrintTo(w io.Writer) {
 // _EscCodePoint is for the character to print as <XXXXX>
 type _EscCodePoint rune
 
+func (c _EscCodePoint) Len() int {
+	return utf8.RuneLen(rune(c))
+}
+
 func (c _EscCodePoint) Width() WidthT {
 	return lenEscaped(rune(c))
 }
@@ -66,6 +78,10 @@ func (c _EscCodePoint) WriteTo(w io.Writer) (int64, error) {
 }
 
 type _RegionalIndicator rune
+
+func (r _RegionalIndicator) Len() int {
+	return utf8.RuneLen(rune(r))
+}
 
 func (r _RegionalIndicator) Width() WidthT {
 	return 2
@@ -81,6 +97,10 @@ func (r _RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
 
 // _CtrlCodePoint is for the character to print as ^X
 type _CtrlCodePoint rune
+
+func (c _CtrlCodePoint) Len() int {
+	return 1
+}
 
 func (c _CtrlCodePoint) Width() WidthT {
 	return 2
@@ -100,6 +120,10 @@ func (c _CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
 // - "\U0001F3F3\uFE0F" needs 2cells-width,too.
 // (\uFE0F is the variation selector-15)
 type _WavingWhiteFlagCodePoint rune
+
+func (s _WavingWhiteFlagCodePoint) Len() int {
+	return utf8.RuneLen(rune(s))
+}
 
 func (s _WavingWhiteFlagCodePoint) Width() WidthT {
 	return 2
