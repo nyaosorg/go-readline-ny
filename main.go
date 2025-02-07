@@ -36,6 +36,24 @@ type ITty interface {
 	Close() error
 }
 
+type Clipboard interface {
+	Read() (string, error)
+	Write(string) error
+}
+
+type defaultClipboard struct {
+	data string
+}
+
+func (d *defaultClipboard) Read() (string, error) {
+	return d.data, nil
+}
+
+func (d *defaultClipboard) Write(s string) error {
+	d.data = s
+	return nil
+}
+
 // Editor is the main class to hold the parameter for ReadLine
 type Editor struct {
 	KeyMap
@@ -58,6 +76,8 @@ type Editor struct {
 	AfterCommand func(*Buffer) // An experimental field
 	// Deprecated: use Highlight
 	Coloring Coloring
+
+	Clipboard Clipboard
 }
 
 const (
@@ -154,6 +174,9 @@ func (editor *Editor) Init() {
 	}
 	if editor.Predictor == nil {
 		editor.Predictor = predictByHistory
+	}
+	if editor.Clipboard == nil {
+		editor.Clipboard = &defaultClipboard{}
 	}
 }
 

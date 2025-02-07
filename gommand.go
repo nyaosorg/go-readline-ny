@@ -5,8 +5,6 @@ import (
 	"io"
 	"strings"
 
-	"github.com/atotto/clipboard"
-
 	"github.com/nyaosorg/go-readline-ny/internal/moji"
 )
 
@@ -233,7 +231,7 @@ func (s SelfInserter) Call(ctx context.Context, this *Buffer) Result {
 var CmdKillLine = NewGoCommand("KILL_LINE", cmdKillLine)
 
 func cmdKillLine(ctx context.Context, this *Buffer) Result {
-	clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
+	this.Clipboard.Write(this.SubString(this.Cursor, len(this.Buffer)))
 
 	this.eraseline()
 	u := &_Undo{
@@ -271,7 +269,7 @@ func cmdUnixWordRubout(ctx context.Context, this *Buffer) Result {
 		this.Cursor--
 	}
 	newCursorPos := this.CurrentWordTop()
-	clipboard.WriteAll(this.SubString(newCursorPos, orgCursorPos))
+	this.Clipboard.Write(this.SubString(newCursorPos, orgCursorPos))
 	this.Delete(newCursorPos, orgCursorPos-newCursorPos)
 	this.Cursor = newCursorPos
 	if newCursorPos-this.ViewStart < 2 {
@@ -285,7 +283,7 @@ func cmdUnixWordRubout(ctx context.Context, this *Buffer) Result {
 var CmdUnixLineDiscard = NewGoCommand("UNIX_LINE_DISCARD", cmdUnixLineDiscard)
 
 func cmdUnixLineDiscard(ctx context.Context, this *Buffer) Result {
-	clipboard.WriteAll(this.SubString(0, this.Cursor))
+	this.Clipboard.Write(this.SubString(0, this.Cursor))
 	this.Delete(0, this.Cursor)
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -327,7 +325,7 @@ func cmdQuotedInsert(ctx context.Context, this *Buffer) Result {
 var CmdYank = NewGoCommand("YANK", cmdYank)
 
 func cmdYank(ctx context.Context, this *Buffer) Result {
-	text, err := clipboard.ReadAll()
+	text, err := this.Clipboard.Read()
 	if err != nil {
 		return CONTINUE
 	}
@@ -340,7 +338,7 @@ func cmdYank(ctx context.Context, this *Buffer) Result {
 var CmdYankWithQuote = NewGoCommand("YANK_WITH_QUOTE", cmdYankWithQuote)
 
 func cmdYankWithQuote(ctx context.Context, this *Buffer) Result {
-	text, err := clipboard.ReadAll()
+	text, err := this.Clipboard.Read()
 	if err != nil {
 		return CONTINUE
 	}
