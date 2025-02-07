@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/atotto/clipboard"
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
@@ -18,6 +19,16 @@ import (
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/simplehistory"
 )
+
+type OSClipboard struct{}
+
+func (OSClipboard) Read() (string, error) {
+	return clipboard.ReadAll()
+}
+
+func (OSClipboard) Write(s string) error {
+	return clipboard.WriteAll(s)
+}
 
 func main() {
 	history := simplehistory.New()
@@ -38,6 +49,8 @@ func main() {
 		PredictColor:   [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
 		ResetColor:     "\x1B[0m",
 		DefaultColor:   "\x1B[33;49;1m",
+
+		Clipboard: OSClipboard{},
 	}
 
 	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
