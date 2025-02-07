@@ -1,3 +1,8 @@
+- By default, avoid using the operating system’s clipboard as the cut buffer. It is now possible to replace the cut buffer with the `Clipboard` field of the `Editor` type. [#9]
+- Export the package `Moji` and its types that were previously internal.
+
+[#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
+
 v1.7.4
 ======
 Jan 28, 2025

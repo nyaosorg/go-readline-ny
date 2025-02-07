@@ -1,3 +1,8 @@
+- OS のクリップボードの読み書きをデフォルトではしないようにし、コピペ用のバッファは Editor型の Clipboard フィールドで差し替えられるようにした [#9]
+- internal だったパッケージ `Moji` と型を公開
+
+[#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
+
 v1.7.4
 ======
 Jan 28, 2025
