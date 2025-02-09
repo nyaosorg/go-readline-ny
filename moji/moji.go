@@ -49,7 +49,7 @@ func (s _ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
 
 func (s _ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 	switch s0 := s[0].(type) {
-	case _WavingWhiteFlagCodePoint:
+	case WavingWhiteFlagCodePoint:
 		saveCursorAfterN(w, s.Width())
 		s0.WriteTo(w)
 		writeRune(w, zeroWidthJoinRune)
@@ -108,7 +108,7 @@ func (s _VariationSequence) Len() int {
 
 func (s _VariationSequence) Width() WidthT {
 	switch s0 := s[0].(type) {
-	case _WavingWhiteFlagCodePoint:
+	case WavingWhiteFlagCodePoint:
 		return s0.Width()
 	default:
 		return s0.Width() + 1

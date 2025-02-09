@@ -114,28 +114,28 @@ func (c CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
-// _WavingWhiteFlagCodePoint is for U+1F3F3 (WAVING WHITE FLAG)
+// WavingWhiteFlagCodePoint is for U+1F3F3 (WAVING WHITE FLAG)
 // In WindowsTerminal:
 // - "\U0001F3F3"       needs 2cells-width (It should needs 1cell-width)
 // - "\U0001F3F3\uFE0F" needs 2cells-width,too.
 // (\uFE0F is the variation selector-15)
-type _WavingWhiteFlagCodePoint rune
+type WavingWhiteFlagCodePoint rune
 
-func (s _WavingWhiteFlagCodePoint) Len() int {
+func (s WavingWhiteFlagCodePoint) Len() int {
 	return utf8.RuneLen(rune(s))
 }
 
-func (s _WavingWhiteFlagCodePoint) Width() WidthT {
+func (s WavingWhiteFlagCodePoint) Width() WidthT {
 	return 2
 }
 
-func (s _WavingWhiteFlagCodePoint) PrintTo(w io.Writer) {
+func (s WavingWhiteFlagCodePoint) PrintTo(w io.Writer) {
 	saveCursorAfterN(w, s.Width())
 	writeRune(w, rune(s))
 	restoreCursor(w)
 }
 
-func (s _WavingWhiteFlagCodePoint) WriteTo(w io.Writer) (int64, error) {
+func (s WavingWhiteFlagCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(s))
 }
 
@@ -155,15 +155,15 @@ func rune2moji(ch rune, pos int) Moji {
 	} else if ch < ' ' {
 		return CtrlCodePoint(ch)
 	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && AmbiguousIsWide {
-		return _WavingWhiteFlagCodePoint(ch)
+		return WavingWhiteFlagCodePoint(ch)
 	} else if isToBeEscaped(ch) {
 		return EscCodePoint(ch)
 	} else if regionalIndicatorBegin <= ch && ch <= regionalIndicatorEnd {
 		return RegionalIndicator(ch)
 	} else if mathematicalBoldCapitalBegin <= ch && ch <= mathematicalBoldCapitalEnd {
-		return _WavingWhiteFlagCodePoint(ch)
+		return WavingWhiteFlagCodePoint(ch)
 	} else if ch == wavingWhiteFlagCodePoint {
-		return _WavingWhiteFlagCodePoint(ch)
+		return WavingWhiteFlagCodePoint(ch)
 	} else {
 		return RawCodePoint(ch)
 	}
@@ -179,7 +179,7 @@ func MojiToRune(m Moji) (rune, bool) {
 		return rune(r), true
 	case RegionalIndicator:
 		return rune(r), true
-	case _WavingWhiteFlagCodePoint:
+	case WavingWhiteFlagCodePoint:
 		return rune(r), true
 	default:
 		return 0, false
