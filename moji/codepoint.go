@@ -58,22 +58,22 @@ func (c RawCodePoint) PrintTo(w io.Writer) {
 	writeRune(w, rune(c))
 }
 
-// _EscCodePoint is for the character to print as <XXXXX>
-type _EscCodePoint rune
+// EscCodePoint is for the character to print as <XXXXX>
+type EscCodePoint rune
 
-func (c _EscCodePoint) Len() int {
+func (c EscCodePoint) Len() int {
 	return utf8.RuneLen(rune(c))
 }
 
-func (c _EscCodePoint) Width() WidthT {
+func (c EscCodePoint) Width() WidthT {
 	return lenEscaped(rune(c))
 }
 
-func (c _EscCodePoint) PrintTo(w io.Writer) {
+func (c EscCodePoint) PrintTo(w io.Writer) {
 	fmt.Fprintf(w, "<%X>", c)
 }
 
-func (c _EscCodePoint) WriteTo(w io.Writer) (int64, error) {
+func (c EscCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
@@ -157,7 +157,7 @@ func rune2moji(ch rune, pos int) Moji {
 	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && AmbiguousIsWide {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else if isToBeEscaped(ch) {
-		return _EscCodePoint(ch)
+		return EscCodePoint(ch)
 	} else if regionalIndicatorBegin <= ch && ch <= regionalIndicatorEnd {
 		return _RegionalIndicator(ch)
 	} else if mathematicalBoldCapitalBegin <= ch && ch <= mathematicalBoldCapitalEnd {
@@ -175,7 +175,7 @@ func MojiToRune(m Moji) (rune, bool) {
 		return rune(r), true
 	case _CtrlCodePoint:
 		return rune(r), true
-	case _EscCodePoint:
+	case EscCodePoint:
 		return rune(r), true
 	case _RegionalIndicator:
 		return rune(r), true
