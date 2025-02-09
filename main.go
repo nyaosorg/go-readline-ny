@@ -11,8 +11,8 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"github.com/nyaosorg/go-readline-ny/internal/moji"
 	"github.com/nyaosorg/go-readline-ny/keys"
+	"github.com/nyaosorg/go-readline-ny/moji"
 )
 
 // Result is the type for readline's result.

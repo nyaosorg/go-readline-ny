@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/nyaosorg/go-readline-ny/internal/moji"
+	"github.com/nyaosorg/go-readline-ny/moji"
 )
 
 const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)

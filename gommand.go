@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/nyaosorg/go-readline-ny/internal/moji"
+	"github.com/nyaosorg/go-readline-ny/moji"
 )
 
 // GoCommand is the implement of Command which has a name and a function
