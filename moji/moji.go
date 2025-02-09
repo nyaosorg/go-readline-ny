@@ -62,7 +62,7 @@ func (s ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 	}
 }
 
-type _ModifierSequence [2]Moji
+type ModifierSequence [2]Moji
 
 func isEmojiModifier(ch rune) bool {
 	if !ModifierSequenceOk {
@@ -79,15 +79,15 @@ func AreEmojiModifier(s string) bool {
 	return isEmojiModifier(u)
 }
 
-func (s _ModifierSequence) Len() int {
+func (s ModifierSequence) Len() int {
 	return s[0].Len() + s[1].Len()
 }
 
-func (s _ModifierSequence) Width() WidthT {
+func (s ModifierSequence) Width() WidthT {
 	return s[0].Width() + s[1].Width()
 }
 
-func (s _ModifierSequence) WriteTo(w io.Writer) (int64, error) {
+func (s ModifierSequence) WriteTo(w io.Writer) (int64, error) {
 	n1, err := s[0].WriteTo(w)
 	if err != nil {
 		return n1, err
@@ -96,7 +96,7 @@ func (s _ModifierSequence) WriteTo(w io.Writer) (int64, error) {
 	return n1 + n2, err
 }
 
-func (s _ModifierSequence) PrintTo(w io.Writer) {
+func (s ModifierSequence) PrintTo(w io.Writer) {
 	s.WriteTo(w)
 }
 
@@ -185,7 +185,7 @@ func StringToMoji(s string) []Moji {
 				continue
 			}
 			if isEmojiModifier(r) {
-				last = _ModifierSequence([...]Moji{last, RawCodePoint(r)})
+				last = ModifierSequence([...]Moji{last, RawCodePoint(r)})
 				mojis[len(mojis)-1] = last
 				continue
 			}
@@ -224,7 +224,7 @@ func MojiWidthAndCountInString(s string) (width WidthT, count int) {
 			}
 			if isEmojiModifier(r) {
 				width -= lastWidth
-				last = _ModifierSequence([...]Moji{last, RawCodePoint(r)})
+				last = ModifierSequence([...]Moji{last, RawCodePoint(r)})
 				lastWidth = last.Width()
 				width += lastWidth
 				continue
