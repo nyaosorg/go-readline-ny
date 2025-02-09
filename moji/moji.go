@@ -22,19 +22,19 @@ var GetZWJSWidth = func(w1, w2 int) int {
 	return w1 + 1 + w2 // WindowsTerminal until 1.21
 }
 
-type _ZeroWidthJoinSequence [2]Moji
+type ZeroWidthJoinSequence [2]Moji
 
-func (s _ZeroWidthJoinSequence) Len() int {
+func (s ZeroWidthJoinSequence) Len() int {
 	return s[0].Len() + len(string(zeroWidthJoinRune)) + s[1].Len()
 }
 
-func (s _ZeroWidthJoinSequence) Width() WidthT {
+func (s ZeroWidthJoinSequence) Width() WidthT {
 	// runewidth.StringWidth should not be used because the width that it gives
 	// has no compatible with WindowsTerminal's.
 	return WidthT(GetZWJSWidth(int(s[0].Width()), int(s[1].Width())))
 }
 
-func (s _ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
+func (s ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
 	n1, err := s[0].WriteTo(w)
 	if err != nil {
 		return n1, err
@@ -47,7 +47,7 @@ func (s _ZeroWidthJoinSequence) WriteTo(w io.Writer) (int64, error) {
 	return n1 + n2 + n3, err
 }
 
-func (s _ZeroWidthJoinSequence) PrintTo(w io.Writer) {
+func (s ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 	switch s0 := s[0].(type) {
 	case WavingWhiteFlagCodePoint:
 		saveCursorAfterN(w, s.Width())
@@ -175,7 +175,7 @@ func StringToMoji(s string) []Moji {
 				next, nextsize := utf8.DecodeRuneInString(s)
 				s = s[nextsize:]
 
-				last = _ZeroWidthJoinSequence([...]Moji{last, RawCodePoint(next)})
+				last = ZeroWidthJoinSequence([...]Moji{last, RawCodePoint(next)})
 				mojis[len(mojis)-1] = last
 				continue
 			}
@@ -210,7 +210,7 @@ func MojiWidthAndCountInString(s string) (width WidthT, count int) {
 				s = s[nextsize:]
 
 				width -= lastWidth
-				last = _ZeroWidthJoinSequence([...]Moji{last, RawCodePoint(next)})
+				last = ZeroWidthJoinSequence([...]Moji{last, RawCodePoint(next)})
 				lastWidth = last.Width()
 				width += lastWidth
 				continue
