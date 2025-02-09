@@ -95,22 +95,22 @@ func (r RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(r))
 }
 
-// _CtrlCodePoint is for the character to print as ^X
-type _CtrlCodePoint rune
+// CtrlCodePoint is for the character to print as ^X
+type CtrlCodePoint rune
 
-func (c _CtrlCodePoint) Len() int {
+func (c CtrlCodePoint) Len() int {
 	return 1
 }
 
-func (c _CtrlCodePoint) Width() WidthT {
+func (c CtrlCodePoint) Width() WidthT {
 	return 2
 }
 
-func (c _CtrlCodePoint) PrintTo(w io.Writer) {
+func (c CtrlCodePoint) PrintTo(w io.Writer) {
 	w.Write([]byte{'^', byte('A' + (byte(c) - 1))})
 }
 
-func (c _CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
+func (c CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
@@ -153,7 +153,7 @@ func rune2moji(ch rune, pos int) Moji {
 	if ch == '\t' {
 		return &Tab{pos: int16(pos)}
 	} else if ch < ' ' {
-		return _CtrlCodePoint(ch)
+		return CtrlCodePoint(ch)
 	} else if boxDrawingBegin <= ch && ch <= boxDrawingEnd && AmbiguousIsWide {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else if isToBeEscaped(ch) {
@@ -173,7 +173,7 @@ func MojiToRune(m Moji) (rune, bool) {
 	switch r := m.(type) {
 	case RawCodePoint:
 		return rune(r), true
-	case _CtrlCodePoint:
+	case CtrlCodePoint:
 		return rune(r), true
 	case EscCodePoint:
 		return rune(r), true
