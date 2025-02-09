@@ -170,11 +170,14 @@ Acknowledgements
 - [@ram-on](https://github.com/ram-on) [#2]
 - [@glejeune](https://github.com/glejeune) [#6]
 - [@brammeleman](https://github.com/brammeleman) [#8]
+- [@apstndb](https://github.com/apstndb) [#9]
+
 
 [#1]: https://github.com/nyaosorg/go-readline-ny/pull/1
 [#2]: https://github.com/nyaosorg/go-readline-ny/issues/2
 [#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
 [#8]: https://github.com/nyaosorg/go-readline-ny/issues/8
+[#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
 
 Release notes
 -------------
