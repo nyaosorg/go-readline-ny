@@ -77,21 +77,21 @@ func (c EscCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
-type _RegionalIndicator rune
+type RegionalIndicator rune
 
-func (r _RegionalIndicator) Len() int {
+func (r RegionalIndicator) Len() int {
 	return utf8.RuneLen(rune(r))
 }
 
-func (r _RegionalIndicator) Width() WidthT {
+func (r RegionalIndicator) Width() WidthT {
 	return 2
 }
 
-func (r _RegionalIndicator) PrintTo(w io.Writer) {
+func (r RegionalIndicator) PrintTo(w io.Writer) {
 	writeRune(w, rune(r))
 }
 
-func (r _RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
+func (r RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(r))
 }
 
@@ -159,7 +159,7 @@ func rune2moji(ch rune, pos int) Moji {
 	} else if isToBeEscaped(ch) {
 		return EscCodePoint(ch)
 	} else if regionalIndicatorBegin <= ch && ch <= regionalIndicatorEnd {
-		return _RegionalIndicator(ch)
+		return RegionalIndicator(ch)
 	} else if mathematicalBoldCapitalBegin <= ch && ch <= mathematicalBoldCapitalEnd {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else if ch == wavingWhiteFlagCodePoint {
@@ -177,7 +177,7 @@ func MojiToRune(m Moji) (rune, bool) {
 		return rune(r), true
 	case EscCodePoint:
 		return rune(r), true
-	case _RegionalIndicator:
+	case RegionalIndicator:
 		return rune(r), true
 	case _WavingWhiteFlagCodePoint:
 		return rune(r), true
