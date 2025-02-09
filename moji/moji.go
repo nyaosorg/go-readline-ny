@@ -100,13 +100,13 @@ func (s ModifierSequence) PrintTo(w io.Writer) {
 	s.WriteTo(w)
 }
 
-type _VariationSequence [2]Moji
+type VariationSequence [2]Moji
 
-func (s _VariationSequence) Len() int {
+func (s VariationSequence) Len() int {
 	return s[0].Len() + s[1].Len()
 }
 
-func (s _VariationSequence) Width() WidthT {
+func (s VariationSequence) Width() WidthT {
 	switch s0 := s[0].(type) {
 	case WavingWhiteFlagCodePoint:
 		return s0.Width()
@@ -115,7 +115,7 @@ func (s _VariationSequence) Width() WidthT {
 	}
 }
 
-func (s _VariationSequence) WriteTo(w io.Writer) (int64, error) {
+func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
 	n1, err := s[0].WriteTo(w)
 	if err != nil {
 		return n1, err
@@ -138,7 +138,7 @@ func restoreCursor(w io.Writer) {
 	w.Write([]byte{'\x1B', '8'})
 }
 
-func (s _VariationSequence) PrintTo(w io.Writer) {
+func (s VariationSequence) PrintTo(w io.Writer) {
 	saveCursorAfterN(w, s.Width())
 	// The sequence 'ESC 7' can not remember the cursor position more than one.
 	// When _VariationSequence contains another _VariationSequence
@@ -180,7 +180,7 @@ func StringToMoji(s string) []Moji {
 				continue
 			}
 			if isVariationSelectorLike(r) {
-				last = _VariationSequence([...]Moji{last, RawCodePoint(r)})
+				last = VariationSequence([...]Moji{last, RawCodePoint(r)})
 				mojis[len(mojis)-1] = last
 				continue
 			}
@@ -217,7 +217,7 @@ func MojiWidthAndCountInString(s string) (width WidthT, count int) {
 			}
 			if isVariationSelectorLike(r) {
 				width -= lastWidth
-				last = _VariationSequence([...]Moji{last, RawCodePoint(r)})
+				last = VariationSequence([...]Moji{last, RawCodePoint(r)})
 				lastWidth = last.Width()
 				width += lastWidth
 				continue
