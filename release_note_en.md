@@ -1,3 +1,7 @@
+v1.8.0
+======
+Feb 9, 2025
+
 - By default, avoid using the operating system’s clipboard as the cut buffer. It is now possible to replace the cut buffer with the `Clipboard` field of the `Editor` type. [#9]
 - Export the package `Moji` and its types that were previously internal.
 
