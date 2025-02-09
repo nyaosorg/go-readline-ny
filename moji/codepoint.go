@@ -32,14 +32,14 @@ func (t *Tab) SetPosition(pos int16) {
 	t.pos = pos
 }
 
-// _RawCodePoint is for the character to print as is.
-type _RawCodePoint rune
+// RawCodePoint is for the character to print as is.
+type RawCodePoint rune
 
-func (c _RawCodePoint) Len() int {
+func (c RawCodePoint) Len() int {
 	return utf8.RuneLen(rune(c))
 }
 
-func (c _RawCodePoint) Width() WidthT {
+func (c RawCodePoint) Width() WidthT {
 	return getWidth(rune(c))
 }
 
@@ -50,11 +50,11 @@ func writeRune(w io.Writer, r rune) (int64, error) {
 	return int64(n), err
 }
 
-func (c _RawCodePoint) WriteTo(w io.Writer) (int64, error) {
+func (c RawCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
 }
 
-func (c _RawCodePoint) PrintTo(w io.Writer) {
+func (c RawCodePoint) PrintTo(w io.Writer) {
 	writeRune(w, rune(c))
 }
 
@@ -165,13 +165,13 @@ func rune2moji(ch rune, pos int) Moji {
 	} else if ch == wavingWhiteFlagCodePoint {
 		return _WavingWhiteFlagCodePoint(ch)
 	} else {
-		return _RawCodePoint(ch)
+		return RawCodePoint(ch)
 	}
 }
 
 func MojiToRune(m Moji) (rune, bool) {
 	switch r := m.(type) {
-	case _RawCodePoint:
+	case RawCodePoint:
 		return rune(r), true
 	case _CtrlCodePoint:
 		return rune(r), true

@@ -175,17 +175,17 @@ func StringToMoji(s string) []Moji {
 				next, nextsize := utf8.DecodeRuneInString(s)
 				s = s[nextsize:]
 
-				last = _ZeroWidthJoinSequence([...]Moji{last, _RawCodePoint(next)})
+				last = _ZeroWidthJoinSequence([...]Moji{last, RawCodePoint(next)})
 				mojis[len(mojis)-1] = last
 				continue
 			}
 			if isVariationSelectorLike(r) {
-				last = _VariationSequence([...]Moji{last, _RawCodePoint(r)})
+				last = _VariationSequence([...]Moji{last, RawCodePoint(r)})
 				mojis[len(mojis)-1] = last
 				continue
 			}
 			if isEmojiModifier(r) {
-				last = _ModifierSequence([...]Moji{last, _RawCodePoint(r)})
+				last = _ModifierSequence([...]Moji{last, RawCodePoint(r)})
 				mojis[len(mojis)-1] = last
 				continue
 			}
@@ -210,21 +210,21 @@ func MojiWidthAndCountInString(s string) (width WidthT, count int) {
 				s = s[nextsize:]
 
 				width -= lastWidth
-				last = _ZeroWidthJoinSequence([...]Moji{last, _RawCodePoint(next)})
+				last = _ZeroWidthJoinSequence([...]Moji{last, RawCodePoint(next)})
 				lastWidth = last.Width()
 				width += lastWidth
 				continue
 			}
 			if isVariationSelectorLike(r) {
 				width -= lastWidth
-				last = _VariationSequence([...]Moji{last, _RawCodePoint(r)})
+				last = _VariationSequence([...]Moji{last, RawCodePoint(r)})
 				lastWidth = last.Width()
 				width += lastWidth
 				continue
 			}
 			if isEmojiModifier(r) {
 				width -= lastWidth
-				last = _ModifierSequence([...]Moji{last, _RawCodePoint(r)})
+				last = _ModifierSequence([...]Moji{last, RawCodePoint(r)})
 				lastWidth = last.Width()
 				width += lastWidth
 				continue
