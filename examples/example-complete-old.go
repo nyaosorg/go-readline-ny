@@ -14,25 +14,33 @@ import (
 	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
+type CustomComp struct {
+	Candidates []string
+}
+
+func (c *CustomComp) Enclosures() string { return `"'` }
+func (c *CustomComp) Delimiters() string { return "&|><;" }
+
+func (c *CustomComp) List(field []string) (completionList []string, listingList []string) {
+	if len(field) <= 1 {
+		return c.Candidates, c.Candidates
+	}
+	return []string{}, []string{}
+}
+
 func mains() error {
 	var editor readline.Editor
 
 	editor.PromptWriter = func(w io.Writer) (int, error) {
 		return io.WriteString(w, "menu> ")
 	}
-	editor.BindKey(keys.CtrlI, &completion.CmdCompletionOrList2{
-		Delimiter: "&|><;",
-		Enclosure: `"'`,
-		Postfix:   " ",
-		Candidates: func(field []string) (forComp []string, forList []string) {
-			if len(field) <= 1 {
-				c := []string{
-					"list", "say", "pewpew", "help", "exit", "Space Command",
-				}
-				return c, c
-			}
-			return nil, nil
+	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
+		Completion: &CustomComp{
+			Candidates: []string{
+				"list", "say", "pewpew", "help", "exit", "Space Command",
+			},
 		},
+		Postfix: " ",
 	})
 	ctx := context.Background()
 	for {

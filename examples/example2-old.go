@@ -53,18 +53,12 @@ func main() {
 		Clipboard: OSClipboard{},
 	}
 
-	editor.BindKey(keys.CtrlI, &completion.CmdCompletionOrList2{
-		// Characters listed here are excluded from completion.
-		Delimiter: "&|><;",
-		// Enclose candidates with these characters when they contain spaces
-		Enclosure: `"'`,
-		// String to append when only one candidate remains
-		Postfix: " ",
-		// Function for listing candidates
-		Candidates: completion.PathComplete,
+	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
+		Completion: completion.File{},
+		Postfix:    " ",
 	})
 	// If you do not want to list files with double-tab-key,
-	// use `CmdCompletion2` instead of `CmdCompletionOrList2`
+	// use `CmdCompletion` instead of `CmdCompletionOrList`
 
 	fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
 	for {

@@ -1,19 +1,11 @@
 package completion
 
 import (
-	"context"
 	"strings"
 	"unicode"
 
-	"github.com/nyaosorg/go-box/v2"
 	rl "github.com/nyaosorg/go-readline-ny"
 )
-
-type Completion interface {
-	Delimiters() string
-	Enclosures() string
-	List(fields []string) (fullnames, basenames []string)
-}
 
 func commonPrefix(list []string) string {
 	if len(list) < 1 {
@@ -134,13 +126,13 @@ func removeUnmatches(full, base []string, source string) (newFull, newBase []str
 	return
 }
 
-func complete(quotes, del string, B *rl.Buffer, C Completion, postfix string) []string {
+func Complete(quotes, del string, B *rl.Buffer, getCandidates func([]string) ([]string, []string), postfix string) []string {
 	fields, lastWordStart := split(quotes, del, B)
 	if len(fields) == 0 {
 		return nil
 	}
 
-	list, baselist := C.List(fields)
+	list, baselist := getCandidates(fields)
 	if baselist == nil || len(baselist) <= 0 {
 		baselist = list
 	}
@@ -168,37 +160,4 @@ func complete(quotes, del string, B *rl.Buffer, C Completion, postfix string) []
 		B.ReplaceAndRepaint(lastWordStart, prefix)
 		return nil
 	}
-}
-
-type CmdCompletion struct {
-	Completion
-	Postfix string
-}
-
-func (C CmdCompletion) String() string {
-	return "COMPLETION"
-}
-
-func (C CmdCompletion) Call(ctx context.Context, B *rl.Buffer) rl.Result {
-	complete(C.Enclosures(), C.Delimiters(), B, C, C.Postfix)
-	return rl.CONTINUE
-}
-
-type CmdCompletionOrList struct {
-	Completion
-	Postfix string
-}
-
-func (C CmdCompletionOrList) String() string {
-	return "COMPLETION_OR_LIST"
-}
-
-func (C CmdCompletionOrList) Call(ctx context.Context, B *rl.Buffer) rl.Result {
-	list := complete(C.Enclosures(), C.Delimiters(), B, C, C.Postfix)
-	if len(list) > 0 {
-		B.Out.WriteByte('\n')
-		box.Print(ctx, list, B.Out)
-		B.RepaintAll()
-	}
-	return rl.CONTINUE
 }

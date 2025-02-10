@@ -6,16 +6,6 @@ import (
 	"strings"
 )
 
-type File struct{}
-
-func (File) Enclosures() string {
-	return `"'`
-}
-
-func (File) Delimiters() string {
-	return "&|><;"
-}
-
 func zeroToOneDot(d string) string {
 	if d == "" {
 		return "."
@@ -23,7 +13,7 @@ func zeroToOneDot(d string) string {
 	return d
 }
 
-func (File) List(field []string) (fullnames []string, basenames []string) {
+func PathComplete(field []string) (completionSet []string, listingSet []string) {
 	if len(field) <= 0 {
 		return
 	}
@@ -76,13 +66,13 @@ func (File) List(field []string) (fullnames []string, basenames []string) {
 				name += sep
 				full += sep
 			}
-			fullnames = append(fullnames, full)
-			basenames = append(basenames, name)
+			completionSet = append(completionSet, full)
+			listingSet = append(listingSet, name)
 		}
-		if len(fullnames) != 1 || !strings.HasSuffix(fullnames[0], sep) {
+		if len(completionSet) != 1 || !strings.HasSuffix(completionSet[0], sep) {
 			return
 		}
 		base = ""
-		dir = fullnames[0]
+		dir = completionSet[0]
 	}
 }
