@@ -21,10 +21,17 @@ func mains() error {
 	}
 	candidates := []string{"list", "say", "pewpew", "help", "exit", "Space Command"}
 
+	// If you do not want to list files with double-tab-key,
+	// use `CmdCompletion2` instead of `CmdCompletionOrList2`
+
 	editor.BindKey(keys.CtrlI, &completion.CmdCompletionOrList2{
+		// Characters listed here are excluded from completion.
 		Delimiter: "&|><;",
+		// Enclose candidates with these characters when they contain spaces
 		Enclosure: `"'`,
-		Postfix:   " ",
+		// String to append when only one candidate remains
+		Postfix: " ",
+		// Function for listing candidates
 		Candidates: func(field []string) (forComp []string, forList []string) {
 			if len(field) <= 1 {
 				return candidates, candidates
