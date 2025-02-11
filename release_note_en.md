@@ -1,3 +1,8 @@
+- Fix: Completion failed to insert a space after the word when there was only one candi
+date.
+- Fix: The second and subsequent characters in .Enclosure(s) were not used.
+- Add a new completion feature: complete.CmdCompletionList2 and CmdCompletion2
+
 v1.8.0
 ======
 Feb 9, 2025
