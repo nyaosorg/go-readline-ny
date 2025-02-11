@@ -34,9 +34,7 @@ The New Yet another Readline for Go (go-readline-ny)
 examples
 --------
 
-### [example1.go](./examples/example1.go)
-
-The most simple sample.
+### [The most simple example](./examples/example1.go)
 
 ```examples/example1.go
 package main
@@ -61,9 +59,9 @@ func main() {
 
 If the target platform includes Windows, you have to import and use [go-colorable](https://github.com/mattn/go-colorable) like example2.go .
 
-### [example2.go](./examples/example2.go)
+### [Tiny Shell](./examples/example2.go)
 
-Tiny Shell. This is a sample of prompt change, colorization, filename completion and history browsing.
+This is a sample demonstrating prompt change, syntax highlighting, filename completion, history browsing, and access to the operating system clipboard.
 
 ```examples/example2.go
 package main
@@ -119,12 +117,18 @@ func main() {
         Clipboard: OSClipboard{},
     }
 
-    editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
-        Completion: completion.File{},
-        Postfix:    " ",
+    editor.BindKey(keys.CtrlI, &completion.CmdCompletionOrList2{
+        // Characters listed here are excluded from completion.
+        Delimiter: "&|><;",
+        // Enclose candidates with these characters when they contain spaces
+        Enclosure: `"'`,
+        // String to append when only one candidate remains
+        Postfix: " ",
+        // Function for listing candidates
+        Candidates: completion.PathComplete,
     })
     // If you do not want to list files with double-tab-key,
-    // use `CmdCompletion` instead of `CmdCompletionOrList`
+    // use `CmdCompletion2` instead of `CmdCompletionOrList2`
 
     fmt.Println("Tiny Shell. Type Ctrl-D to quit.")
     for {
@@ -151,17 +155,66 @@ func main() {
 }
 ```
 
-### example3.go
+### [Custom completion](examples/example3.go)
 
-- [example3.go](./examples/example3.go)
+```examples/example3.go
+package main
 
-This is a sample to change key-bindings to diamond cursor.
+import (
+    "context"
+    "fmt"
+    "io"
+    "os"
 
-### example4.go
+    "github.com/nyaosorg/go-readline-ny"
+    "github.com/nyaosorg/go-readline-ny/completion"
+    "github.com/nyaosorg/go-readline-ny/keys"
+)
 
-- [example4.go](./examples/example4.go)
+func mains() error {
+    var editor readline.Editor
 
-This is a sample that implements the function to start the text editor defined by the environment variable EDITOR and import the edited contents when the ESCAPE key is pressed.
+    editor.PromptWriter = func(w io.Writer) (int, error) {
+        return io.WriteString(w, "menu> ")
+    }
+    candidates := []string{"list", "say", "pewpew", "help", "exit", "Space Command"}
+
+    // If you do not want to list files with double-tab-key,
+    // use `CmdCompletion2` instead of `CmdCompletionOrList2`
+
+    editor.BindKey(keys.CtrlI, &completion.CmdCompletionOrList2{
+        // Characters listed here are excluded from completion.
+        Delimiter: "&|><;",
+        // Enclose candidates with these characters when they contain spaces
+        Enclosure: `"'`,
+        // String to append when only one candidate remains
+        Postfix: " ",
+        // Function for listing candidates
+        Candidates: func(field []string) (forComp []string, forList []string) {
+            if len(field) <= 1 {
+                return candidates, candidates
+            }
+            return nil, nil
+        },
+    })
+    ctx := context.Background()
+    for {
+        line, err := editor.ReadLine(ctx)
+        if err != nil {
+            return err
+        }
+        fmt.Printf("TEXT=%#v\n", line)
+    }
+    return nil
+}
+
+func main() {
+    if err := mains(); err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        os.Exit(1)
+    }
+}
+```
 
 Acknowledgements
 ----------------
