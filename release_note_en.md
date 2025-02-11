@@ -1,3 +1,7 @@
+v1.9.0
+======
+Feb 12, 2025
+
 - Fix: Completion failed to insert a space after the word when there was only one candi
 date.
 - Fix: The second and subsequent characters in .Enclosure(s) were not used.
