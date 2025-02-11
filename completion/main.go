@@ -131,7 +131,13 @@ func Complete(quotes, del string, B *rl.Buffer, getCandidates func([]string) ([]
 	if len(fields) == 0 {
 		return nil
 	}
-
+	q := ""
+	if len(quotes) > 0 {
+		q = quotes[:1]
+	}
+	if qq := B.Buffer[lastWordStart].String(); strings.Contains(quotes, qq) {
+		q = qq
+	}
 	list, baselist := getCandidates(fields)
 	if baselist == nil || len(baselist) <= 0 {
 		baselist = list
@@ -144,7 +150,7 @@ func Complete(quotes, del string, B *rl.Buffer, getCandidates func([]string) ([]
 	if len(list) == 1 {
 		str := list[0]
 		if len(quotes) > 0 && len(del) > 0 && strings.ContainsAny(str, " \t\r\n\v\f"+del) {
-			str = string(quotes[0]) + str + string(quotes[0])
+			str = q + str + q
 		}
 		B.ReplaceAndRepaint(lastWordStart, str+postfix)
 		return nil
@@ -155,7 +161,7 @@ func Complete(quotes, del string, B *rl.Buffer, getCandidates func([]string) ([]
 		return baselist
 	} else {
 		if len(quotes) > 0 && hasToInsertQuotation(list, " \t\r\n\v\f"+del) {
-			prefix = string(quotes[0]) + prefix
+			prefix = q + prefix
 		}
 		B.ReplaceAndRepaint(lastWordStart, prefix)
 		return nil
