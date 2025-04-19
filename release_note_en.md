@@ -1,3 +1,5 @@
+- Fixed a build error caused by multiple `main` functions under the `examples` directory when running `go test ./...`.
+
 v1.9.0
 ======
 Feb 12, 2025
