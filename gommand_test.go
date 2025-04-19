@@ -3,6 +3,8 @@ package readline_test
 import (
 	"context"
 	"io"
+	"os"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -38,7 +40,11 @@ func tryAll(t *testing.T, texts ...string) (string, []string) {
 
 func TestKeyFuncBackSpace(t *testing.T) {
 	result, outputs := tryAll(t, f, "\b", "x")
-	if result != "x" {
+	expect := "x"
+	if runtime.GOOS != "windows" || os.Getenv("WT_SESSION") == "" {
+		expect = "\U0001F468\u200Dx"
+	}
+	if result != expect {
 		t.Fatalf("TEXT=%s", result)
 		return
 	}
