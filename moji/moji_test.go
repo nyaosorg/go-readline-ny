@@ -1,6 +1,8 @@
 package moji
 
 import (
+	"os"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -12,8 +14,13 @@ const emojiManFarmer = string(emojiMan) + string(zeroWidthJoinRune) + string(emo
 func TestZeroWidthJoinSequenceWidth(t *testing.T) {
 	manFarmer := StringToMoji(emojiManFarmer)
 
-	if w := manFarmer[0].Width(); w != 5 {
-		t.Fatalf("EmojiManFarmer's width is invalid (%d). It should be 5", w)
+	expect := WidthT(5)
+	if runtime.GOOS != "windows" || os.Getenv("WT_SESSION") == "" {
+		// <1F468> as EscCodePoint because zeroWidthJoinRune does not work.
+		expect = 7
+	}
+	if result := manFarmer[0].Width(); result != expect {
+		t.Fatalf("`%#v`: EmojiManFarmer's width is invalid (%d). It should be %d", manFarmer[0], result, expect)
 		return
 	}
 }
