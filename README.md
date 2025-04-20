@@ -2,6 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/nyaosorg/go-readline-ny)](https://goreportcard.com/report/github.com/nyaosorg/go-readline-ny)
 [![Wiki](https://img.shields.io/badge/Wiki-orange)](https://github.com/nyaosorg/go-readline-ny/wiki)
 [![License](https://img.shields.io/badge/License-MIT-red)](https://github.com/nyaosorg/go-readline-ny/blob/master/LICENSE)
+[![Go Test](https://github.com/nyaosorg/go-readline-ny/actions/workflows/test.yml/badge.svg)](https://github.com/nyaosorg/go-readline-ny/actions/workflows/test.yml)
 
 The New Yet another Readline for Go (go-readline-ny)
 ====================================================
