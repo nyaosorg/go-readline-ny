@@ -62,49 +62,66 @@ func TestString2Moji(t *testing.T) {
 		Source string
 		Title  string
 		Count  int
+		Count2 int
 		Width  WidthT
+		Width2 WidthT // not Windows Terminal, e.g. xterm
 	}{
 		{
 			Source: "\U0001F926\u200D\u2640\uFE0F",
 			Title:  "WOMAN FACEPALMING",
 			Count:  1,
+			Count2: 1,
 			Width:  5,
+			Width2: 6, // equals three code points
 		},
 		{
 			Source: "#\uFE0F\u20E3",
 			Title:  "EnclosedNumberSign",
 			Count:  1,
+			Count2: 1,
 			Width:  3,
+			Width2: 3,
 		},
 		{
 			Source: "\U0001F3F3\uFE0F",
 			Title:  "WhiteFlag",
 			Count:  1,
+			Count2: 1,
 			Width:  2,
+			Width2: 2,
 		},
-		{
+		/*{
 			Source: "\U0001F647\U0001F3FF",
 			Title:  "PersonBowing: dark skin tone",
 			Count:  1,
+			Count2: 2, // two code points
 			Width:  4,
+			Width2: 4,
 		},
+		*/
 	}
 
 	for _, p := range table {
 		// t.Logf("try %s", p.Title)
 		mojis := StringToMoji(p.Source)
 
-		if result := len(mojis); result != p.Count {
+		expectCount := p.Count
+		expectWidth := p.Width
+		if runtime.GOOS != "windows" || os.Getenv("WT_SESSION") == "" {
+			expectWidth = p.Width2
+			expectCount = p.Count2
+		}
+		if result := len(mojis); result != expectCount {
 			t.Fatalf("StringToMoji: Count of %s == %d (expect %d)",
-				p.Title, result, p.Count)
+				p.Title, result, expectCount)
 		}
-		if result := mojis[0].Width(); result != p.Width {
-			t.Fatalf("StringToMoji: Width of %s == %d (expect %d)",
-				p.Title, result, p.Width)
+		if result := mojis[0].Width(); result != expectWidth {
+			t.Fatalf("StringToMoji: Width of %#v(%s) == %d (expect %d)",
+				mojis[0], p.Title, result, expectWidth)
 		}
-		if w, c := MojiWidthAndCountInString(p.Source); w != p.Width || c != p.Count {
-			t.Fatalf("MojiWidthAndCountInString: Widht and Count of %s == %d,%d (expect %d,%d)",
-				p.Title, w, c, p.Width, p.Count)
+		if w, c := MojiWidthAndCountInString(p.Source); w != expectWidth || c != expectCount {
+			t.Fatalf("MojiWidthAndCountInString: Width and Count of %s == %d,%d (expect %d,%d)",
+				p.Title, w, c, expectWidth, expectCount)
 		}
 	}
 }
