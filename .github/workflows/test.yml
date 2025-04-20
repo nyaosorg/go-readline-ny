@@ -1,4 +1,4 @@
-name: go-readline-ny
+name: Go Test
 
 on:
   push:
