@@ -3,6 +3,7 @@
 [![Wiki](https://img.shields.io/badge/Wiki-orange)](https://github.com/nyaosorg/go-readline-ny/wiki)
 [![License](https://img.shields.io/badge/License-MIT-red)](https://github.com/nyaosorg/go-readline-ny/blob/master/LICENSE)
 [![Go Test](https://github.com/nyaosorg/go-readline-ny/actions/workflows/test.yml/badge.svg)](https://github.com/nyaosorg/go-readline-ny/actions/workflows/test.yml)
+[![Awesome](https://awesome.re/badge.svg)](https://github.com/avelino/awesome-go)
 
 The New Yet another Readline for Go (go-readline-ny)
 ====================================================
