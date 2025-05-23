@@ -218,22 +218,6 @@ func main() {
 }
 ```
 
-Acknowledgements
-----------------
-
-- [@masamitsu-murase](https://github.com/masamitsu-murase) [#1]
-- [@ram-on](https://github.com/ram-on) [#2]
-- [@glejeune](https://github.com/glejeune) [#6]
-- [@brammeleman](https://github.com/brammeleman) [#8]
-- [@apstndb](https://github.com/apstndb) [#9]
-
-
-[#1]: https://github.com/nyaosorg/go-readline-ny/pull/1
-[#2]: https://github.com/nyaosorg/go-readline-ny/issues/2
-[#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
-[#8]: https://github.com/nyaosorg/go-readline-ny/issues/8
-[#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
-
 Release notes
 -------------
 
@@ -244,3 +228,18 @@ License
 -------
 
 MIT License
+
+Acknowledgements
+----------------
+
+- [masamitsu-murase (Masamitsu MURASE)](https://github.com/masamitsu-murase) [#1]
+- [ram-on (Ramon)](https://github.com/ram-on) [#2]
+- [glejeune (Gregoire Lejeune)](https://github.com/glejeune) [#6]
+- [brammeleman](https://github.com/brammeleman) [#8]
+- [apstndb](https://github.com/apstndb) [#9]
+
+[#1]: https://github.com/nyaosorg/go-readline-ny/pull/1
+[#2]: https://github.com/nyaosorg/go-readline-ny/issues/2
+[#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
+[#8]: https://github.com/nyaosorg/go-readline-ny/issues/8
+[#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
