@@ -243,3 +243,8 @@ Acknowledgements
 [#6]: https://github.com/nyaosorg/go-readline-ny/pull/6
 [#8]: https://github.com/nyaosorg/go-readline-ny/issues/8
 [#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
+
+Author
+------
+
+- [hymkor (HAYAMA Kaoru)](https://github.com/hymkor)
