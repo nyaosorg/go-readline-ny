@@ -73,6 +73,7 @@ func split(quotes, del string, B *rl.Buffer) (fields []string, lastWordStart int
 			}
 			i++
 			if i >= B.Cursor {
+				fields = append(fields, "")
 				return
 			}
 		}
