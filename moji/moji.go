@@ -1,7 +1,6 @@
 package moji
 
 import (
-	"fmt"
 	"io"
 	"unicode"
 	"unicode/utf8"
@@ -17,7 +16,6 @@ type Moji interface {
 	WriteTo(io.Writer) (int64, error)
 	PrintTo(io.Writer)
 	Len() int
-	GoString() string
 }
 
 var GetZWJSWidth = func(w1, w2 int) int {
@@ -64,10 +62,6 @@ func (s ZeroWidthJoinSequence) PrintTo(w io.Writer) {
 	}
 }
 
-func (s ZeroWidthJoinSequence) GoString() string {
-	return fmt.Sprintf("moji.ZeroWidthJoinSequence{%#v,%#v}", s[0], s[1])
-}
-
 type ModifierSequence [2]Moji
 
 func isEmojiModifier(ch rune) bool {
@@ -106,10 +100,6 @@ func (s ModifierSequence) PrintTo(w io.Writer) {
 	s.WriteTo(w)
 }
 
-func (s ModifierSequence) GoString() string {
-	return fmt.Sprintf("moji.ModifierSequence{%#v,%#v}", s[0], s[1])
-}
-
 type VariationSequence [2]Moji
 
 func (s VariationSequence) Len() int {
@@ -132,10 +122,6 @@ func (s VariationSequence) WriteTo(w io.Writer) (int64, error) {
 	}
 	n2, err := s[1].WriteTo(w)
 	return n1 + n2, err
-}
-
-func (s VariationSequence) GoString() string {
-	return fmt.Sprintf("moji.VariationSequence{%#v,%#v}", s[0], s[1])
 }
 
 func saveCursorAfterN(w io.Writer, n WidthT) {

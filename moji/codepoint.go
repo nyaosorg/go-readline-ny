@@ -28,10 +28,6 @@ func (t *Tab) WriteTo(w io.Writer) (int64, error) {
 	return int64(n), err
 }
 
-func (t *Tab) GoString() string {
-	return "moji.Tab{}"
-}
-
 func (t *Tab) SetPosition(pos int16) {
 	t.pos = pos
 }
@@ -62,10 +58,6 @@ func (c RawCodePoint) PrintTo(w io.Writer) {
 	writeRune(w, rune(c))
 }
 
-func (c RawCodePoint) GoString() string {
-	return fmt.Sprintf("moji.RawCodePoint{%X}", rune(c))
-}
-
 // EscCodePoint is for the character to print as <XXXXX>
 type EscCodePoint rune
 
@@ -83,10 +75,6 @@ func (c EscCodePoint) PrintTo(w io.Writer) {
 
 func (c EscCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
-}
-
-func (c EscCodePoint) GoString() string {
-	return fmt.Sprintf("moji.EscCodePoint{%X}", rune(c))
 }
 
 type RegionalIndicator rune
@@ -107,10 +95,6 @@ func (r RegionalIndicator) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(r))
 }
 
-func (r RegionalIndicator) GoString() string {
-	return fmt.Sprintf("moji.RegionalIndicator{%X}", rune(r))
-}
-
 // CtrlCodePoint is for the character to print as ^X
 type CtrlCodePoint rune
 
@@ -128,10 +112,6 @@ func (c CtrlCodePoint) PrintTo(w io.Writer) {
 
 func (c CtrlCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(c))
-}
-
-func (c CtrlCodePoint) GoString() string {
-	return fmt.Sprintf("moji.CtrlCodePoint{%X}", rune(c))
 }
 
 // WavingWhiteFlagCodePoint is for U+1F3F3 (WAVING WHITE FLAG)
@@ -157,10 +137,6 @@ func (s WavingWhiteFlagCodePoint) PrintTo(w io.Writer) {
 
 func (s WavingWhiteFlagCodePoint) WriteTo(w io.Writer) (int64, error) {
 	return writeRune(w, rune(s))
-}
-
-func (s WavingWhiteFlagCodePoint) GoString() string {
-	return fmt.Sprintf("moji.WavingWhiteFlagCodePoint{%X}", rune(s))
 }
 
 const (
