@@ -1,3 +1,7 @@
+v1.9.1
+======
+Jun 25, 2025
+
 - Fixed a build error caused by multiple `main` functions under the `examples` directory when running `go test ./...`.
 - Completion candidates are now listed even when the word to complete is empty.
 
