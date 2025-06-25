@@ -7,14 +7,14 @@ import (
 	rl "github.com/nyaosorg/go-readline-ny"
 )
 
-// Deprecated.
+// Deprecated:
 type Completion interface {
 	Delimiters() string
 	Enclosures() string
 	List(fields []string) (completionSet, listingSet []string)
 }
 
-// Deprecated. Use CmdCompletion2
+// Deprecated: Use CmdCompletion2
 type CmdCompletion struct {
 	Completion
 	Postfix string
@@ -29,7 +29,7 @@ func (C CmdCompletion) Call(ctx context.Context, B *rl.Buffer) rl.Result {
 	return rl.CONTINUE
 }
 
-// Deprecated. Use CmdCompletionOrList2
+// Deprecated: Use CmdCompletionOrList2
 type CmdCompletionOrList struct {
 	Completion
 	Postfix string
