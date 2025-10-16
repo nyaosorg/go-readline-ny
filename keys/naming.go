@@ -108,6 +108,10 @@ var NameToCode = map[string]Code{
 	"PAUSE":       Pause,
 	"RIGHT":       Right,
 	"UP":          Up,
+	"C_PAGEDOWN":  CtrlPageDown,
+	"C_PAGEUP":    CtrlPageUp,
+	"C_HOME":      CtrlHome,
+	"C_END":       CtrlEnd,
 }
 
 func NormalizeName(src string) string {

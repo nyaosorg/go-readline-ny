@@ -35,6 +35,10 @@ const (
 	CtrlRBracket  = "\x1D" // C-]
 	CtrlCaret     = "\x1E" // C-^
 	CtrlUnderbar  = "\x1F"
+	CtrlHome      = "\x1B[1;5H"
+	CtrlEnd       = "\x1B[1;5F"
+	CtrlPageUp    = "\x1B[5;5~"
+	CtrlPageDown  = "\x1B[6;5~"
 	Enter         = "\r"
 	Escape        = "\x1B"
 	AltA          = "\x1Ba"
