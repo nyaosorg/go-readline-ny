@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+v1.10.0
+=======
+Oct 18, 2025
+
 - Implemented the following changes in response to Issue [#452] in nyaosorg/nyagos:
   - Added symbolic identifiers and string names for keys  
     | Identifier\*1        | Symbol\*2       | Key Combination   |
