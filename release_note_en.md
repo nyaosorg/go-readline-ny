@@ -1,3 +1,26 @@
+( **English** / [Japanese](release_note_ja.md) )
+
+- Implemented the following changes in response to Issue [#452] in nyaosorg/nyagos:
+  - Added symbolic identifiers and string names for keys  
+    | Identifier\*1        | Symbol\*2       | Key Combination   |
+    | ------------------- | -------------- | ----------------- |
+    | `keys.CtrlPageDown` | `"C_PAGEDOWN"` | `Ctrl`+`PageDown` |
+    | `keys.CtrlPageUp`   | `"C_PAGEUP"`   | `Ctrl`+`PageUp`   |
+    | `keys.CtrlHome`     | `"C_HOME"`     | `Ctrl`+`Home`     |
+    | `keys.CtrlEnd`      | `"C_END"`      | `Ctrl`+`End`      |
+  - Added default key bindings  
+    |Key Combination| Function |
+    |---------------|----------|
+    |`Ctrl`+`Home` | Delete from the beginning of the line to the cursor (same as `Ctrl`+`U`) |
+    |`Ctrl`+`End` | Delete from the cursor to the end of the line (same as `Ctrl`+`K`) |
+- Updated [mattn/go-runewidth] from v0.0.16 to v0.0.19
+
+\*1 Constants defined in `"github.com/nyaosoorg/go-readline-ny/keys"`  
+\*2 Keys of the mapping `"keys".NameToCode` that associates symbolic strings with key sequences
+
+[#452]: https://github.com/nyaosorg/nyagos/issues/452
+[mattn/go-runewidth]: https://github.com/mattn/go-runewidth
+
 v1.9.1
 ======
 Jun 25, 2025

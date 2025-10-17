@@ -1,3 +1,26 @@
+( [English](release_note_en.md) / **Japanese** )
+
+- nyaosorg/nyagos [#452] への対応のため以下を実施
+    - キーを表す識別子・シンボル文字列を追加 
+        | 識別子\*1         | シンボル\*2    | キー組み合わせ  |
+        |-------------------|----------------|-----------------|
+        |`keys.CtrlPageDown`|`"C_PAGEDOWN"`  |`Ctrl`+`PageDown`|
+        |`keys.CtrlPageUp`  |`"C_PAGEUP"`    |`Ctrl`+`PageUp`  |
+        |`keys.CtrlHome`    |`"C_HOME"`      |`Ctrl`+`Home`    |
+        |`keys.CtrlEnd`     |`"C_END"`       |`Ctrl`+`End`     |
+    - 初期キー設定を追加  
+        |キー組み合わせ| 機能 |
+        |--------------|------|
+        |`Ctrl`+`Home` | 先頭からカーソル位置までを削除(`Ctrl`+`U`と等価) |
+        |`Ctrl`+`End`  | カーソル位置から末尾までの削除(`Ctrl`+`K`と等価) |
+- [mattn/go-runewidth] を v0.0.16 から v0.0.19 へ更新
+
+\*1 `"github.com/nyaosoorg/go-readline-ny/keys"` で定義の定数  
+\*2 シンボル文字列→キーシーケンスの対応マップ `"keys".NameToCode` のキー
+
+[#452]: https://github.com/nyaosorg/nyagos/issues/452
+[mattn/go-runewidth]: https://github.com/mattn/go-runewidth
+
 v1.9.1
 ======
 Jun 25, 2025
