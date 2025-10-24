@@ -1,17 +1,19 @@
-package readline
+package tty8
 
 import (
 	"fmt"
 
 	"github.com/mattn/go-tty"
+
+	"github.com/nyaosorg/go-readline-ny/internal/ttysub"
 )
 
-type _Tty struct {
+type Tty struct {
 	*tty.TTY
 	buf []string
 }
 
-func (m *_Tty) Open(onResize func(int)) error {
+func (m *Tty) Open(onResize func(int)) error {
 	var err error
 	m.TTY, err = tty.Open()
 	if err != nil {
@@ -23,13 +25,11 @@ func (m *_Tty) Open(onResize func(int)) error {
 	}
 	ws := m.TTY.SIGWINCH()
 	go func(lastw int) {
-		for {
-			wh, ok := <-ws
-			if !ok {
-				break
-			}
+		for wh := range ws {
 			if lastw != wh.W {
-				onResize(wh.W)
+				if onResize != nil {
+					onResize(wh.W)
+				}
 				lastw = wh.W
 			}
 		}
@@ -37,10 +37,10 @@ func (m *_Tty) Open(onResize func(int)) error {
 	return nil
 }
 
-func (m *_Tty) GetKey() (string, error) {
+func (m *Tty) GetKey() (string, error) {
 	if len(m.buf) <= 0 {
 		var err error
-		m.buf, err = getKeys(m.TTY)
+		m.buf, err = ttysub.GetKeys(m.TTY)
 		if err != nil || len(m.buf) <= 0 {
 			return "", err
 		}
@@ -50,7 +50,7 @@ func (m *_Tty) GetKey() (string, error) {
 	return top, nil
 }
 
-func (m *_Tty) Close() error {
+func (m *Tty) Close() error {
 	if m.TTY != nil {
 		m.TTY.Close()
 		m.TTY = nil

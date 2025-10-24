@@ -13,6 +13,7 @@ import (
 
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/moji"
+	"github.com/nyaosorg/go-readline-ny/tty8"
 )
 
 // Result is the type for readline's result.
@@ -170,7 +171,7 @@ func (editor *Editor) Init() {
 		editor.History = _EmptyHistory{}
 	}
 	if editor.Tty == nil {
-		editor.Tty = &_Tty{}
+		editor.Tty = &tty8.Tty{}
 	}
 	if editor.Predictor == nil {
 		editor.Predictor = predictByHistory
