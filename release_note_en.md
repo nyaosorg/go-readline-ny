@@ -1,5 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Exported the wrapper type of `"github.com/mattn/go-tty".TTY` as `"github.com/nyaosorg/go-readline-ny/tty8".Tty`, allowing key input (including control sequences) to be handled per key rather than per rune.
+
 v1.10.0
 =======
 Oct 18, 2025
