@@ -9,6 +9,7 @@ type VimBatch struct {
 	bits int
 }
 
+// Deprecated: use Highlight instead
 func (s *VimBatch) Init() readline.ColorSequence {
 	s.bits = 0
 	return readline.ColorReset
@@ -19,6 +20,7 @@ const (
 	quotedArea = 2
 )
 
+// Deprecated: use Highlight instead
 func (s *VimBatch) Next(codepoint rune) readline.ColorSequence {
 	newbits := s.bits
 	if codepoint == '%' {
