@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+v1.11.0
+=======
+Oct 24, 2025
+
 - `"github.com/mattn/go-tty".TTY` のラッパー型を `"github.com/nyaosorg/go-readline-ny/tty8".Tty"` として公開。本型は制御シーケンスを含むキー入力を 1 キー単位で扱う
 
 v1.10.0
