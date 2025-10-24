@@ -140,7 +140,7 @@ func Complete(quotes, del string, B *rl.Buffer, getCandidates func([]string) ([]
 		q = qq
 	}
 	list, baselist := getCandidates(fields)
-	if baselist == nil || len(baselist) <= 0 {
+	if len(baselist) <= 0 {
 		baselist = list
 	}
 	list, baselist = removeUnmatches(list, baselist, fields[len(fields)-1])
