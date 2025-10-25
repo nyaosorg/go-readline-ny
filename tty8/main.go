@@ -34,17 +34,17 @@ func (m *Tty) Open(onResize func(width int)) error {
 	if err != nil {
 		return fmt.Errorf("go-tty.Size: %w", err)
 	}
-	ws := m.TTY.SIGWINCH()
-	go func(lastw int) {
-		for wh := range ws {
-			if lastw != wh.W {
-				if onResize != nil {
+	if onResize != nil {
+		ws := m.TTY.SIGWINCH()
+		go func(lastw int) {
+			for wh := range ws {
+				if lastw != wh.W {
 					onResize(wh.W)
+					lastw = wh.W
 				}
-				lastw = wh.W
 			}
-		}
-	}(_lastw)
+		}(_lastw)
+	}
 	return nil
 }
 
