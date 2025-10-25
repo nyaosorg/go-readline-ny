@@ -1,5 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Avoid starting an unnecessary goroutine when `tty8.(*Tty).Open(nil)` is called
+
 v1.11.0
 =======
 Oct 24, 2025

@@ -1,5 +1,7 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+* `tty8.(*Tty).Open(nil)` で不要な goroutine を起動しないようにした
+
 v1.11.0
 =======
 Oct 24, 2025
