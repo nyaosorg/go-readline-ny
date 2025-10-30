@@ -42,7 +42,7 @@ func cmdISearchBackward(ctx context.Context, this *Buffer) Result {
 		drawWidth := WidthT(0)
 		for _, ch := range StringToMoji(drawStr) {
 			w1 := ch.Width()
-			if drawWidth+w1 >= this.ViewWidth() {
+			if drawWidth+w1 > this.ViewWidth() {
 				break
 			}
 			ch.PrintTo(this.Out)

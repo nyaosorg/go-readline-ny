@@ -162,7 +162,7 @@ func (B *Buffer) ResetViewStart() {
 	w := WidthT(0)
 	for i := 0; i <= B.Cursor && i < len(B.Buffer); i++ {
 		w += B.Buffer[i].Moji.Width()
-		for w >= B.ViewWidth() {
+		for w > B.ViewWidth() {
 			if B.ViewStart >= len(B.Buffer) {
 				// When standard output is redirected.
 				return

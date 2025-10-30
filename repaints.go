@@ -89,7 +89,7 @@ func (B *Buffer) repaintWithoutUpdateSuffix() {
 		io.WriteString(B.Out, B.PredictColor[0]) // "\x1B[3;22;39m"
 		for _, c := range B.getSuffix() {
 			w += c.Width()
-			if w >= B.ViewWidth() {
+			if w > B.ViewWidth() {
 				break
 			}
 			c.PrintTo(B.Out)

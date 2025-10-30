@@ -89,7 +89,7 @@ var CmdEndOfLine = NewGoCommand("END_OF_LINE", cmdEndOfLine)
 
 func cmdEndOfLine(ctx context.Context, this *Buffer) Result {
 	allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
-	if allength < this.ViewWidth() {
+	if allength <= this.ViewWidth() {
 		this.puts(this.Buffer[this.Cursor:])
 		this.Cursor = len(this.Buffer)
 	} else {
@@ -101,7 +101,7 @@ func cmdEndOfLine(ctx context.Context, this *Buffer) Result {
 				break
 			}
 			_w := w + this.Buffer[this.ViewStart-1].Moji.Width()
-			if _w >= this.ViewWidth() {
+			if _w > this.ViewWidth() {
 				break
 			}
 			w = _w
@@ -129,7 +129,7 @@ func cmdForwardChar(ctx context.Context, this *Buffer) Result {
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
-	if w < this.ViewWidth() {
+	if w <= this.ViewWidth() {
 		// No Scroll
 		this.puts(this.Buffer[this.Cursor : this.Cursor+1])
 	} else {
@@ -219,7 +219,7 @@ func (s SelfInserter) Call(ctx context.Context, this *Buffer) Result {
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	w1 := mojis.Width()
 	this.Cursor += lenMoji
-	if w+w1 >= this.ViewWidth() {
+	if w+w1 > this.ViewWidth() {
 		// scroll left
 		this.ResetViewStart()
 	}
@@ -384,7 +384,7 @@ func cmdSwapChar(ctx context.Context, this *Buffer) Result {
 		w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
 		this.GotoHead()
-		if w >= this.ViewWidth() {
+		if w > this.ViewWidth() {
 			this.ViewStart++
 		}
 		this.Cursor++
@@ -424,7 +424,7 @@ func cmdForwardWord(ctx context.Context, this *Buffer) Result {
 		newPos++
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)
-	if w < this.ViewWidth() {
+	if w <= this.ViewWidth() {
 		this.puts(this.Buffer[this.Cursor:newPos])
 		this.Cursor = newPos
 	} else {
