@@ -8,7 +8,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny/moji"
 )
 
-const forbiddenWidth WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
+const ScrollMargin WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type _Undo struct {
 	pos  int
@@ -84,7 +84,7 @@ func (B *Buffer) updateSuffix() {
 
 // ViewWidth returns the cell-width screen can show in the one-line.
 func (B *Buffer) ViewWidth() WidthT {
-	return WidthT(B.termWidth) - WidthT(B.topColumn) - forbiddenWidth
+	return WidthT(B.termWidth) - WidthT(B.topColumn) - ScrollMargin
 }
 
 func (B *Buffer) getView() (_Range, WidthT) {
