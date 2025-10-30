@@ -163,3 +163,10 @@ func TestCmdBackwardChar(t *testing.T) {
 	keyTest(t, "[|１２]３４", 4, "１", "２", "３", "４", keys.Left, keys.Left, keys.Left, keys.Left)
 	keyTest(t, "[|１２]３４", 4, "１", "２", "３", "４", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left)
 }
+
+func TestCmdInterrupt(t *testing.T) {
+	result := keyTest(t, "[|]", 80, "a", "b", "c", keys.CtrlC)
+	if result != readline.CtrlC {
+		t.Fatalf("expect CtrlC, but %v", result)
+	}
+}
