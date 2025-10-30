@@ -1,6 +1,14 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
-- Avoid starting an unnecessary goroutine when `tty8.(*Tty).Open(nil)` is called
+- Prevent unnecessary goroutines from being started in `tty8.Tty.Open(nil)` / `tty10.Tty.Open(nil)`
+- Fix `tty10.Tty.Open(f)` calling function f even when the terminal size has not changed
+
+Notes (sub-packages):
+
+- `tty8.Tty`: Terminal interface using github.com/mattn/go-tty (default, works on Windows 7/8/Server 2008 R2)
+- `tty10.Tty`: Terminal interface using golang.org/x/term (for newer environments)
+
+Both sub-packages abstract the differences between the underlying external packages, allowing go-readline-ny to switch between them internally.
 
 v1.11.0
 =======
