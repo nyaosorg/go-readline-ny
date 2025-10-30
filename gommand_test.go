@@ -2,6 +2,7 @@ package readline_test
 
 import (
 	"context"
+	"errors"
 	"io"
 	"os"
 	"runtime"
@@ -100,7 +101,7 @@ func TestKeyFuncBackSpace(t *testing.T) {
 	}
 }
 
-func keyTest(t *testing.T, expView string, width int, typed ...string) {
+func keyTest(t *testing.T, expView string, width int, typed ...string) error {
 	t.Helper()
 
 	expText := strings.ReplaceAll(expView, "[", "")
@@ -121,6 +122,9 @@ func keyTest(t *testing.T, expView string, width int, typed ...string) {
 	ss.Register(editor)
 	result, err := editor.ReadLine(context.Background())
 	if err != nil {
+		if errors.Is(err,readline.CtrlC) || errors.Is(err,io.EOF) {
+			return err
+		}
 		t.Fatalf("ERR=%s", err.Error())
 	}
 	if result != expText {
@@ -129,6 +133,7 @@ func keyTest(t *testing.T, expView string, width int, typed ...string) {
 	if ss.View != expView {
 		t.Fatalf("view: expect %#v, but %#v", expView, ss.View)
 	}
+	return err
 }
 
 func TestCmdBackspace(t *testing.T) {
