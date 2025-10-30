@@ -10,9 +10,54 @@ import (
 
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-readline-ny/auto"
+	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
 const f = "\U0001F468\u200D\U0001F33E"
+
+type snapShot struct {
+	View string
+}
+
+func (s *snapShot) Call(_ context.Context, B *readline.Buffer) readline.Result {
+	var shot strings.Builder
+	start := B.ViewStart
+	shot.WriteString(B.SubString(0, start))
+	shot.WriteByte('[')
+	width := readline.WidthT(0)
+	viewWidth := B.ViewWidth()
+	isCursorBarDisplayed := false
+	isViewEndDisplayed := false
+	for i := start; i < len(B.Buffer); i++ {
+		if i == B.Cursor {
+			shot.WriteByte('|')
+			isCursorBarDisplayed = true
+		}
+		w1 := B.Buffer[i].Moji.Width()
+		if width <= viewWidth && width+w1 > viewWidth {
+			shot.WriteByte(']')
+			isViewEndDisplayed = true
+		}
+		shot.WriteString(B.Buffer[i].String())
+		width += w1
+	}
+	if !isCursorBarDisplayed {
+		shot.WriteByte('|')
+	}
+	if !isViewEndDisplayed {
+		shot.WriteByte(']')
+	}
+	s.View = shot.String()
+	return readline.CONTINUE
+}
+
+func (s *snapShot) String() string {
+	return "snap-shot"
+}
+
+func (s *snapShot) Register(editor *readline.Editor) {
+	editor.KeyMap.BindKey(keys.Code(s.String()), s)
+}
 
 func tryAll(t *testing.T, texts ...string) (string, []string) {
 	var buffer strings.Builder
@@ -52,5 +97,36 @@ func TestKeyFuncBackSpace(t *testing.T) {
 		for _, o := range outputs {
 			println(o)
 		}
+	}
+}
+
+func keyTest(t *testing.T, expView string, width int, typed ...string) {
+	t.Helper()
+
+	expText := strings.ReplaceAll(expView, "[", "")
+	expText = strings.ReplaceAll(expText, "|", "")
+	expText = strings.ReplaceAll(expText, "]", "")
+
+	ss := &snapShot{}
+	prtSc := ss.String()
+	typed = append(typed, prtSc)
+
+	editor := &readline.Editor{
+		Tty: &auto.Pilot{
+			Width: width + int(readline.ScrollMargin),
+			Text:  typed},
+		Writer:       io.Discard,
+		PromptWriter: func(w io.Writer) (int, error) { return 0, nil },
+	}
+	ss.Register(editor)
+	result, err := editor.ReadLine(context.Background())
+	if err != nil {
+		t.Fatalf("ERR=%s", err.Error())
+	}
+	if result != expText {
+		t.Fatalf("text: expect %#v, but %#v", expText, result)
+	}
+	if ss.View != expView {
+		t.Fatalf("view: expect %#v, but %#v", expView, ss.View)
 	}
 }
