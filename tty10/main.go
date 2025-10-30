@@ -23,23 +23,29 @@ func (M *Tty) Open(onSize func(int)) error {
 		return err
 	}
 
-	M.done = make(chan struct{})
-	go func() {
-		ticker := time.NewTicker(time.Second)
-		for {
-			select {
-			case <-M.done:
-				ticker.Stop()
-				return
-			case <-ticker.C:
-				w, _, err := M.Size()
-				if err == nil {
-					onSize(w)
+	if onSize != nil {
+		w, _, err := M.Size()
+		if err != nil {
+			return err
+		}
+		M.done = make(chan struct{})
+		go func(lastw int) {
+			ticker := time.NewTicker(time.Second)
+			for {
+				select {
+				case <-M.done:
+					ticker.Stop()
+					return
+				case <-ticker.C:
+					w, _, err := M.Size()
+					if err == nil && w != lastw {
+						onSize(w)
+						lastw = w
+					}
 				}
 			}
-		}
-	}()
-
+		}(w)
+	}
 	return nil
 }
 
@@ -83,6 +89,7 @@ func (M *Tty) Close() error {
 	if M.done != nil {
 		M.done <- struct{}{}
 		close(M.done)
+		M.done = nil
 	}
 	if M.disable != nil {
 		M.disable()
