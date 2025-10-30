@@ -130,3 +130,19 @@ func keyTest(t *testing.T, expView string, width int, typed ...string) {
 		t.Fatalf("view: expect %#v, but %#v", expView, ss.View)
 	}
 }
+
+func TestCmdBackspace(t *testing.T) {
+	keyTest(t, "[a|]", 80, "a", "b", "\b")
+	keyTest(t, "[|]", 80, "a", "b", "\b", "\b")
+	keyTest(t, "[|]", 80, "a", "b", "\b", "\b", "\b")
+	keyTest(t, "[a|c]", 80, "a", "b", "c", keys.Left, "\b")
+	keyTest(t, "[１|３]", 80, "１", "２", "３", keys.Left, "\b")
+	keyTest(t, "12[345|]", 4, "1", "2", "3", "4", "5", "6", "\b")
+	keyTest(t, "12[34|6]", 4, "1", "2", "3", "4", "5", "6", keys.Left, "\b")
+	keyTest(t, "12[|4567]", 4, "1", "2", "3", "4", "5", "6", "7", keys.Left, keys.Left, keys.Left, keys.Left, "\b")
+	keyTest(t, "1[|3456]7", 4, "1", "2", "3", "4", "5", "6", "7", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left, "\b")
+	keyTest(t, "１２[３４５|]", 8, "１", "２", "３", "４", "５", "６", "\b")
+	keyTest(t, "１２[３４|６]", 8, "１", "２", "３", "４", "５", "６", keys.Left, "\b")
+	keyTest(t, "１２[|４５６７]", 8, "１", "２", "３", "４", "５", "６", "７", keys.Left, keys.Left, keys.Left, keys.Left, "\b")
+	keyTest(t, "１[|３４５６]７", 8, "１", "２", "３", "４", "５", "６", "７", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left, "\b")
+}
