@@ -146,3 +146,15 @@ func TestCmdBackspace(t *testing.T) {
 	keyTest(t, "１２[|４５６７]", 8, "１", "２", "３", "４", "５", "６", "７", keys.Left, keys.Left, keys.Left, keys.Left, "\b")
 	keyTest(t, "１[|３４５６]７", 8, "１", "２", "３", "４", "５", "６", "７", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left, "\b")
 }
+
+func TestCmdBackwardChar(t *testing.T) {
+	keyTest(t, "[a|b]", 80, "a", "b", keys.CtrlB)
+	keyTest(t, "[a|b]", 80, "a", "b", keys.Left)
+	keyTest(t, "ab[|cdef]g", 4, "a", "b", "c", "d", "e", "f", "g", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left)
+	keyTest(t, "[|abcd]efg", 4, "a", "b", "c", "d", "e", "f", "g", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left, keys.Left, keys.Left)
+	keyTest(t, "１２[３|４]", 4, "１", "２", "３", "４", keys.Left)
+	keyTest(t, "１２[|３４]", 4, "１", "２", "３", "４", keys.Left, keys.Left)
+	keyTest(t, "１[|２３]４", 4, "１", "２", "３", "４", keys.Left, keys.Left, keys.Left)
+	keyTest(t, "[|１２]３４", 4, "１", "２", "３", "４", keys.Left, keys.Left, keys.Left, keys.Left)
+	keyTest(t, "[|１２]３４", 4, "１", "２", "３", "４", keys.Left, keys.Left, keys.Left, keys.Left, keys.Left)
+}
