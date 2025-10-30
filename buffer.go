@@ -8,7 +8,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny/moji"
 )
 
-const ScrollMargin WidthT = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
+const ScrollMargin WidthT = 4 // = last column (1) + FULLWIDTHCHAR-SIZE (2) + extra
 
 type _Undo struct {
 	pos  int
