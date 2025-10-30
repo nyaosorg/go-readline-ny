@@ -1,5 +1,6 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+- `Buffer.ViewWidth()` の値を調整した。テキストがスクロールを始める長さを意味していたが、スクロールせずに表示できる最大桁数を返すようにした。
 - `tty8.Tty.Open(nil)` / `tty10.Tty.Open(nil)` で不要な goroutine を起動しないよう改善
 - `tty10.Tty.Open(f)` で、端末サイズに変更がなくても関数 f が呼ばれる問題を修正
 

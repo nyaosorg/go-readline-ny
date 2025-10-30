@@ -1,5 +1,6 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+- The meaning of `Buffer.ViewWidth()` has been adjusted: it now returns the maximum number of columns that can be displayed at once without scrolling, rather than the text length at which scrolling starts.
 - Prevent unnecessary goroutines from being started in `tty8.Tty.Open(nil)` / `tty10.Tty.Open(nil)`
 - Fix `tty10.Tty.Open(f)` calling function f even when the terminal size has not changed
 
