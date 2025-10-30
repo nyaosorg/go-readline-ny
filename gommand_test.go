@@ -17,7 +17,7 @@ const f = "\U0001F468\u200D\U0001F33E"
 func tryAll(t *testing.T, texts ...string) (string, []string) {
 	var buffer strings.Builder
 	editor := readline.Editor{
-		Tty:          &auto.Pilot{texts},
+		Tty:          &auto.Pilot{Text: texts},
 		Writer:       &buffer,
 		PromptWriter: func(w io.Writer) (int, error) { return 0, nil },
 	}
