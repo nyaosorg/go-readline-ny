@@ -25,6 +25,7 @@ The New Yet another Readline for Go (go-readline-ny)
 - Add-Ons:
     - [SKK] (Japanese input method editor)
     - [Multi-lines Editing][go-multiline-ny]
+- Pluggable terminal interface (`tty8`, `tty10`, or `auto.Pilot` for testing)
 
 [SKK]: https://github.com/nyaosorg/go-readline-skk
 [go-multiline-ny]: https://github.com/hymkor/go-multiline-ny
@@ -217,6 +218,62 @@ func main() {
     }
 }
 ```
+
+### Terminal Interfaces
+
+go-readline-ny allows you to replace its terminal interface with one of the following implementations:
+
+- `tty8.Tty` — uses [github.com/mattn/go-tty](https://github.com/mattn/go-tty); works even on Windows 7/8/Server 2008 R2 (default)
+- `tty10.Tty` — uses [golang.org/x/term](https://golang.org/x/term); for modern environments[^tty10]
+- `auto.Pilot` — a fake terminal interface for automated or scripted input (no real TTY required)
+
+[^tty10]: To use a specific terminal implementation, import the corresponding package: `import "github.com/nyaosorg/go-readline-ny/tty10"`
+
+Each implementation provides a compatible interface so that go-readline-ny can switch between them transparently.
+
+#### Example: Using the auto.Pilot for Automated Input
+
+You can also simulate key inputs using the `auto.Pilot` interface.
+This allows automated testing or scripted editing without a real terminal.
+
+```examples/autopilot.go
+package main
+
+import (
+    "context"
+    "fmt"
+    "io"
+    "os"
+
+    "github.com/nyaosorg/go-readline-ny"
+    "github.com/nyaosorg/go-readline-ny/auto"
+    "github.com/nyaosorg/go-readline-ny/keys"
+)
+
+func main() {
+    editor := &readline.Editor{
+        Default: "12345",
+        Tty: &auto.Pilot{
+            Text: []string{keys.CtrlE, keys.Left, "\b"},
+        },
+        Writer:       io.Discard,
+        PromptWriter: func(w io.Writer) (int, error) { return 0, nil },
+    }
+
+    result, err := editor.ReadLine(context.Background())
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err.Error())
+        os.Exit(1)
+    }
+    if result == "1235" {
+        fmt.Println("PASS")
+    } else {
+        fmt.Println("FAIL")
+    }
+}
+```
+
+This feature enables automated testing of readline behaviors —such as cursor movement, text editing, and key bindings — without a real terminal.
 
 Release notes
 -------------
