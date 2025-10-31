@@ -11,6 +11,7 @@ import (
 	"sync"
 	"unicode/utf8"
 
+	"github.com/nyaosorg/go-ttyadapter"
 	"github.com/nyaosorg/go-ttyadapter/tty8"
 
 	"github.com/nyaosorg/go-readline-ny/keys"
@@ -31,12 +32,7 @@ const (
 	INTR Result = iota
 )
 
-type ITty interface {
-	Open(onSize func(int)) error
-	GetKey() (string, error)
-	Size() (int, int, error)
-	Close() error
-}
+type ITty = ttyadapter.Tty
 
 type Clipboard interface {
 	Read() (string, error)
