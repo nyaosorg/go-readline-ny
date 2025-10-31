@@ -221,19 +221,21 @@ func main() {
 
 ### Terminal Interfaces
 
-go-readline-ny allows you to replace its terminal interface with one of the following implementations:
+`go-readline-ny` allows you to replace its terminal interface with one of the following implementations:
 
-- `tty8.Tty` — uses [github.com/mattn/go-tty](https://github.com/mattn/go-tty); works even on Windows 7/8/Server 2008 R2 (default)
-- `tty10.Tty` — uses [golang.org/x/term](https://golang.org/x/term); for modern environments[^tty10]
-- `auto.Pilot` — a fake terminal interface for automated or scripted input (no real TTY required)
+- [`tty8.Tty`][tty8] — uses [github.com/mattn/go-tty](https://github.com/mattn/go-tty); works even on Windows 7/8/Server 2008 R2 (default)
+- [`tty10.Tty`][tty10] — uses [golang.org/x/term](https://golang.org/x/term); for modern environments[^tty10]
+- [`auto.Pilot`][auto] — a mock terminal interface for automated or scripted input (no real TTY required)
 
-[^tty10]: To use a specific terminal implementation, import the corresponding package: `import "github.com/nyaosorg/go-readline-ny/tty10"`
+[tty8]: https://pkg.go.dev/github.com/nyaosorg/go-ttyadapter/tty8#Tty
+[tty10]: https://pkg.go.dev/github.com/nyaosorg/go-ttyadapter/tty10#Tty
+[auto]: https://pkg.go.dev/github.com/nyaosorg/go-ttyadapter/auto#Pilot
 
-Each implementation provides a compatible interface so that go-readline-ny can switch between them transparently.
+Each implementation provides a compatible interface so that `go-readline-ny` can switch between them transparently.
 
-#### Example: Using the auto.Pilot for Automated Input
+#### Example: Using `auto.Pilot` for Automated Input
 
-You can also simulate key inputs using the `auto.Pilot` interface.
+You can simulate key inputs using the `auto.Pilot` interface.
 This allows automated testing or scripted editing without a real terminal.
 
 ```examples/autopilot.go
@@ -245,8 +247,9 @@ import (
     "io"
     "os"
 
+    "github.com/nyaosorg/go-ttyadapter/auto"
+
     "github.com/nyaosorg/go-readline-ny"
-    "github.com/nyaosorg/go-readline-ny/auto"
     "github.com/nyaosorg/go-readline-ny/keys"
 )
 
@@ -254,7 +257,7 @@ func main() {
     editor := &readline.Editor{
         Default: "12345",
         Tty: &auto.Pilot{
-            Text: []string{keys.CtrlE, keys.Left, "\b"},
+            Text: []string{keys.CtrlE, keys.Left, "\b", "\r"},
         },
         Writer:       io.Discard,
         PromptWriter: func(w io.Writer) (int, error) { return 0, nil },
@@ -273,7 +276,7 @@ func main() {
 }
 ```
 
-This feature enables automated testing of readline behaviors —such as cursor movement, text editing, and key bindings — without a real terminal.
+This feature enables automated testing of readline behaviors—such as cursor movement, text editing, and key bindings - without requiring a real terminal.
 
 Release notes
 -------------
