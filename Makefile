@@ -28,8 +28,7 @@ demo-future :
 	$(GO) run -tags=tty10,orgxwidth test/unicodetest/main.go
 
 test :
-	pushd "moji" && $(GO) test -v && popd
-	$(GO) test -v
+	$(GO) test -v ./...
 
 get :
 	$(GO) get -u all
