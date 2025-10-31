@@ -8,8 +8,9 @@ import (
 	"io"
 	"os"
 
+	"github.com/nyaosorg/go-ttyadapter/auto"
+
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/nyaosorg/go-readline-ny/auto"
 	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
@@ -17,7 +18,7 @@ func main() {
 	editor := &readline.Editor{
 		Default: "12345",
 		Tty: &auto.Pilot{
-			Text: []string{keys.CtrlE, keys.Left, "\b"},
+			Text: []string{keys.CtrlE, keys.Left, "\b", "\r"},
 		},
 		Writer:       io.Discard,
 		PromptWriter: func(w io.Writer) (int, error) { return 0, nil },
