@@ -1,15 +1,7 @@
 ( [English](release_note_en.md) / **Japanese** )
 
 - `Buffer.ViewWidth()` の値を調整した。テキストがスクロールを始める長さを意味していたが、スクロールせずに表示できる最大桁数を返すようにした。
-- `tty8.Tty.Open(nil)` / `tty10.Tty.Open(nil)` で不要な goroutine を起動しないよう改善
-- `tty10.Tty.Open(f)` で、端末サイズに変更がなくても関数 f が呼ばれる問題を修正
-
-補足（サブパッケージ）:
-
-- `tty8.Tty`: github.com/mattn/go-tty を使用した端末インターフェイス（デフォルト、Windows 7/8/Server 2008 R2 でも利用可能）
-- `tty10.Tty`: golang.org/x/term を使用した端末インターフェイス（新しい環境向け）
-
-いずれも外部パッケージの違いを吸収し、go-readline-ny の内部で切り替え可能
+* 端末入力処理を [`github.com/nyaosorg/go-ttyadapter`](https://github.com/nyaosorg/go-ttyadapter) へ移行した。
 
 v1.11.0
 =======

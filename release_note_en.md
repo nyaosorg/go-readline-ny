@@ -1,15 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
 - The meaning of `Buffer.ViewWidth()` has been adjusted: it now returns the maximum number of columns that can be displayed at once without scrolling, rather than the text length at which scrolling starts.
-- Prevent unnecessary goroutines from being started in `tty8.Tty.Open(nil)` / `tty10.Tty.Open(nil)`
-- Fix `tty10.Tty.Open(f)` calling function f even when the terminal size has not changed
-
-Notes (sub-packages):
-
-- `tty8.Tty`: Terminal interface using github.com/mattn/go-tty (default, works on Windows 7/8/Server 2008 R2)
-- `tty10.Tty`: Terminal interface using golang.org/x/term (for newer environments)
-
-Both sub-packages abstract the differences between the underlying external packages, allowing go-readline-ny to switch between them internally.
+- Migrated terminal input handling to [`github.com/nyaosorg/go-ttyadapter`](https://github.com/nyaosorg/go-ttyadapter).
 
 v1.11.0
 =======
