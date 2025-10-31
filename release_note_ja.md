@@ -1,7 +1,14 @@
 ( [English](release_note_en.md) / **Japanese** )
 
 - `Buffer.ViewWidth()` の値を調整した。テキストがスクロールを始める長さを意味していたが、スクロールせずに表示できる最大桁数を返すようにした。
-* 端末入力処理を [`github.com/nyaosorg/go-ttyadapter`](https://github.com/nyaosorg/go-ttyadapter) へ移行した。
+- 端末入力のサブパッケージを、次のように外部パッケージへ移行した
+    - `tty8` → "[github.com/nyaosorg/go-ttyadapter]/tty8" ([github.com/mattn/go-tty]用)
+    - `tty10` → "[github.com/nyaosorg/go-ttyadapter]/tty10" ([golang.org/x/term]用)
+    - `auto` → "[github.com/nyaosorg/go-ttyadapter]/auto"
+
+[github.com/mattn/go-tty]: https://github.com/mattn/go-tty
+[golang.org/x/term]: https://pkg.go.dev/golang.org/x/term
+[github.com/nyaosorg/go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
 
 v1.11.0
 =======

@@ -1,7 +1,14 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
 - The meaning of `Buffer.ViewWidth()` has been adjusted: it now returns the maximum number of columns that can be displayed at once without scrolling, rather than the text length at which scrolling starts.
-- Migrated terminal input handling to [`github.com/nyaosorg/go-ttyadapter`](https://github.com/nyaosorg/go-ttyadapter).
+- Migrated the terminal input subpackages as follows:
+    - `tty8` → "[github.com/nyaosorg/go-ttyadapter]/tty8" for [github.com/mattn/go-tty]
+    - `tty10` → "[github.com/nyaosorg/go-ttyadapter]/tty10" for [golang.org/x/term]
+    - `auto` → "[github.com/nyaosorg/go-ttyadapter]/auto"
+
+[github.com/mattn/go-tty]: https://github.com/mattn/go-tty
+[golang.org/x/term]: https://pkg.go.dev/golang.org/x/term
+[github.com/nyaosorg/go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
 
 v1.11.0
 =======
