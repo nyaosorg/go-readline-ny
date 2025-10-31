@@ -9,8 +9,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nyaosorg/go-ttyadapter/auto"
+
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/nyaosorg/go-readline-ny/auto"
 	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
@@ -85,7 +86,7 @@ func tryAll(t *testing.T, texts ...string) (string, []string) {
 }
 
 func TestKeyFuncBackSpace(t *testing.T) {
-	result, outputs := tryAll(t, f, "\b", "x")
+	result, outputs := tryAll(t, f, "\b", "x", "\r")
 	expect := "x"
 	if runtime.GOOS != "windows" || os.Getenv("WT_SESSION") == "" {
 		expect = "\U0001F468\u200Dx"
@@ -122,7 +123,7 @@ func keyTest(t *testing.T, expView string, width int, typed ...string) error {
 	ss.Register(editor)
 	result, err := editor.ReadLine(context.Background())
 	if err != nil {
-		if errors.Is(err,readline.CtrlC) || errors.Is(err,io.EOF) {
+		if errors.Is(err, readline.CtrlC) || errors.Is(err, io.EOF) {
 			return err
 		}
 		t.Fatalf("ERR=%s", err.Error())

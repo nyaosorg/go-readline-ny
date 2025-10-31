@@ -11,9 +11,10 @@ import (
 	"sync"
 	"unicode/utf8"
 
+	"github.com/nyaosorg/go-ttyadapter/tty8"
+
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/moji"
-	"github.com/nyaosorg/go-readline-ny/tty8"
 )
 
 // Result is the type for readline's result.
