@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+v1.12.0
+=======
+Nov 1, 2025
+
 - `Buffer.ViewWidth()` の値を調整した。テキストがスクロールを始める長さを意味していたが、スクロールせずに表示できる最大桁数を返すようにした。
 - 端末入力のサブパッケージを、次のように外部パッケージへ移行した
     - `tty8` → "[github.com/nyaosorg/go-ttyadapter]/tty8" ([github.com/mattn/go-tty]用)

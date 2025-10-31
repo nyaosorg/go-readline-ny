@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+v1.12.0
+=======
+Nov 1, 2025
+
 - The meaning of `Buffer.ViewWidth()` has been adjusted: it now returns the maximum number of columns that can be displayed at once without scrolling, rather than the text length at which scrolling starts.
 - Migrated the terminal input subpackages as follows:
     - `tty8` → "[github.com/nyaosorg/go-ttyadapter]/tty8" for [github.com/mattn/go-tty]
