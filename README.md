@@ -224,7 +224,7 @@ func main() {
 `go-readline-ny` allows you to replace its terminal interface with one of the following implementations:
 
 - [`tty8.Tty`][tty8] — uses [github.com/mattn/go-tty](https://github.com/mattn/go-tty); works even on Windows 7/8/Server 2008 R2 (default)
-- [`tty10.Tty`][tty10] — uses [golang.org/x/term](https://golang.org/x/term); for modern environments[^tty10]
+- [`tty10.Tty`][tty10] — uses [golang.org/x/term](https://golang.org/x/term); for modern environments
 - [`auto.Pilot`][auto] — a mock terminal interface for automated or scripted input (no real TTY required)
 
 [tty8]: https://pkg.go.dev/github.com/nyaosorg/go-ttyadapter/tty8#Tty
