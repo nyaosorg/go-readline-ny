@@ -1,5 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Fixed a panic in completion.PathComplete that occurred when the last token was an empty string. It now correctly returns all files in the current directory.
+
 v1.12.0
 =======
 Nov 1, 2025

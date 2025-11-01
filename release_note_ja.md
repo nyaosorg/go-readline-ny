@@ -1,5 +1,7 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+- 補完候補のファイル名リストを生成する `completion.PathComplete` が、最後の単語が空文字列のときにパニックを起こす問題を修正し、カレントディレクトリ内の全ファイルを返すようにした。
+
 v1.12.0
 =======
 Nov 1, 2025
