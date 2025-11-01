@@ -3,7 +3,7 @@ package completion
 import (
 	"context"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 	rl "github.com/nyaosorg/go-readline-ny"
 )
 
