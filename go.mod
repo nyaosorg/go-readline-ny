@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/atotto/clipboard v0.1.4
-	github.com/mattn/go-colorable v0.1.13
+	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-runewidth v0.0.19
 	github.com/nyaosorg/go-box/v2 v2.2.1
 	github.com/nyaosorg/go-ttyadapter v0.0.1
