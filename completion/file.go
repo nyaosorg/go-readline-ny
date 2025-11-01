@@ -19,7 +19,10 @@ func PathComplete(field []string) (completionSet []string, listingSet []string) 
 	}
 	target := field[len(field)-1]
 	var dir, base string
-	if tail := target[len(target)-1]; tail == os.PathSeparator || tail == '/' {
+	if len(target) <= 0 {
+		base = ""
+		dir = ""
+	} else if tail := target[len(target)-1]; tail == os.PathSeparator || tail == '/' {
 		base = ""
 		dir = target
 	} else {
