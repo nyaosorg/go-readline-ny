@@ -1,6 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
-- Fixed a panic in completion.PathComplete that occurred when the last token was an empty string. It now correctly returns all files in the current directory.
+- Fixed a panic in completion.PathComplete that occurred when the last token was an empty string. It now correctly returns all files in the current directory. (#10)
+- Adapt to the API changes in go-box v3 (#11)
 
 v1.12.0
 =======
