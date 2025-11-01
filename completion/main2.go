@@ -38,7 +38,7 @@ func (C *CmdCompletionOrList2) Call(ctx context.Context, B *rl.Buffer) rl.Result
 	list := Complete(C.Enclosure, C.Delimiter, B, C.Candidates, C.Postfix)
 	if len(list) > 0 {
 		B.Out.WriteByte('\n')
-		box.Print(ctx, list, B.Out)
+		box.Println(list, B.Out)
 		B.RepaintAll()
 	}
 	return rl.CONTINUE

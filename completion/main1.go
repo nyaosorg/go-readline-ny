@@ -3,7 +3,7 @@ package completion
 import (
 	"context"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 	rl "github.com/nyaosorg/go-readline-ny"
 )
 
@@ -43,7 +43,7 @@ func (C CmdCompletionOrList) Call(ctx context.Context, B *rl.Buffer) rl.Result {
 	list := Complete(C.Enclosures(), C.Delimiters(), B, C.List, C.Postfix)
 	if len(list) > 0 {
 		B.Out.WriteByte('\n')
-		box.Print(ctx, list, B.Out)
+		box.Println(list, B.Out)
 		B.RepaintAll()
 	}
 	return rl.CONTINUE
