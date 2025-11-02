@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+v1.12.1
+=======
+Nov 2, 2025
+
 - 補完候補のファイル名リストを生成する `completion.PathComplete` が、最後の単語が空文字列のときにパニックを起こす問題を修正し、カレントディレクトリ内の全ファイルを返すようにした。 (#10)
 - nyaosorg/go-box を v3 へ更新 (#11)
 
