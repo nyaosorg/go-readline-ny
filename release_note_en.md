@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+v1.12.2
+=======
+Nov 3, 2025
+
 - Updated [go-ttyadapter] to [v0.1.0] and adjusted to its API changes [#12]
 - Addressed warnings reported by Go Report Card [#13]
 

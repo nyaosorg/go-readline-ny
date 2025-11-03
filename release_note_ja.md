@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+v1.12.2
+=======
+Nov 3, 2025
+
 - [go-ttyadapter] を [v0.1.0] へ更新し、API の変更に追随した [#12]
 - Go Report Card の警告に対処 [#13]
 
