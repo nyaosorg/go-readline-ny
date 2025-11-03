@@ -196,7 +196,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		suffix:         nil, // moji.StringToMoji("$"),
 	}
 
-	onResize := func(w int) {
+	onResize := func(w, _ int) {
 		editor.mutex.Lock()
 		buffer.termWidth = w
 		buffer.ResetViewStart()
