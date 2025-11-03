@@ -24,7 +24,7 @@ func (SlowPattern) FindAllStringIndex(string, int) [][]int {
 
 func main() {
 	editor := &readline.Editor{
-		Writer:  colorable.NewColorableStdout(),
+		Writer: colorable.NewColorableStdout(),
 		Highlight: []readline.Highlight{
 			{Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
 			{Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[35;49;22m"},
@@ -32,9 +32,9 @@ func main() {
 			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[37;41;22m"},
 			{Pattern: SlowPattern{}, Sequence: ""},
 		},
-		PredictColor:   [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
-		ResetColor:     "\x1B[0m",
-		DefaultColor:   "\x1B[33;49;1m",
+		PredictColor: [...]string{"\x1B[3;22;34m", "\x1B[23;39m"},
+		ResetColor:   "\x1B[0m",
+		DefaultColor: "\x1B[33;49;1m",
 	}
 	editor.BindKey(keys.CtrlI, completion.CmdCompletionOrList{
 		Completion: completion.File{},
