@@ -1,5 +1,13 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Updated [go-ttyadapter] to [v0.1.0] and adjusted to its API changes [#12]
+- Addressed warnings reported by Go Report Card [#13]
+
+[#12]: https://github.com/nyaosorg/go-readline-ny/pull/12
+[#13]: https://github.com/nyaosorg/go-readline-ny/pull/13
+[go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
+[v0.1.0]: https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.1.0
+
 v1.12.1
 =======
 Nov 2, 2025
