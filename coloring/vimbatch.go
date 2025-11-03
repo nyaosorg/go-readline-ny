@@ -37,8 +37,6 @@ func (s *VimBatch) Next(codepoint rune) readline.ColorSequence {
 		color = readline.Magenta
 	} else if codepoint == '&' {
 		color = readline.DarkYellow
-	} else {
-		color = readline.DefaultForeGroundColor
 	}
 	s.bits = newbits
 	return color
