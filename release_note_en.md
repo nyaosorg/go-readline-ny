@@ -6,6 +6,9 @@
   - Deleted the experimental code based on `golang.org/x/text/width`, which had already been disabled.
   - Stopped creating a separate `runewidth.Condition` instance for Windows Terminal;
     now the global `RuneWidth` function is used directly.
+  - Fixed incorrect width calculation for certain emoji sequences.
+    Previously, East Asian Width mode was always enabled except on Windows Terminal,
+    which caused some emojis (e.g., WOMAN FACEPALMING) to be measured wider than they actually appear.
 
 v1.12.2
 =======
