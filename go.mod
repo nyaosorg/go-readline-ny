@@ -8,7 +8,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.19
 	github.com/nyaosorg/go-box/v3 v3.0.0
 	github.com/nyaosorg/go-ttyadapter v0.1.0
-	golang.org/x/text v0.19.0
 )
 
 require (
