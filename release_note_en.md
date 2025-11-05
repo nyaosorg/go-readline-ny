@@ -1,6 +1,6 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
-- Optimized character width handling
+- Optimized character width handling (#14)
   - Removed the caching layer for `github.com/mattn/go-runewidth` since it provided no performance benefit.
     Related functions `ResetCharWidth` and `SetCharWidth` have been marked as deprecated.
   - Deleted the experimental code based on `golang.org/x/text/width`, which had already been disabled.
