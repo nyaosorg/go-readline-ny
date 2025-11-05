@@ -314,12 +314,14 @@ func MojiCountInString(s string) int {
 	return c
 }
 
+// Deprecated: Char width caching has been removed.
+// This function no longer has any effect and will be removed in a future release.
 func ResetCharWidth() {
-	moji.ResetCharWidth()
 }
 
+// Deprecated: Char width caching has been removed.
+// This function no longer has any effect and will be removed in a future release.
 func SetCharWidth(c rune, width int) {
-	moji.SetCharWidth(c, width)
 }
 
 func EnableSurrogatePair(value bool) {

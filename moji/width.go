@@ -10,27 +10,6 @@ import (
 // WidthT means the width type
 type WidthT int
 
-var widthCache = map[rune]WidthT{}
-
-// ResetCharWidth resets the cache for the width of characters.
-func ResetCharWidth() {
-	widthCache = map[rune]WidthT{}
-}
-
-// SetCharWidth sets the width of the character into the cache.
-func SetCharWidth(c rune, width int) {
-	widthCache[c] = WidthT(width)
-}
-
-func getWidth(r rune) WidthT {
-	w, ok := widthCache[r]
-	if !ok {
-		w = WidthT(runewidth.RuneWidth(r))
-		widthCache[r] = w
-	}
-	return w
-}
-
 func lenEscaped(c rune) WidthT {
 	w := WidthT(3) // '<' + 1-digit + '>'
 	for c > 0xF {
@@ -59,5 +38,5 @@ func AreVariationSelectorLike(s string) bool {
 func isToBeEscaped(ch rune) bool {
 	return isVariationSelectorLike(ch) ||
 		(ch >= 0x10000 && !SurrogatePairOk) ||
-		getWidth(ch) == 0
+		runewidth.RuneWidth(ch) == 0
 }
