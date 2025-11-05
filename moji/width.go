@@ -3,6 +3,8 @@ package moji
 import (
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/mattn/go-runewidth"
 )
 
 // WidthT means the width type
@@ -23,7 +25,7 @@ func SetCharWidth(c rune, width int) {
 func getWidth(r rune) WidthT {
 	w, ok := widthCache[r]
 	if !ok {
-		w = WidthT(runeWidth(r))
+		w = WidthT(runewidth.RuneWidth(r))
 		widthCache[r] = w
 	}
 	return w
