@@ -5,6 +5,8 @@ import (
 	"io"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/mattn/go-runewidth"
 )
 
 type Tab struct {
@@ -40,7 +42,7 @@ func (c RawCodePoint) Len() int {
 }
 
 func (c RawCodePoint) Width() WidthT {
-	return getWidth(rune(c))
+	return WidthT(runewidth.RuneWidth(rune(c)))
 }
 
 func writeRune(w io.Writer, r rune) (int64, error) {
