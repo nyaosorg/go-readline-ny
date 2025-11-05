@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -12,12 +13,21 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 )
 
+var flagLog = flag.String("l", "", "output log filename")
+
 func mains() error {
-	logWriter, err := os.Create("output.log")
-	if err != nil {
-		return err
+	colorable.EnableColorsStdout(nil)
+
+	var w io.Writer = colorable.NewColorableStdout()
+	if *flagLog != "" {
+		logWriter, err := os.Create(*flagLog)
+		if err != nil {
+			return err
+		}
+		defer logWriter.Close()
+
+		w = io.MultiWriter(w, logWriter)
 	}
-	defer logWriter.Close()
 
 	if _, ok := os.LookupEnv("ZWJS"); ok {
 		// for WindowsTerminal 1.22
@@ -34,9 +44,7 @@ func mains() error {
 			return io.WriteString(w, "\x1B[30;49;1m  0123456789ABCDEF\n$ ")
 		},
 		// Coloring: &coloring.VimBatch{},
-		Writer: io.MultiWriter(
-			colorable.NewColorableStdout(),
-			logWriter),
+		Writer: w,
 		Highlight: []readline.Highlight{
 			{Pattern: regexp.MustCompile("&"), Sequence: "\x1B[33;49;22m"},
 			{Pattern: regexp.MustCompile(`"[^"]*"`), Sequence: "\x1B[31;49;22m"},
@@ -55,6 +63,7 @@ func mains() error {
 }
 
 func main() {
+	flag.Parse()
 	if err := mains(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
