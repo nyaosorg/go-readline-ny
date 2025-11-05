@@ -1,5 +1,10 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+- 文字幅計測まわりのコードを最適化
+    - "github.com/mattn/go-runewidth" 向けのキャッシュは効果がないため廃止。関連する関数 `ResetCharWidth`, `SetCharWidth` を非推奨化
+    - "golang.org/x/text/width" を用いた試験コードを削除(元々無効にはなっていた)
+    - Windows Terminal 対応のため runewidth の Condition 構造体のインスタンスをわざわざ作っていたが、グローバルな RuneWidth 関数を直接使うようにした
+
 v1.12.2
 =======
 Nov 3, 2025
