@@ -9,6 +9,8 @@
   - Fixed incorrect width calculation for certain emoji sequences.
     Previously, East Asian Width mode was always enabled except on Windows Terminal,
     which caused some emojis (e.g., WOMAN FACEPALMING) to be measured wider than they actually appear.
+- Deprecated the type `ITty`. Use `ttyadapter.Tty` instead. (#16)
+  This change should have been included in v1.12.0 but was missed.
 
 v1.12.2
 =======

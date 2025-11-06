@@ -7,6 +7,8 @@
     - 絵文字の幅計算の誤りを修正。
       Windows Terminal 以外では常に East Asian Width が有効になっていたため、
       文字の幾つか(例：WOMAN FACEPALMING) が実際よりも長くなっていた。
+- 型 `ITty` を非推奨（Deprecated）とした。代わりに `ttyadapter.Tty` を使用すること。(#16)
+  ※この変更は本来 v1.12.0 に含めるべきだったが、漏れていたため今回追加した。
 
 v1.12.2
 =======
