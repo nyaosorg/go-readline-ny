@@ -63,7 +63,7 @@ type Editor struct {
 	Default        string
 	Cursor         int
 	LineFeedWriter func(Result, io.Writer) (int, error)
-	Tty            ITty
+	Tty            ttyadapter.Tty
 	HistoryCycling bool
 	mutex          sync.Mutex
 
