@@ -32,6 +32,7 @@ const (
 	INTR Result = iota
 )
 
+// Deprecated: Use `ttyadapter.Tty`
 type ITty = ttyadapter.Tty
 
 type Clipboard interface {
