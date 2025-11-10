@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+v1.12.3
+=======
+Nov 10, 2025
+
 - Optimized character width handling (#14)
   - Removed the caching layer for `github.com/mattn/go-runewidth` since it provided no performance benefit.
     Related functions `ResetCharWidth` and `SetCharWidth` have been marked as deprecated.
