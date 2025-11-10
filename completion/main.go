@@ -74,6 +74,7 @@ func split(quotes, del string, B *rl.Buffer) (fields []string, lastWordStart int
 			i++
 			if i >= B.Cursor {
 				fields = append(fields, "")
+				lastWordStart = i
 				return
 			}
 		}
@@ -136,8 +137,10 @@ func Complete(quotes, del string, B *rl.Buffer, getCandidates func([]string) ([]
 	if len(quotes) > 0 {
 		q = quotes[:1]
 	}
-	if qq := B.Buffer[lastWordStart].String(); strings.Contains(quotes, qq) {
-		q = qq
+	if lastWordStart < len(B.Buffer) {
+		if qq := B.Buffer[lastWordStart].String(); strings.Contains(quotes, qq) {
+			q = qq
+		}
 	}
 	list, baselist := getCandidates(fields)
 	if len(baselist) <= 0 {
