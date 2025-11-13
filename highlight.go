@@ -5,6 +5,13 @@ import (
 	"unicode/utf8"
 )
 
+// Highlight defines a syntax highlighting rule.
+// Pattern can be any object that implements FindAllStringIndex(string, int) [][]int,
+// such as *regexp.Regexp.
+// The second argument to FindAllStringIndex is normally -1, but in this package
+// it is used as (-1 - cursorPosition) to pass the current cursor position to
+// non-regexp highlighters.
+// For each matched region, the escape sequence in Sequence will be applied.
 type Highlight struct {
 	Pattern  interface{ FindAllStringIndex(string, int) [][]int }
 	Sequence string
