@@ -124,7 +124,7 @@ func cmdAcceptPredict(ctx context.Context, b *Buffer) Result {
 	for _, c := range b.suffix {
 		c.WriteTo(&s)
 	}
-	b.ReplaceAndRepaint(len(b.Buffer), s.String())
+	b.ReplaceAndRepaint(0, s.String())
 	return CONTINUE
 }
 

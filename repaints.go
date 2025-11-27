@@ -85,9 +85,11 @@ func (B *Buffer) repaintWithoutUpdateSuffix() {
 	B.GotoHead()
 	puts := B.newPrinter()
 	puts(all)
-	if B.PredictColor[0] != "" && len(B.suffix) > 0 {
+	if B.PredictColor[0] != "" && len(B.suffix) > len(B.Buffer) {
 		io.WriteString(B.Out, B.PredictColor[0]) // "\x1B[3;22;39m"
-		for _, c := range B.getSuffix() {
+		sfx := B.getSuffix()
+		for i := len(B.Buffer); i < len(sfx); i++ {
+			c := sfx[i]
 			w += c.Width()
 			if w > B.ViewWidth() {
 				break
