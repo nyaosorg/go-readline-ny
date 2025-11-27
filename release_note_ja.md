@@ -2,6 +2,14 @@ Release notes (Japanese)
 ========================
 ( [English](release_note_en.md) / **Japanese** )
 
+- カーソル一文字分の右移動(`FORWARD_CHAR`)に組み込まれていた予測候補確定を分離し、次の3機能に分離した。
+
+  - 純粋にカーソル一文字分の右移動のみ (`FORWARD_CHAR`)
+  - 予測候補を確定 (`ACCEPT_PREDICT`)
+  - カーソルが行末の時は予測候補確定、さもなければカーソル一文字分移動(`FORWARD_CHAR_OR_ACCEPT_PREDICT`)
+
+  なお、右矢印キー、Ctrl-F はデフォルトで `FORWARD_CHAR_OR_ACCEPT_PREDICT` とした。(#19)
+
 v1.12.3
 -------
 Nov 10, 2025
