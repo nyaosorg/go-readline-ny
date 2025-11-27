@@ -64,8 +64,8 @@ func predictByHistory(B *Buffer) string {
 	current := B.String()
 	for i := B.History.Len() - 1; i >= 0; i-- {
 		h := B.History.At(i)
-		if strings.HasPrefix(h, current) {
-			return h[len(current):]
+		if len(h) >= len(current) && strings.EqualFold(h[:len(current)], current) {
+			return h
 		}
 	}
 	return ""
