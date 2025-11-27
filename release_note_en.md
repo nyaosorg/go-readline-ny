@@ -2,6 +2,14 @@ Release notes (English)
 =======================
 ( **English** / [Japanese](release_note_ja.md) )
 
+* Split the commit-prediction behavior that had been embedded in `FORWARD_CHAR` into three separate functions:
+
+  * `FORWARD_CHAR`: move the cursor one character to the right
+  * `ACCEPT_PREDICT`: accept the current prediction
+  * `FORWARD_CHAR_OR_ACCEPT_PREDICT`: accept the prediction when the cursor is at the end of the line; otherwise move the cursor one character to the right
+
+  By default, the Right Arrow key and **Ctrl-F** are now bound to `FORWARD_CHAR_OR_ACCEPT_PREDICT`. (#19)
+
 v1.12.3
 -------
 Nov 10, 2025
