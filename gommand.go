@@ -114,18 +114,34 @@ func cmdEndOfLine(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+var CmdAcceptPredict = NewGoCommand("ACCEPT_PREDICT", cmdAcceptPredict)
+
+func cmdAcceptPredict(ctx context.Context, b *Buffer) Result {
+	if len(b.suffix) <= 0 {
+		return CONTINUE
+	}
+	var s strings.Builder
+	for _, c := range b.suffix {
+		c.WriteTo(&s)
+	}
+	b.ReplaceAndRepaint(len(b.Buffer), s.String())
+	return CONTINUE
+}
+
+var CmdForwardCharOrAcceptPredict = NewGoCommand("FORWARD_CHAR_OR_ACCEPT_PREDICT", cmdForwardCharOrAcceptPredict)
+
+func cmdForwardCharOrAcceptPredict(ctx context.Context, b *Buffer) Result {
+	if b.Cursor < len(b.Buffer) {
+		return cmdForwardChar(ctx, b)
+	}
+	return cmdAcceptPredict(ctx, b)
+}
+
 // CmdForwardChar is the command that moves cursor to the next character (for Ctrl-F)
 var CmdForwardChar = NewGoCommand("FORWARD_CHAR", cmdForwardChar)
 
 func cmdForwardChar(ctx context.Context, this *Buffer) Result {
 	if this.Cursor >= len(this.Buffer) {
-		if len(this.suffix) > 0 {
-			var s strings.Builder
-			for _, c := range this.suffix {
-				c.WriteTo(&s)
-			}
-			this.InsertAndRepaint(s.String())
-		}
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
