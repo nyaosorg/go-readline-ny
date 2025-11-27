@@ -10,6 +10,9 @@ Release notes (English)
 
   By default, the Right Arrow key and **Ctrl-F** are now bound to `FORWARD_CHAR_OR_ACCEPT_PREDICT`. (#19)
 
+- Made input prediction case-insensitive. (#20)
+  - The return value of the `Editor.Predictor` callback (used by addons to override how predictions are generated) used to contain only the remaining, untyped part of the string. Since the predictor now also needs to correct the case of the already-typed portion, the API was changed so that the callback returns the entire predicted string.
+
 v1.12.3
 -------
 Nov 10, 2025
