@@ -1,7 +1,9 @@
+Release notes (Japanese)
+========================
 ( [English](release_note_en.md) / **Japanese** )
 
 v1.12.3
-=======
+-------
 Nov 10, 2025
 
 - 文字幅計測まわりのコードを最適化 (#14)
@@ -16,7 +18,7 @@ Nov 10, 2025
 - 補完で、現在の単語が空の場合にカーソルが前の単語の先頭に移動してしまう不具合を修正 (#17)
 
 v1.12.2
-=======
+-------
 Nov 3, 2025
 
 - [go-ttyadapter] を [v0.1.0] へ更新し、API の変更に追随した [#12]
@@ -28,14 +30,14 @@ Nov 3, 2025
 [v0.1.0]: https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.1.0
 
 v1.12.1
-=======
+-------
 Nov 2, 2025
 
 - 補完候補のファイル名リストを生成する `completion.PathComplete` が、最後の単語が空文字列のときにパニックを起こす問題を修正し、カレントディレクトリ内の全ファイルを返すようにした。 (#10)
 - nyaosorg/go-box を v3 へ更新 (#11)
 
 v1.12.0
-=======
+-------
 Nov 1, 2025
 
 - `Buffer.ViewWidth()` の値を調整した。テキストがスクロールを始める長さを意味していたが、スクロールせずに表示できる最大桁数を返すようにした。
@@ -49,13 +51,13 @@ Nov 1, 2025
 [github.com/nyaosorg/go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
 
 v1.11.0
-=======
+-------
 Oct 24, 2025
 
 - `"github.com/mattn/go-tty".TTY` のラッパー型を `"github.com/nyaosorg/go-readline-ny/tty8".Tty"` として公開。本型は制御シーケンスを含むキー入力を 1 キー単位で扱う
 
 v1.10.0
-=======
+-------
 Oct 18, 2025
 
 - nyaosorg/nyagos [#452] への対応のため以下を実施
@@ -80,14 +82,14 @@ Oct 18, 2025
 [mattn/go-runewidth]: https://github.com/mattn/go-runewidth
 
 v1.9.1
-======
+------
 Jun 25, 2025
 
 - `go test ./...` を実行した時に `examples` ディレクトリにある複数の `main` 関数で生じるビルドエラーを修正
 - 補完対象の単語がゼロ文字の時も、補完リストを表示するようにした
 
 v1.9.0
-======
+------
 Feb 12, 2025
 
 - 補完で一候補しかない時に単語の後にスペースが挿入されなかった問題を修正
@@ -95,7 +97,7 @@ Feb 12, 2025
 - 新しい補完機能 complete.CmdCompletionList2 と CmdCompletion2 を追加
 
 v1.8.0
-======
+------
 Feb 9, 2025
 
 - OS のクリップボードの読み書きをデフォルトではしないようにし、コピペ用のバッファは Editor型の Clipboard フィールドで差し替えられるようにした [#9]
@@ -104,19 +106,19 @@ Feb 9, 2025
 [#9]: https://github.com/nyaosorg/go-readline-ny/issues/9
 
 v1.7.4
-======
+------
 Jan 28, 2025
 
 - 実験的仕様変更: シンタックスハイライト構造体の Pattern フィールドの `FindAllStringIndex` を呼び出す時、第二引数に `-1` ではなく、`-1 - (カーソルのバイト数位置` の値を与えるようにした。
 
 v1.7.3
-======
+------
 Jan 23, 2025
 
 - シンタックスハイライトの評価関数の呼び出し回数を削減し、評価関数が遅い場合の処理時間を改善した。
 
 v1.7.2
-======
+------
 Jan 22, 2025
 
 - go-multiline-ny のために以下の変更を行った
@@ -124,7 +126,7 @@ Jan 22, 2025
     - 非公開であった型・関数を公開: NewEscapeSequenceId, EscapeSequenceId, HighlightToColoring, HighlightColorSequence, and ColorInterface
 
 v1.7.1
-======
+------
 Jan 18, 2025
 
 - go-readline-skk を使って日本語を入力した時、シンタックスハイライトを表示するコードでパニックが発生する問題を修正
@@ -132,7 +134,7 @@ Jan 18, 2025
 - 関数 GetKeys, GetRawKey を非公開とした
 
 v1.7.0
-======
+------
 Jan 12, 2025
 
 - シンタックスハイライトの新しいインターフェイスを用意した。
@@ -157,7 +159,7 @@ editor := &readline.Editor{
 ```
 
 v1.6.3
-======
+------
 Jan 7, 2025
 
 - bufio.Writer の過剰なネストをさせないようにした
@@ -169,25 +171,25 @@ Thanks to [@brammeleman]
 [#8]: https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.6.3
 
 v1.6.2
-======
+------
 Nov 20, 2024
 
 - UNIX系プラットフォームでのインクリメンタルサーチで Backspace キー`\x7F` が直前の文字を削除しない不具合を修正 (Ctrl-H は機能していた)
 
 v1.6.1
-======
+------
 Nov 8, 2024
 
 - UNIX系デスクトップのターミナルの機能で、複数行を貼り付けた時、一部のテキストをとりこぼす不具合を修正 ([hymkor/go-multiline-ny v0.16.2](https://github.com/hymkor/go-multiline-ny/releases/tag/v0.16.2) 向け修正)
 
 v1.6.0
-======
+------
 Nov 4, 2024
 
 - 入力予想機能の予想関数を差し替えられるようにした(`(*Editor) Predictor = ...`)
 
 v1.5.0
-======
+------
 Oct 6, 2024
 
 - PowerShell 7 風の入力予測機能の実装
@@ -201,19 +203,19 @@ editor := &readline.Editor{
 ```
 
 v1.4.1
-======
+------
 Oct 2, 2024
 
 - WindowsTerminal 1.22 向けに、Zero Width Join Sequence の文字幅の計算関数を差し替えられるようにした(SetZWJSWidthGetter)
 
 v1.4.0
-======
+------
 Jun 16, 2024
 
 - Ctrl-P/N: 履歴を切り替えるときに変更したエントリを保存し、(Enterが入力されるまでは)再度切り替えたときに復元するようにした
 
 v1.3.1
-======
+------
 Apr 21, 2024
 
 - [#6] サブパッケージ completion で、空状態で補完するとクラッシュする不具合を修正  
@@ -223,52 +225,52 @@ Apr 21, 2024
 [@glejeune]: https://github.com/glejeune
 
 v1.3.0
-======
+------
 Apr 17, 2024
 
 - 定数追加: keys.ShiftTAB = "\x1B[Z"
 - 端末のインターフェイスと実装を簡素化 (`ITty` 周辺の互換性破壊)
 
 v1.2.0
-======
+------
 Feb 29, 2024
 
 - "keys": キーの名前定数は型無しとした (元々は `keys.Code` だった)
 
 v1.1.0
-======
+------
 Feb 27, 2024
 
 - "completion": 1候補に絞れた時に空白を追加していたが、空白のかわりに CmdCompletion.Postfix や CmdCompletionOrList.Postfix で指定できるようにした (デフォルトは0文字)
 
 v1.0.1
-======
-Oct 08, 2023
+------
+Oct 8, 2023
 
 - 合字や異体字など単純なコードポイントでない文字位置で色を変えられなかった問題を修正
 
 v1.0.0
-======
-Oct 06, 2023
+------
+Oct 6, 2023
 
 - バージョンを v1.0.0 にしました。
 
 v0.15.2
-=======
-Oct 02, 2023
+-------
+Oct 2, 2023
 
 - カーソルが末尾にある時、`Coloring.Next` が CursorPositionDummyRune(U+E000) を受けとれない問題を修正
 - `(ColorSequence) Chain` を追加 (二つのColorSequenceを連結する)
 
 v0.15.1
-=======
-Oct 01, 2023
+-------
+Oct 1, 2023
 
 - `(ColorSequence) Add` を作成
 - カーソル位置で、`Coloring.Next` は CursorPositionDummyRune(U+E000) を受けとるようにした
 
 v0.15.0
-=======
+-------
 Sep 29, 2023
 
 - v1.0.0 に向けて、非推奨としていたフィールド、メソッド、関数を削除しました
@@ -284,7 +286,7 @@ Sep 29, 2023
     - `(*KeyMap) BindKeySymbol`. `nameutils.BindKeySymbol` をかわりに使ってください
 
 v0.14.1
-=======
+-------
 Sep 13 2023
 
 - 関数 `GetKey(tty) string` を公開
@@ -296,7 +298,7 @@ Sep 13 2023
 [go-tty.TTY]: https://pkg.go.dev/github.com/mattn/go-tty#TTY
 
 v0.14.0
-=======
+-------
 Aug 28 2023
 
 - `(*Editor) PromptWriter` が `Ctrl-H` や `ESC]...\007` を出力した場合でも、プロンプトの幅を正しくカウントするようになった
@@ -306,39 +308,39 @@ Aug 28 2023
     - 利用するには PromptWriter フィールドが設定されていることが必要になります
 
 v0.13.2
-=======
+-------
 Jul 29 2023
 
 - keys/code.go で `\x` と書くべきものが `0x` になっていたリテラルを修正
 - カーソルオフの状態で呼ばれると、そのままカーソルがオンにならず、表示されない不具合を修正
 
 v0.13.1
-=======
+-------
 May 28 2023
 
 - メソッド `(*KeyMap) Lookup` 追加
 
 v0.13.0
-=======
+-------
 May 19 2023
 
 - タブ文字を `^I` の代わりに４桁ごとの位置までの空白で表現できるようになった。
 
 v0.12.3
-=======
+-------
 May 16 2023
 
 - 新メソッド `(*Editor) Init` を追加
     - nil なフィールドをデフォルト値へ置き換える。`(*Editor) Readline` を呼び出す前に `Editor` のフィールドを参照する時、明示的に `(*Editor) Init` を呼ばなくてはいけない。主に go-readline-ny のアドオンパッケージ向け
 
 v0.12.2
-=======
+-------
 May 15 2023
 
 - パスがディレクトリをまったく含まないとき、`completion.File` が失敗する問題を修正
 
 v0.12.1
-=======
+-------
 May 15 2023
 
 -  `CmdCompletion` and `CmdCompletionOrList` で候補の絞り込みをするようにしたので、`Completion` interface 側で絞り込みをしなくてもよくなった
@@ -346,7 +348,7 @@ May 15 2023
 - `completion.File` で、ファイル名の中に `./` が含まれている時にひとつもマッチしなかった問題を修正（filepath パッケージが `./` を削除してしまうため）
 
 v0.12.0
-=======
+-------
 May 13 2023
 
 - [nyagos](https://github.com/nyaosorg/nyagos) の補完のサブセットを、サブパッケージ `completion` として逆輸入した。
@@ -354,7 +356,7 @@ May 13 2023
 - LineFeed に io.Writer パラメーターを追加した新フィールド `LineFeedWriter` を追加。
 
 v0.11.7
-=======
+-------
 May 12 2023
 
 - グローバルな sync.Mutex 変数を `Editor` インスタンスの変数に変更した。キーに割り当てられたコマンド内で、新たな `Editor` インスタンスを生成して、`(*Editor) ReadLine` を呼ぶことができない問題があった。
@@ -364,14 +366,14 @@ May 12 2023
 - `(*Buffer) GetKey` で `(*Buffer).Out.Flush` を呼ぶようにしたので、ユーザは明示的に `Flush` を呼ぶ必要はなくなった。
 
 v0.11.6
-=======
+-------
 May 8 2023
 
 - 関数 `StringToMoji` と `GetStringWidth` のメモリアローケーション回数を削減した
 - 新関数 `MojiCountInString` を追加（  `len(StringToMoji(s))` よりコストが低い）
 
 v0.11.5
-=======
+-------
 May 7 2023
 
 + TeraTerm で Ubuntu に接続して `make demo` を実行したときに色がおかしい不具合を修正
@@ -379,7 +381,7 @@ May 7 2023
     + リセット用のカラーコード `ESC[0m` に相当する定数値 `readline.ColorReset` を用意
 
 v0.11.4
-=======
+-------
 May 6 2023
 
 - [Windows以外で桁数と行数が取り違えられる問題][issue-one] を修正するため、[go-tty] を [v0.0.5] へ更新しました。
@@ -389,13 +391,13 @@ May 6 2023
 [v0.0.5]: https://github.com/mattn/go-tty/releases/tag/v0.0.5
 
 v0.11.3
-=======
+-------
 May 5 2023
 
 + 改行やエスケープシーケンス、絵文字が含まれていても出力する幅を正しく計測できるプロンプトフックとして、`Editor` 型に新しいフィールド `PromptWriter` を追加しました。
 
 v0.11.2
-=======
+-------
 May 2 2023
 
 無駄に複雑化している内部構造を簡素化しました。
@@ -418,7 +420,7 @@ May 2 2023
 + （使われている場所がなかった） `(Result) String()` を削除
 
 v0.11.0
-=======
+-------
 Apr 26 2023
 
 - 以下のテストで動作確認ができており、fork 原因のWindowsTerminal の不具合が修正されているようなので、[go-tty] の独自forkバージョンを削除し、オリジナルの v0.0.4 を使用するようにした。
@@ -436,7 +438,7 @@ Apr 26 2023
 [x/text/width]: https://pkg.go.dev/golang.org/x/text/width
 
 v0.10.1
-=======
+-------
 Apr 14 2023
 
 - v0.10.0
@@ -447,13 +449,13 @@ Apr 14 2023
     - v0.10.0 で色用の定数が壊れていたのを修正
 
 v0.9.1
-=======
+------
 Apr 10 2023
 
 - `Coloring.Init()` / `.Next()` が 0 を返した時、`m` というゴミ文字列が表示されるのを修正
 
 v0.9.0
-=======
+------
 Apr 9 2023
 
 - 非公開の型 `_Cell` を `Cell` に改名（公開）。`Cell` のインスタンスは１文字を表すコードポイント群(=`Moji`)と非公開の色情報を含んでいます。
@@ -463,39 +465,39 @@ Apr 9 2023
 農夫の絵文字（👨‍🌾）は３つのコードポイント (U+0001F468, U+200D , and U+0001F33E)で表されますが、`Moji` は１インスタンスでそれらを格納します。
 
 v0.8.5
-=======
+------
 Apr 2 2023
 
 - v0.8.4 の非互換性を修正しました。v0.8.4 は nyagos でリンクできなくなってしまっており、削除したメソッド `(*KeyMap)GetBindKey(string)`  を復元しました。
 
 
 v0.8.4
-=======
+------
 Mar 25 2023
 
 - キーのマッピングを返す関数の `(*KeyMap) GetBindKey` が nil を返すのは都合が悪いので、 かわりに `(*Editor)GetBindKey` を作成し、`(*KeyMap) GetBindKey` は削除した
 
 v0.8.3
-=======
+------
 Sep 24 2022
 
 - サンプルの色プラグイン `vimbatch` の文字色を `ESC[37m` (白) から `ESC[39m` (端末の標準文字色) へ変更
 
 v0.8.2
-=======
+------
 Aug 12 2022
 
 - 最初の文字を表示する前に色をリセット (以前は省略されていた)
 
 v0.8.1
-=======
+------
 Aug 12 2022
 
 - Ctrl-E がタイプされたとき、カーソル上に
 - Fix: On Ctrl-E typed, sometimes non-space character remains on the cursor.
 
 v0.8.0
-=======
+------
 Apr 29 2022
 
 - WezTerm で Surrogate-pair を有効にした。
@@ -507,7 +509,7 @@ Apr 29 2022
 [nyagos 4.4.12\_0]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.12_0
 
 v0.7.0
-=======
+------
 Feb 26 2022
 
 Windows Terminal での透明色に対応
@@ -516,7 +518,7 @@ Windows Terminal での透明色に対応
 - デフォルト背景色で `ESC[40m` ではなく `ESC[49m` を使うようにした
 
 v0.6.3
-=======
+------
 Dec 29 2021
 
 - [#2],[#3] フラグフィールド `Editor.HistoryCycling` を追加
@@ -531,7 +533,7 @@ Thanks to [@ram-on]
 [@ram-on]: https://github.com/ram-on
 
 v0.6.1
-=======
+------
 Dec 10 2021
 
 カラー対応
@@ -541,26 +543,26 @@ Dec 10 2021
 See [example2.go](https://github.com/nyaosorg/go-readline-ny/blob/master/example2.go) and [coloring/vimbatch.go](https://github.com/nyaosorg/go-readline-ny/blob/master/coloring/vimbatch.go)
 
 v0.5.0
-=======
+------
 Sep 12 2021
 
 レポジトリオーナーを zetamatta から nyaosorg へ変更
 
 v0.4.14
-=======
+-------
 Aug 27 2021
 
 - Windows10 の、WindowsTerminal でない端末で、罫線キャラクターの幅が不正確になっていた  
  ( [East Asian Ambiguous Character · Issue #412 · zetamatta/nyagos](https://github.com/zetamatta/nyagos/issues/412) )
 
 v0.4.13
-=======
+-------
 May 3 2021
 
 - Windows Terminal で数学向けボールド文字 (U+1D400 - U+1D7FF) をサポートした。
 
 v0.4.12
-=======
+-------
 May 3 2021
 
 - Visual Studio Code のターミナルではサロゲートペアがサポートされていないので強制オフにするようにした。
@@ -568,25 +570,25 @@ May 3 2021
 この問題は VSCode を WindowsTerminal より起動すると表面化します。
 
 v0.4.11
-=======
+-------
 Apr 14 2021
 
 - Emoji Moifier Sequence (skin tone) をサポート: 🏻(U+1F3FB)～ 🏿 (U+1F3FF)
 
 v0.4.10
-=======
+-------
 Apr 14 2021
 
 - ReadLine メソッドを呼ばれる前から押されていて、呼ばれてからキーが離されたコードが入力される不具合を修正した
 
 v0.4.9
-======
+------
 Apr 14 2021
 
 - RAINBOW FLAG をサポート:(U+1F3F3 U+200D U+1F308 🏳‍🌈)
 
 v0.4.8
-======
+------
 Apr 14 2021
 
 - WAVING WHITE FLAG と異体字をサポート (U+1F3F3 & U+1F3F3 U+FE0F / 🏳 & 🏳️)
