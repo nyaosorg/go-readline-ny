@@ -2,16 +2,18 @@ Release notes (English)
 =======================
 ( **English** / [Japanese](release_note_ja.md) )
 
-* Split the commit-prediction behavior that had been embedded in `FORWARD_CHAR` into three separate functions:
+- Split the commit-prediction behavior that had been embedded in `FORWARD_CHAR` into three separate functions (#19 and [nyagos#476], thanks to @emisjerry):
 
-  * `FORWARD_CHAR`: move the cursor one character to the right
-  * `ACCEPT_PREDICT`: accept the current prediction
-  * `FORWARD_CHAR_OR_ACCEPT_PREDICT`: accept the prediction when the cursor is at the end of the line; otherwise move the cursor one character to the right
+  - `FORWARD_CHAR`: move the cursor one character to the right
+  - `ACCEPT_PREDICT`: accept the current prediction
+  - `FORWARD_CHAR_OR_ACCEPT_PREDICT`: accept the prediction when the cursor is at the end of the line; otherwise move the cursor one character to the right
 
-  By default, the Right Arrow key and **Ctrl-F** are now bound to `FORWARD_CHAR_OR_ACCEPT_PREDICT`. (#19)
+  By default, the Right Arrow key and **Ctrl-F** are now bound to `FORWARD_CHAR_OR_ACCEPT_PREDICT`.
 
-- Made input prediction case-insensitive. (#20)
+- Made input prediction case-insensitive. (#20 and [nyagos#476], thanks to @emisjerry)
   - The return value of the `Editor.Predictor` callback (used by addons to override how predictions are generated) used to contain only the remaining, untyped part of the string. Since the predictor now also needs to correct the case of the already-typed portion, the API was changed so that the callback returns the entire predicted string.
+
+[nyagos#476]: https://github.com/nyaosorg/nyagos/discussions/476
 
 v1.12.3
 -------
