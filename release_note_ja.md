@@ -2,6 +2,19 @@ Release notes (Japanese)
 ========================
 ( [English](release_note_en.md) / **Japanese** )
 
+- カーソル一文字分の右移動(`FORWARD_CHAR`)に組み込まれていた予測候補確定を分離し、次の3機能に分離した。(#19 and [nyagos#476], thanks to @emisjerry)
+
+  - 純粋にカーソル一文字分の右移動のみ (`FORWARD_CHAR`)
+  - 予測候補を確定 (`ACCEPT_PREDICT`)
+  - カーソルが行末の時は予測候補確定、さもなければカーソル一文字分移動(`FORWARD_CHAR_OR_ACCEPT_PREDICT`)
+
+  なお、右矢印キー、Ctrl-F はデフォルトで `FORWARD_CHAR_OR_ACCEPT_PREDICT` とした。
+
+- 入力予測機能で英大文字・小文字を区別しないようにした (#20 and [nyagos#476], thanks to @emisjerry)
+  - 予測候補の生成を差し替えるパラメータ(アドオン用コールバック関数) `Editor.Predictor` の戻り値は従来、未入力部分の文字列だけだったが、入力済み部分の英大文字・英小文字を補正する必要もあるため、全文字列を戻り値とするよう API を変更した
+
+[nyagos#476]: https://github.com/nyaosorg/nyagos/discussions/476
+
 v1.12.3
 -------
 Nov 10, 2025
