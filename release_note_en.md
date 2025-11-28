@@ -2,6 +2,10 @@ Release notes (English)
 =======================
 ( **English** / [Japanese](release_note_ja.md) )
 
+v1.13.0
+-------
+Nov 28, 2025
+
 - Split the commit-prediction behavior that had been embedded in `FORWARD_CHAR` into three separate functions (#19 and [nyagos#476], thanks to @emisjerry):
 
   - `FORWARD_CHAR`: move the cursor one character to the right

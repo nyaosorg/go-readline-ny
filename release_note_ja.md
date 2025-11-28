@@ -2,6 +2,10 @@ Release notes (Japanese)
 ========================
 ( [English](release_note_en.md) / **Japanese** )
 
+v1.13.0
+-------
+Nov 28, 2025
+
 - カーソル一文字分の右移動(`FORWARD_CHAR`)に組み込まれていた予測候補確定を分離し、次の3機能に分離した。(#19 and [nyagos#476], thanks to @emisjerry)
 
   - 純粋にカーソル一文字分の右移動のみ (`FORWARD_CHAR`)
