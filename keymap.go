@@ -52,6 +52,9 @@ var GlobalKeyMap = &KeyMap{
 		keys.Up:           CmdPreviousHistory,
 		keys.CtrlHome:     CmdUnixLineDiscard,
 		keys.CtrlEnd:      CmdKillLine,
+
+		keys.Escape + keys.Left:  CmdBackwardWord,
+		keys.Escape + keys.Right: CmdForwardWord,
 	},
 }
 
