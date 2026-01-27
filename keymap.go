@@ -46,7 +46,6 @@ var GlobalKeyMap = &KeyMap{
 		keys.Delete:       CmdDeleteChar,
 		keys.Down:         CmdNextHistory,
 		keys.End:          CmdEndOfLine,
-		keys.Escape:       CmdKillWholeLine,
 		keys.Home:         CmdBeginningOfLine,
 		keys.Left:         CmdBackwardChar,
 		keys.Right:        CmdForwardCharOrAcceptPredict,
