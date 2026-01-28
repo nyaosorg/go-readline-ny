@@ -7,6 +7,7 @@ Release notes (English)
   - Pressing `Escape` is now equivalent to pressing `Alt`.
 - `Esc`+`Left`  now behaves the same as `Esc`+`b` or `Alt`+`b`.(#22)
 - `Esc`+`Right` now behaves the same as `Esc`+`f` or `Alt`+`f`.(#22)
+- Changed the behavior of `Alt` + `f`, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word. (#23)
 
 v1.13.0
 -------
