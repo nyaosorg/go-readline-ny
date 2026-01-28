@@ -8,6 +8,7 @@ Release notes (English)
 - `Esc`+`Left`  now behaves the same as `Esc`+`b` or `Alt`+`b`.(#22)
 - `Esc`+`Right` now behaves the same as `Esc`+`f` or `Alt`+`f`.(#22)
 - Changed the behavior of `Alt` + `f`, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word. (#23)
+- `Alt`/`Esc`+`Backspace` and `ESC`+`Ctrl`+`w` now delete the word to the left of the cursor. (#24)
 
 v1.13.0
 -------

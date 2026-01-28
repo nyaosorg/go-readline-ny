@@ -8,6 +8,7 @@ Release notes (Japanese)
 - `Esc`+`Left`  を `Esc`+`b`, `Alt`+`b` と等価にした。(#22)
 - `Esc`+`Right` を `Esc`+`f`, `Alt`+`f` と等価にした。(#22)
 - これまで次の単語の先頭への移動だった Alt + f の挙動を本家の readline に合わせ、現在または次の単語の末尾へ移動するように修正した。 (#23)
+- `Alt`/`Esc`+`Backspace`, `ESC`+`Ctrl`+`w` で、カーソル左の単語を削除するようにした。 (#24)
 
 v1.13.0
 -------
