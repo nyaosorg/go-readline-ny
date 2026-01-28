@@ -430,15 +430,15 @@ func cmdBackwardWord(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-// CmdForwardWord is the command that move cursor to the top of the next word (for M-F)
+// CmdForwardWord moves the cursor to the end of the current or next word (M-f).
 var CmdForwardWord = NewGoCommand("FORWARD_WORD", cmdForwardWord)
 
 func cmdForwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos < len(this.Buffer) && !moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
+	for newPos < len(this.Buffer) && moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
 		newPos++
 	}
-	for newPos < len(this.Buffer) && moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
+	for newPos < len(this.Buffer) && !moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
 		newPos++
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)
