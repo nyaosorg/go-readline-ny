@@ -46,13 +46,15 @@ var GlobalKeyMap = &KeyMap{
 		keys.Delete:       CmdDeleteChar,
 		keys.Down:         CmdNextHistory,
 		keys.End:          CmdEndOfLine,
-		keys.Escape:       CmdKillWholeLine,
 		keys.Home:         CmdBeginningOfLine,
 		keys.Left:         CmdBackwardChar,
 		keys.Right:        CmdForwardCharOrAcceptPredict,
 		keys.Up:           CmdPreviousHistory,
 		keys.CtrlHome:     CmdUnixLineDiscard,
 		keys.CtrlEnd:      CmdKillLine,
+
+		keys.Escape + keys.Left:  CmdBackwardWord,
+		keys.Escape + keys.Right: CmdForwardWord,
 	},
 }
 

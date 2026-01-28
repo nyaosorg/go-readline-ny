@@ -195,6 +195,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		Buffer:         make([]Cell, 0, 20),
 		historyPointer: editor.History.Len(),
 		suffix:         nil, // moji.StringToMoji("$"),
+		Tty:            &pendingEscTty{Tty: editor.Tty},
 	}
 
 	onResize := func(w, _ int) {
@@ -205,13 +206,13 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		editor.mutex.Unlock()
 	}
 
-	if err := editor.Tty.Open(onResize); err != nil {
+	if err := buffer.Tty.Open(onResize); err != nil {
 		return "", err
 	}
-	defer editor.Tty.Close()
+	defer buffer.Tty.Close()
 
 	var err error
-	buffer.termWidth, _, err = editor.Tty.Size()
+	buffer.termWidth, _, err = buffer.Tty.Size()
 	if err != nil {
 		return "", err
 	}

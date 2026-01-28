@@ -212,7 +212,9 @@ func (s SelfInserter) String() string {
 
 func (s SelfInserter) Call(ctx context.Context, this *Buffer) Result {
 	keys := string(s)
-	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
+	if len(keys) >= 2 && keys[0] == '\x1B' && keys[1] == '\x1B' {
+		keys = keys[2:]
+	} else if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
 	if moji.AreZeroWidthJoin(keys) && this.Cursor > 0 {

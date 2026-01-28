@@ -2,6 +2,12 @@ Release notes (English)
 =======================
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Changed the behavior of the Escape key to act as a prefix key instead of clearing input. This ensures that: (#22)
+  - Escape sequences such as `\x1B[A` (arrow keys) work correctly even when the input is split by the terminal.
+  - Pressing `Escape` is now equivalent to pressing `Alt`.
+- `Esc`+`Left`  now behaves the same as `Esc`+`b` or `Alt`+`b`.(#22)
+- `Esc`+`Right` now behaves the same as `Esc`+`f` or `Alt`+`f`.(#22)
+
 v1.13.0
 -------
 Nov 28, 2025
