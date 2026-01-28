@@ -55,6 +55,8 @@ var GlobalKeyMap = &KeyMap{
 
 		keys.Escape + keys.Left:  CmdBackwardWord,
 		keys.Escape + keys.Right: CmdForwardWord,
+		keys.AltBackspace:        CmdBackwardKillWord,
+		keys.Escape + keys.CtrlW: CmdBackwardKillWord,
 	},
 }
 

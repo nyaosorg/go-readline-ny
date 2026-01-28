@@ -414,19 +414,37 @@ func cmdSwapChar(ctx context.Context, this *Buffer) Result {
 // CmdBackwardWord is the command that moves cursor to the top of the previous word (for M-B)
 var CmdBackwardWord = NewGoCommand("BACKWARD_WORD", cmdBackwardWord)
 
+func headOfWord(b *Buffer) int {
+	p := b.Cursor
+	for p > 0 && moji.IsSpaceMoji(b.Buffer[p-1].Moji) {
+		p--
+	}
+	for p > 0 && !moji.IsSpaceMoji(b.Buffer[p-1].Moji) {
+		p--
+	}
+	return p
+}
+
 func cmdBackwardWord(ctx context.Context, this *Buffer) Result {
-	newPos := this.Cursor
-	for newPos > 0 && moji.IsSpaceMoji(this.Buffer[newPos-1].Moji) {
-		newPos--
-	}
-	for newPos > 0 && !moji.IsSpaceMoji(this.Buffer[newPos-1].Moji) {
-		newPos--
-	}
+	newPos := headOfWord(this)
 	if newPos < this.ViewStart {
 		this.ViewStart = newPos
 	}
 	this.Cursor = newPos
 	this.repaint()
+	return CONTINUE
+}
+
+var CmdBackwardKillWord = NewGoCommand("BACKWARD_KILL_WORD", cmdBackwardKillWord)
+
+func cmdBackwardKillWord(ctx context.Context, b *Buffer) Result {
+	newPos := headOfWord(b)
+	if newPos < b.ViewStart {
+		b.ViewStart = newPos
+	}
+	b.Delete(newPos, b.Cursor-newPos)
+	b.Cursor = newPos
+	b.repaint()
 	return CONTINUE
 }
 
