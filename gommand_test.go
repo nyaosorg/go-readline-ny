@@ -112,6 +112,7 @@ func keyTest(t *testing.T, expView string, width int, typed ...string) error {
 	ss := &snapShot{}
 	prtSc := ss.String()
 	typed = append(typed, prtSc)
+	typed = append(typed, keys.Enter)
 
 	editor := &readline.Editor{
 		Tty: &auto.Pilot{
