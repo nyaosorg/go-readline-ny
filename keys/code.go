@@ -43,7 +43,7 @@ const (
 	Escape        = "\x1B"
 	AltA          = "\x1Ba"
 	AltB          = "\x1Bb"
-	ALTBackspace  = "\x1B\b"
+	AltBackspace  = "\x1B\b"
 	AltC          = "\x1Bc"
 	AltD          = "\x1Bd"
 	AltE          = "\x1Be"

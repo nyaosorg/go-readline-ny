@@ -112,6 +112,7 @@ func keyTest(t *testing.T, expView string, width int, typed ...string) error {
 	ss := &snapShot{}
 	prtSc := ss.String()
 	typed = append(typed, prtSc)
+	typed = append(typed, keys.Enter)
 
 	editor := &readline.Editor{
 		Tty: &auto.Pilot{
@@ -170,4 +171,10 @@ func TestCmdInterrupt(t *testing.T) {
 	if result != readline.CtrlC {
 		t.Fatalf("expect CtrlC, but %v", result)
 	}
+}
+
+func TestCmdBackwardKillWord(t *testing.T) {
+	keyTest(t, "[foo   |]", 80, "foo   bar   baz", keys.AltBackspace, keys.AltBackspace)
+	keyTest(t, "[foo   |baz]", 80, "foo   bar   baz", keys.AltB, keys.AltBackspace)
+	keyTest(t, "[foo   |  baz]", 80, "foo   bar   baz", keys.AltB, keys.Left, keys.Left, keys.AltBackspace)
 }
