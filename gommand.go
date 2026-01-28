@@ -451,14 +451,19 @@ func cmdBackwardKillWord(ctx context.Context, b *Buffer) Result {
 // CmdForwardWord moves the cursor to the end of the current or next word (M-f).
 var CmdForwardWord = NewGoCommand("FORWARD_WORD", cmdForwardWord)
 
+func endOfWord(b *Buffer) int {
+	p := b.Cursor
+	for p < len(b.Buffer) && moji.IsSpaceMoji(b.Buffer[p].Moji) {
+		p++
+	}
+	for p < len(b.Buffer) && !moji.IsSpaceMoji(b.Buffer[p].Moji) {
+		p++
+	}
+	return p
+}
+
 func cmdForwardWord(ctx context.Context, this *Buffer) Result {
-	newPos := this.Cursor
-	for newPos < len(this.Buffer) && moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
-		newPos++
-	}
-	for newPos < len(this.Buffer) && !moji.IsSpaceMoji(this.Buffer[newPos].Moji) {
-		newPos++
-	}
+	newPos := endOfWord(this)
 	w := this.GetWidthBetween(this.ViewStart, newPos)
 	if w <= this.ViewWidth() {
 		this.puts(this.Buffer[this.Cursor:newPos])
@@ -468,6 +473,15 @@ func cmdForwardWord(ctx context.Context, this *Buffer) Result {
 		this.ResetViewStart()
 		this.repaint()
 	}
+	return CONTINUE
+}
+
+var CmdKillWord = NewGoCommand("KILL_WORD", cmdKillWord)
+
+func cmdKillWord(ctx context.Context, b *Buffer) Result {
+	end := endOfWord(b)
+	b.Delete(b.Cursor, end-b.Cursor)
+	b.repaint()
 	return CONTINUE
 }
 

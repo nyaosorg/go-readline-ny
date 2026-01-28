@@ -178,3 +178,9 @@ func TestCmdBackwardKillWord(t *testing.T) {
 	keyTest(t, "[foo   |baz]", 80, "foo   bar   baz", keys.AltB, keys.AltBackspace)
 	keyTest(t, "[foo   |  baz]", 80, "foo   bar   baz", keys.AltB, keys.Left, keys.Left, keys.AltBackspace)
 }
+
+
+func TestCmdKillWord(t *testing.T) {
+	keyTest(t, "[foo  |  baz]", 80, "foo  bar  baz", keys.AltB, keys.AltB, keys.AltD)
+	keyTest(t, "[fo|]", 80, "foo", keys.Left, keys.AltD)
+}
