@@ -15,6 +15,8 @@ ifndef GO
     GO:=$(shell $(WHICH) $(SUPPORTGO) 2>$(NUL)|| echo go)
 endif
 
+VERSION:=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
+
 .PHONY: all test bench
 
 all :
@@ -40,3 +42,6 @@ $(SUPPORTGO):
 
 bench :
 	cd test/bench && lispect time.lsp
+
+release:
+	pwsh -Command "latest-notes.ps1" | gh release create -d --notes-file - -t $(VERSION) $(VERSION)
