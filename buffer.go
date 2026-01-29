@@ -47,7 +47,6 @@ type Buffer struct {
 	modifiedHistory     map[int]string
 	memoHighlightSource string
 	memoHighlightResult *HighlightColorSequence
-	Tty                 *pendingEscTty
 }
 
 // getSuffix returns the text that should be displayed after the edit text

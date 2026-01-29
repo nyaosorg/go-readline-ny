@@ -12,7 +12,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/nyaosorg/go-ttyadapter"
-	"github.com/nyaosorg/go-ttyadapter/tty8"
+	"github.com/nyaosorg/go-ttyadapter/tty8pe"
 
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/moji"
@@ -169,7 +169,7 @@ func (editor *Editor) Init() {
 		editor.History = _EmptyHistory{}
 	}
 	if editor.Tty == nil {
-		editor.Tty = &tty8.Tty{}
+		editor.Tty = &tty8pe.Tty{}
 	}
 	if editor.Predictor == nil {
 		editor.Predictor = predictByHistory
@@ -195,7 +195,6 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		Buffer:         make([]Cell, 0, 20),
 		historyPointer: editor.History.Len(),
 		suffix:         nil, // moji.StringToMoji("$"),
-		Tty:            &pendingEscTty{Tty: editor.Tty},
 	}
 
 	onResize := func(w, _ int) {
@@ -206,13 +205,13 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		editor.mutex.Unlock()
 	}
 
-	if err := buffer.Tty.Open(onResize); err != nil {
+	if err := editor.Tty.Open(onResize); err != nil {
 		return "", err
 	}
-	defer buffer.Tty.Close()
+	defer editor.Tty.Close()
 
 	var err error
-	buffer.termWidth, _, err = buffer.Tty.Size()
+	buffer.termWidth, _, err = editor.Tty.Size()
 	if err != nil {
 		return "", err
 	}
