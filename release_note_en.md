@@ -2,6 +2,10 @@ Release notes (English)
 =======================
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Update `github.com/nyaosorg/go-ttyadapter` from v0.1.0 to v0.3.0 (#27)
+- Move Escape key handling from `go-readline-ny` to `github.com/nyaosorg/go-ttyadapter/tty8pe`
+- Fix issue where control key sequences after Escape were missing the `\x1B` prefix
+
 v1.14.0
 -------
 Jan 28, 2026
