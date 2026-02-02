@@ -2,6 +2,10 @@ Release notes (Japanese)
 ========================
 ( [English](release_note_en.md) / **Japanese** )
 
+v1.14.1
+-------
+Jan 29, 2026
+
 - `github.com/nyaosorg/go-ttyadapter` を v0.1.0 から v0.3.0 へ更新 (#27)
 - Escキーの特殊処理を自前ではなく、`github.com/nyaosorg/go-ttyadapter/tty8pe` へ移管
 - Escキーの後に制御キーを入力すると、制御キーシーケンスから `\x1B` が抜けた文字列が入力されてしまう問題を修正
