@@ -278,11 +278,11 @@ func main() {
 
 This feature enables automated testing of readline behaviors—such as cursor movement, text editing, and key bindings - without requiring a real terminal.
 
-Release notes
+Changelog
 -------------
 
-- [Release notes (English)](release_note_en.md)
-- [Release notes (Japanese)](release_note_ja.md)
+- [Changelog (English)](CHANGELOG.md)
+- [Changelog (Japanese)](CHANGELOG_ja.md)
 
 License
 -------

@@ -1,6 +1,8 @@
-Release notes (Japanese)
+Changelog (Japanese)
 ========================
-( [English](release_note_en.md) / **Japanese** )
+( [English](CHANGELOG.md) / **Japanese** )
+
+- リリースノートのファイルを CHANGELOG.md とCHANGELOG\_ja.md へリネーム (#29)
 
 v1.14.1
 -------

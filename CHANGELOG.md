@@ -1,6 +1,8 @@
-Release notes (English)
+Changelog (English)
 =======================
-( **English** / [Japanese](release_note_ja.md) )
+( **English** / [Japanese](CHANGELOG_ja.md) )
+
+- Rename release note files to CHANGELOG.md and CHANGELOG\_ja.md (#29)
 
 v1.14.1
 -------
