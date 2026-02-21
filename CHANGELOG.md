@@ -1,6 +1,6 @@
-Release notes (English)
+Changelog (English)
 =======================
-( **English** / [Japanese](release_note_ja.md) )
+( **English** / [Japanese](CHANGELOG_ja.md) )
 
 v1.14.1
 -------
