@@ -2,6 +2,8 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+- リリースノートのファイルを CHANGELOG.md とCHANGELOG\_ja.md へリネーム (#29)
+
 v1.14.1
 -------
 Jan 29, 2026

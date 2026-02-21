@@ -2,6 +2,8 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Rename release note files to CHANGELOG.md and CHANGELOG\_ja.md (#29)
+
 v1.14.1
 -------
 Jan 29, 2026
