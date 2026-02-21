@@ -32,10 +32,6 @@ demo-future :
 test :
 	$(GO) test -v ./...
 
-get :
-	$(GO) get -u all
-	$(GO) mod tidy
-
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	$(SUPPORTGO) download
@@ -44,4 +40,7 @@ bench :
 	cd test/bench && lispect time.lsp
 
 release:
-	pwsh -Command "latest-notes.ps1" | gh release create -d --notes-file - -t $(VERSION) $(VERSION)
+	$(GO) run github.com/hymkor/latest-notes@latest | gh release create -d --notes-file - -t $(VERSION) $(VERSION)
+
+dry-release:
+	$(GO) run github.com/hymkor/latest-notes@latest
