@@ -2,6 +2,10 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+v1.14.2
+-------
+Apr 9, 2026
+
 - Add `OnAfterRender` hook for post-render customization (#31)
   Allows additional rendering after the input line is drawn.
   Useful for overlays, virtual characters, and inline suggestions.
