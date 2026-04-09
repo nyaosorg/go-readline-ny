@@ -67,12 +67,13 @@ type Editor struct {
 	HistoryCycling bool
 	mutex          sync.Mutex
 
-	Highlight    []Highlight
-	ResetColor   string
-	DefaultColor string
-	PredictColor [2]string
-	Predictor    func(*Buffer) string
-	AfterCommand func(*Buffer) // An experimental field
+	Highlight     []Highlight
+	ResetColor    string
+	DefaultColor  string
+	PredictColor  [2]string
+	Predictor     func(*Buffer) string
+	OnAfterRender func(B *Buffer, availWidth int)
+	AfterCommand  func(*Buffer) // An experimental field
 	// Deprecated: use Highlight
 	Coloring Coloring
 
