@@ -37,7 +37,6 @@ func (C Cell) String() string {
 type Buffer struct {
 	*Editor
 	Buffer              []Cell
-	suffix              []Moji
 	ViewStart           int
 	termWidth           int // == topColumn + termWidth + forbiddenWidth
 	topColumn           int // == width of Prompt
@@ -47,39 +46,6 @@ type Buffer struct {
 	modifiedHistory     map[int]string
 	memoHighlightSource string
 	memoHighlightResult *HighlightColorSequence
-}
-
-// getSuffix returns the text that should be displayed after the edit text
-func (B *Buffer) getSuffix() []Moji {
-	if B.PredictColor[0] == "" {
-		return nil
-	}
-	if B.Cursor != len(B.Buffer) {
-		return nil
-	}
-	return B.suffix
-}
-
-func predictByHistory(B *Buffer) string {
-	current := B.String()
-	for i := B.History.Len() - 1; i >= 0; i-- {
-		h := B.History.At(i)
-		if len(h) >= len(current) && strings.EqualFold(h[:len(current)], current) {
-			return h
-		}
-	}
-	return ""
-}
-
-func (B *Buffer) updateSuffix() {
-	if B.PredictColor[0] == "" {
-		return
-	}
-	if len(B.Buffer) <= 0 {
-		B.suffix = nil
-		return
-	}
-	B.suffix = moji.StringToMoji(B.Predictor(B))
 }
 
 // ViewWidth returns the cell-width screen can show in the one-line.
