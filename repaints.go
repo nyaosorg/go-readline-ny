@@ -2,7 +2,6 @@ package readline
 
 import (
 	"fmt"
-	"io"
 	"strings"
 
 	"github.com/nyaosorg/go-readline-ny/moji"
@@ -76,27 +75,12 @@ func (B *Buffer) GotoHead() {
 }
 
 func (B *Buffer) repaint() {
-	B.updateSuffix()
-	B.repaintWithoutUpdateSuffix()
-}
-
-func (B *Buffer) repaintWithoutUpdateSuffix() {
 	all, left, w := B.getView2()
 	B.GotoHead()
 	puts := B.newPrinter()
 	puts(all)
-	if B.PredictColor[0] != "" && len(B.suffix) > len(B.Buffer) {
-		io.WriteString(B.Out, B.PredictColor[0]) // "\x1B[3;22;39m"
-		sfx := B.getSuffix()
-		for i := len(B.Buffer); i < len(sfx); i++ {
-			c := sfx[i]
-			w += c.Width()
-			if w > B.ViewWidth() {
-				break
-			}
-			c.PrintTo(B.Out)
-		}
-		io.WriteString(B.Out, B.PredictColor[1]) // "\x1B[23m"
+	if B.Editor.OnAfterRender != nil {
+		B.Editor.OnAfterRender(B, int(B.ViewWidth()-w))
 	}
 	B.eraseline()
 	B.GotoHead()

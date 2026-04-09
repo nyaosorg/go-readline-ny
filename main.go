@@ -70,9 +70,10 @@ type Editor struct {
 	Highlight    []Highlight
 	ResetColor   string
 	DefaultColor string
-	PredictColor [2]string
-	Predictor    func(*Buffer) string
-	AfterCommand func(*Buffer) // An experimental field
+
+	predict
+	OnAfterRender func(B *Buffer, availWidth int)
+	AfterCommand  func(*Buffer) // An experimental field
 	// Deprecated: use Highlight
 	Coloring Coloring
 
@@ -86,8 +87,6 @@ const (
 	// without SetConsoleCursorPosition by `ESC[u`
 	ansiCursorOn = "\x1B[?25h\x1B[s\x1B[u"
 )
-
-var PredictColorBlueItalic = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
 
 // CtrlC is the error when Ctrl-C is pressed.
 var CtrlC = (errors.New("^C"))
@@ -171,12 +170,10 @@ func (editor *Editor) Init() {
 	if editor.Tty == nil {
 		editor.Tty = &tty8pe.Tty{}
 	}
-	if editor.Predictor == nil {
-		editor.Predictor = predictByHistory
-	}
 	if editor.Clipboard == nil {
 		editor.Clipboard = &defaultClipboard{}
 	}
+	editor.predict.install(editor)
 }
 
 // ReadLine calls LineEditor
@@ -194,7 +191,6 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		Editor:         editor,
 		Buffer:         make([]Cell, 0, 20),
 		historyPointer: editor.History.Len(),
-		suffix:         nil, // moji.StringToMoji("$"),
 	}
 
 	onResize := func(w, _ int) {
@@ -254,7 +250,7 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		if rc != CONTINUE {
 			if buffer.suffix != nil {
 				buffer.suffix = nil
-				buffer.repaintWithoutUpdateSuffix()
+				buffer.repaint()
 			}
 			if buffer.LineFeedWriter != nil {
 				buffer.LineFeedWriter(rc, buffer.Out)

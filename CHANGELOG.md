@@ -2,6 +2,15 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Add `OnAfterRender` hook for post-render customization (#31)
+  Allows additional rendering after the input line is drawn.
+  Useful for overlays, virtual characters, and inline suggestions.
+
+- Refactor prediction logic into an embedded struct (#31)
+  Prediction-related fields and logic are now grouped into an internal struct.
+  The default prediction rendering is integrated via `OnAfterRender`,
+  improving separation of concerns and extensibility.
+
 - Rename release note files to CHANGELOG.md and CHANGELOG\_ja.md (#29)
 
 v1.14.1
