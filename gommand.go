@@ -89,28 +89,32 @@ var CmdEndOfLine = NewGoCommand("END_OF_LINE", cmdEndOfLine)
 
 func cmdEndOfLine(ctx context.Context, this *Buffer) Result {
 	allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
+
+	var w WidthT
 	if allength <= this.ViewWidth() {
 		this.puts(this.Buffer[this.Cursor:])
 		this.Cursor = len(this.Buffer)
+		w = this.ViewWidth() - allength
 	} else {
 		this.GotoHead()
 		this.ViewStart = len(this.Buffer) - 1
-		w := this.Buffer[this.ViewStart].Moji.Width()
+		w = this.Buffer[this.ViewStart].Moji.Width()
 		for {
 			if this.ViewStart <= 0 {
 				break
 			}
-			_w := w + this.Buffer[this.ViewStart-1].Moji.Width()
-			if _w > this.ViewWidth() {
+			newW := w + this.Buffer[this.ViewStart-1].Moji.Width()
+			if newW > this.ViewWidth() {
 				break
 			}
-			w = _w
+			w = newW
 			this.ViewStart--
 		}
 		this.puts(this.Buffer[this.ViewStart:])
 		this.Cursor = len(this.Buffer)
 	}
 	this.eraseline()
+	this.callOnAfterRender(w)
 	return CONTINUE
 }
 
