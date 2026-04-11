@@ -75,16 +75,16 @@ func (B *Buffer) GotoHead() {
 }
 
 func (B *Buffer) repaint() {
-	all, left, w := B.getView2()
+	v := B.getView()
 	B.GotoHead()
 	puts := B.newPrinter()
-	puts(all)
-	if B.Editor.OnAfterRender != nil {
-		B.Editor.OnAfterRender(B, int(B.ViewWidth()-w))
-	}
+	puts(v.All())
 	B.eraseline()
+	if len(v.After()) <= 0 {
+		B.callOnAfterRender(B.ViewWidth() - v.DrawWidth())
+	}
 	B.GotoHead()
-	puts(left)
+	puts(v.LeftOfCursor())
 }
 
 // DrawFromHead draw all text in viewarea and

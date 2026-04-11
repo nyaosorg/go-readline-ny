@@ -82,11 +82,11 @@ func cmdISearchBackward(ctx context.Context, this *Buffer) Result {
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
 		case "\x03", "\x07", "\x1B":
-			all, left, _ := this.getView2()
-			this.puts(all)
+			v := this.getView()
+			this.puts(v.All())
 			this.eraseline()
 			this.GotoHead()
-			this.puts(left)
+			this.puts(v.LeftOfCursor())
 			return CONTINUE
 		case "\x12":
 			for i := lastFoundPos - 1; ; i-- {

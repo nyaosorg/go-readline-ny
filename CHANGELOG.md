@@ -6,6 +6,8 @@ Changelog (English)
 
 - Fix regression in `Editor` initialization (v1.14.2) (#33):
   - `PredictColor` and `Predictor` fields have been restored for backward compatibility
+- Fix `OnAfterRender` output being erased due to render order issues (#35)
+  - Affected commands include `END_OF_LINE`, `KILL_LINE`, and `FORWARD_CHAR`
 
 ### New features
 

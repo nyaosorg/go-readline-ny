@@ -6,6 +6,8 @@ Changelog (Japanese)
 
 - `Editor` 構造体で発生した非互換性の修正 (v1.14.2) (#33):
   - フィールド `PredictColor` と `Predictor` を互換性のために復活
+- 描画順の問題で、`OnAfterRender` の出力が消えてしまう不具合を修正 (#35)
+  - 影響コマンド: `END_OF_LINE`, `KILL_LINE`, `FORWARD_CHAR`
 
 ### 仕様追加
 

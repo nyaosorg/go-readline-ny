@@ -53,24 +53,52 @@ func (B *Buffer) ViewWidth() WidthT {
 	return WidthT(B.termWidth) - WidthT(B.topColumn) - ScrollMargin
 }
 
-func (B *Buffer) getView() (_Range, WidthT) {
+type viewResult struct {
+	b     *Buffer
+	view  _Range
+	after _Range
+	width WidthT
+}
+
+func (v *viewResult) All() _Range       { return v.view }
+func (v *viewResult) After() _Range     { return v.after }
+func (v *viewResult) DrawWidth() WidthT { return v.width }
+
+func (v *viewResult) availWidth() WidthT { return v.b.ViewWidth() - v.width }
+
+func (B *Buffer) getView() *viewResult {
 	view := B.Buffer[B.ViewStart:]
 	width := B.ViewWidth()
 	w := WidthT(0)
 	for i, c := range view {
-		_w := w
-		w += c.Moji.Width()
-		if w >= width {
-			return view[:i], _w
+		newW := w + c.Moji.Width()
+		if newW > width {
+			return &viewResult{
+				b:     B,
+				view:  view[:i],
+				after: view[i:],
+				width: w,
+			}
 		}
+		w = newW
 	}
-	return view, w
+	return &viewResult{
+		b:     B,
+		view:  view,
+		after: view[len(view):],
+		width: w,
+	}
 }
 
-func (B *Buffer) getView2() (all _Range, before _Range, w WidthT) {
-	v, w := B.getView()
-	x := B.Cursor - B.ViewStart
-	return v, v[:x], w
+func (v *viewResult) LeftOfCursor() _Range {
+	x := v.b.Cursor - v.b.ViewStart
+	return v.view[:x]
+}
+
+func (B *Buffer) callOnAfterRender(w WidthT) {
+	if B.Editor.OnAfterRender != nil {
+		B.Editor.OnAfterRender(B, int(w+ScrollMargin))
+	}
 }
 
 func (B *Buffer) insert(csrPos int, insStr []Cell) {
