@@ -233,6 +233,8 @@ func cmdKillLine(ctx context.Context, this *Buffer) Result {
 	this.Clipboard.Write(this.SubString(this.Cursor, len(this.Buffer)))
 
 	this.eraseline()
+	this.callOnAfterRender(this.getView().availWidth())
+
 	u := &_Undo{
 		pos:  this.Cursor,
 		text: cell2string(this.Buffer[this.Cursor:]),
