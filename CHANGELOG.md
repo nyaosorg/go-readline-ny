@@ -2,6 +2,9 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Fix regression in `Editor` initialization (v1.14.2) (#33):
+  - `PredictColor` and `Predictor` fields have been restored for backward compatibility
+
 v1.14.2
 -------
 Apr 9, 2026

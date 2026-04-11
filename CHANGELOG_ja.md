@@ -2,6 +2,9 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+- `Editor` 構造体で発生した非互換性の修正 (v1.14.2) (#33):
+  - フィールド `PredictColor` と `Predictor` を互換性のために復活
+
 v1.14.2
 -------
 Apr 9, 2026
