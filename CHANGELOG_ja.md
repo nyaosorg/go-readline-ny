@@ -2,6 +2,10 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+v1.14.3
+-------
+Apr 11, 2026
+
 ### 不具合修正
 
 - `Editor` 構造体で発生した非互換性の修正 (v1.14.2) (#33):

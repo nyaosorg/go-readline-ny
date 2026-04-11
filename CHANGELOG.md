@@ -2,6 +2,10 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+v1.14.3
+-------
+Apr 11, 2026
+
 ### Bug fixes
 
 - Fix regression in `Editor` initialization (v1.14.2) (#33):
