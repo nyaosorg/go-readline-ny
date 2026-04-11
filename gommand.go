@@ -303,6 +303,13 @@ func cmdRepaintOnNewline(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
+var CmdRepaintLine = NewGoCommand("REPAINT_LINE", cmdRepaintLine)
+
+func cmdRepaintLine(ctx context.Context, this *Buffer) Result {
+	this.RepaintLastLine()
+	return CONTINUE
+}
+
 // CmdQuotedInsert is the command that inserts the next typed character itself even if it is a control-character (for Ctrl-V or Ctrl-Q)
 var CmdQuotedInsert = NewGoCommand("QUOTED_INSERT", cmdQuotedInsert)
 
