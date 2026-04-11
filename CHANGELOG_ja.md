@@ -2,8 +2,15 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+### 不具合修正
+
 - `Editor` 構造体で発生した非互換性の修正 (v1.14.2) (#33):
   - フィールド `PredictColor` と `Predictor` を互換性のために復活
+
+### 仕様追加
+
+- `REPAINT_LINE` コマンド (`CmdRepaintLine` オブジェクト) を追加 (#34)
+  - 画面のクリアや改行をせずに現在行を再描画
 
 v1.14.2
 -------
