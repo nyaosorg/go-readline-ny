@@ -71,7 +71,10 @@ type Editor struct {
 	ResetColor   string
 	DefaultColor string
 
+	PredictColor [2]string            // for compatibility
+	Predictor    func(*Buffer) string // for compatibility
 	predict
+
 	OnAfterRender func(B *Buffer, availWidth int)
 	AfterCommand  func(*Buffer) // An experimental field
 	// Deprecated: use Highlight
@@ -173,7 +176,7 @@ func (editor *Editor) Init() {
 	if editor.Clipboard == nil {
 		editor.Clipboard = &defaultClipboard{}
 	}
-	editor.predict.install(editor)
+	editor.predict.install(editor, editor.PredictColor, editor.Predictor)
 }
 
 // ReadLine calls LineEditor
