@@ -2,8 +2,15 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+### Bug fixes
+
 - Fix regression in `Editor` initialization (v1.14.2) (#33):
   - `PredictColor` and `Predictor` fields have been restored for backward compatibility
+
+### New features
+
+- Add `REPAINT_LINE` command (`CmdRepaintLine` Object) (#34):
+  - Redraws the current line without clearing the screen or adding a newline
 
 v1.14.2
 -------
