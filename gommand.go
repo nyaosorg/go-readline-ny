@@ -138,6 +138,9 @@ func cmdForwardChar(ctx context.Context, this *Buffer) Result {
 		this.ViewStart++
 		this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
 		this.eraseline()
+		if this.Cursor+1 >= len(this.Buffer) {
+			this.callOnAfterRender(this.getView().availWidth())
+		}
 	}
 	this.Cursor++
 	return CONTINUE
