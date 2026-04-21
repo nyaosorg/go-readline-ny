@@ -87,5 +87,9 @@ func main() {
 		cmd.Run()
 
 		history.Add(text)
+
+		// editor.History.Add(text)
+		// -> compile error: History interface does not have Add method
+		//    But the value returned by `simplehistory.New()` does.
 	}
 }
