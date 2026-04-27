@@ -2,6 +2,13 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+v1.15.0
+-------
+Apr 27, 2026
+
+- github.com/mattn/go-tty を v2.0.0 へ更新
+- github.com/nyaosorg/go-ttyadapter を v0.6.0 へ更新
+
 v1.14.3
 -------
 Apr 11, 2026
