@@ -2,6 +2,13 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+v1.15.0
+-------
+Apr 27, 2026
+
+- Update github.com/mattn/go-tty to v2.0.0
+- Update github.com/nyaosorg/go-ttyadapter to v0.6.0
+
 v1.14.3
 -------
 Apr 11, 2026
