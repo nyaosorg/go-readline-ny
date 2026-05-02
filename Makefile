@@ -26,11 +26,8 @@ all :
 demo :
 	$(GO) run test/unicodetest/main.go
 
-demo-future :
-	$(GO) run -tags=tty10,orgxwidth test/unicodetest/main.go
-
 test :
-	$(GO) test -v ./...
+	$(GO) test ./...
 
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
