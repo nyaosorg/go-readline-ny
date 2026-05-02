@@ -2,9 +2,11 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
-- キー入力の待ち動作に変更があるようなので、go-tty を v0.0.7 へ固定 (#38)
-  - github.com/mattn/go-tty を v0.0.7 へ更新
-  - github.com/nyaosorg/go-ttyadapter を v0.3.0 へ更新
+- キー入力の待ち動作に変更があるようなので、go-tty を v0.0.7 へ固定
+  - github.com/mattn/go-tty を v0.0.7 へ更新 (#38)
+- github.com/nyaosorg/go-ttyadapter を v0.6.2 へ更新し、go-ttyadapter/fav の経由でデフォルトの端末入力を次のとおりとした (#39)
+  - Go 1.21 未満の Windows では [github.com/mattn/go-tty](https://github.com/mattn/go-tty)
+  - Go 1.21 以上、もしくは非 Windows では [golang.org/x/term](https://pkg.go.dev/golang.org/x/term)
 
 v1.15.0
 -------
