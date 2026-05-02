@@ -12,7 +12,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/nyaosorg/go-ttyadapter"
-	"github.com/nyaosorg/go-ttyadapter/tty8pe"
+	"github.com/nyaosorg/go-ttyadapter/fav"
 
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/moji"
@@ -171,7 +171,7 @@ func (editor *Editor) Init() {
 		editor.History = _EmptyHistory{}
 	}
 	if editor.Tty == nil {
-		editor.Tty = &tty8pe.Tty{}
+		editor.Tty = &fav.Tty{}
 	}
 	if editor.Clipboard == nil {
 		editor.Clipboard = &defaultClipboard{}
