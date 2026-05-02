@@ -2,9 +2,11 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
-- Pin go-tty to v0.0.7 for stable blocking behavior (#38)
-  - Update github.com/mattn/go-tty to v0.0.7
-  - Update github.com/nyaosorg/go-ttyadapter to v0.3.0
+- Pin go-tty to v0.0.7 for stable blocking behavior
+  - Update github.com/mattn/go-tty to v0.0.7 (#38)
+- Update `go-ttyadapter` to v0.6.2: Switched the default TTY backend via `go-ttyadapter/fav` as follows: (#39)
+  - Windows with Go &lt; 1.21: [github.com/mattn/go-tty](https://github.com/mattn/go-tty)
+  - Windows with Go &gt;= 1.21 or non-Windows: [golang.org/x/term](https://pkg.go.dev/golang.org/x/term)
 
 v1.15.0
 -------
