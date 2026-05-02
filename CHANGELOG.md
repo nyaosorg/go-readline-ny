@@ -2,6 +2,10 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+v1.15.1
+-------
+May 3, 2026
+
 - Pin go-tty to v0.0.7 for stable blocking behavior
   - Update github.com/mattn/go-tty to v0.0.7 (#38)
 - Update `go-ttyadapter` to v0.6.2: Switched the default TTY backend via `go-ttyadapter/fav` as follows: (#39)
