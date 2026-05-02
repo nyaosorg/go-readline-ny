@@ -2,6 +2,10 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Pin go-tty to v0.0.7 for stable blocking behavior (#38)
+  - Update github.com/mattn/go-tty to v0.0.7
+  - Update github.com/nyaosorg/go-ttyadapter to v0.3.0
+
 v1.15.0
 -------
 Apr 27, 2026

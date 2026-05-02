@@ -2,6 +2,10 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+- キー入力の待ち動作に変更があるようなので、go-tty を v0.0.7 へ固定 (#38)
+  - github.com/mattn/go-tty を v0.0.7 へ更新
+  - github.com/nyaosorg/go-ttyadapter を v0.3.0 へ更新
+
 v1.15.0
 -------
 Apr 27, 2026
