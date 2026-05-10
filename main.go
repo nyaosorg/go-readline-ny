@@ -171,7 +171,7 @@ func (editor *Editor) Init() {
 		editor.History = _EmptyHistory{}
 	}
 	if editor.Tty == nil {
-		editor.Tty = &fav.Tty{}
+		editor.Tty = new(fav.Tty)
 	}
 	if editor.Clipboard == nil {
 		editor.Clipboard = &defaultClipboard{}
@@ -204,10 +204,12 @@ func (editor *Editor) ReadLine(ctx context.Context) (string, error) {
 		editor.mutex.Unlock()
 	}
 
-	if err := editor.Tty.Open(onResize); err != nil {
-		return "", err
+	if !editor.Tty.IsOpen() {
+		if err := editor.Tty.Open(onResize); err != nil {
+			return "", err
+		}
+		defer editor.Tty.Close()
 	}
-	defer editor.Tty.Close()
 
 	var err error
 	buffer.termWidth, _, err = editor.Tty.Size()
