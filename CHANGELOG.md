@@ -2,6 +2,9 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Update go-ttyadapter to v0.7.0 (#41)
+- Open/Close TTY only when not already opened (#41)
+
 v1.15.1
 -------
 May 3, 2026
