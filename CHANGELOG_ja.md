@@ -2,6 +2,9 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+- go-ttyadapter を v0.7.0 へ更新 (#41)
+- 端末入力がすでにOpen されていない時だけ、Open/Close を実行するようにした (#41)
+
 v1.15.1
 -------
 May 3, 2026
