@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/mattn/go-runewidth"
 	"github.com/nyaosorg/go-readline-ny/moji"
@@ -24,8 +25,13 @@ func main() {
 			fmt.Fprintln(os.Stderr, s, err.Error())
 			os.Exit(1)
 		}
-		fmt.Printf("runewidth(U+%X): %d\n", value, runewidth.RuneWidth(rune(value)))
-		buffer.WriteRune(rune(value))
+		if value < 0 || value > utf8.MaxRune || (value >= 0xD800 && value <= 0xDFFF) {
+			fmt.Fprintln(os.Stderr, s, "is not a valid Unicode scalar value")
+			os.Exit(1)
+		}
+		r := rune(value)
+		fmt.Printf("runewidth(U+%X): %d\n", value, runewidth.RuneWidth(r))
+		buffer.WriteRune(r)
 	}
 	text := buffer.String()
 	w, c := moji.MojiWidthAndCountInString(text)
