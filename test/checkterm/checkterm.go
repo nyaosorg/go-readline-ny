@@ -19,7 +19,7 @@ func main() {
 
 	var buffer strings.Builder
 	for _, s := range os.Args[1:] {
-		value, err := strconv.ParseInt(s, 16, 64)
+		value, err := strconv.ParseInt(s, 16, 32)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, s, err.Error())
 			os.Exit(1)
