@@ -2,6 +2,15 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Added support for the ConEmu terminal. (#42)
+  - ConEmu is detected when the `ConEmuPID` environment variable is defined.
+  - The following behavior is used:
+    - Code points U+10000 and above (UTF-16 surrogate pairs) are unsupported.  
+      → As before, they are displayed as `<XXXXX>`.
+    - Zero Width Joiner Sequences are supported.
+    - Variation Sequences are supported.
+    - Emoji Modifier Sequences are unsupported.
+  - Related issue: [nyaosorg/nyagos #510](https://github.com/nyaosorg/nyagos/issues/510)
 - Update go-ttyadapter to v0.7.0 (#41)
 - Open/Close TTY only when not already opened (#41)
 

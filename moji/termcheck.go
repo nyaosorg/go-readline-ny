@@ -13,17 +13,19 @@ var (
 
 	isContour = os.Getenv("TERMINAL_NAME") == "contour"
 
+	isConEmu = os.Getenv("ConEmuPID") != ""
+
 	// SurrogatePairOk is true when the surrogated pair unicode is supported
 	// If it is false, <NNNN> is displayed instead.
 	SurrogatePairOk = isWindowsTerminal || isWezTerm || isContour
 
 	// ZeroWidthJoinSequenceOk is true when ZWJ(U+200D) is supported.
 	// If it is false, <NNNN> is displayed instead.
-	ZeroWidthJoinSequenceOk = isWindowsTerminal || isWezTerm || isContour
+	ZeroWidthJoinSequenceOk = isWindowsTerminal || isWezTerm || isContour || isConEmu
 
 	// VariationSequenceOk is true when Variation Sequences are supported.
 	// If it is false, <NNNN> is displayed instead.
-	VariationSequenceOk = isWindowsTerminal || isWezTerm || isContour
+	VariationSequenceOk = isWindowsTerminal || isWezTerm || isContour || isConEmu
 
 	// ModifierSequenceOk is false, SkinTone sequence are treated as two
 	// character
