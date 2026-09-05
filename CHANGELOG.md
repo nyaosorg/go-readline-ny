@@ -2,6 +2,10 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+v1.16.0
+-------
+Sep 6, 2026
+
 - Added support for the ConEmu terminal. (#42)
   - ConEmu is detected when the `ConEmuPID` environment variable is defined.
   - The following behavior is used:

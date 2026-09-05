@@ -2,6 +2,10 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+v1.16.0
+-------
+Sep 6, 2026
+
 - 端末 ConEmu をサポートしました (#42)
   - 環境変数 ConEmuPID の定義されていると ConEmu と認識します
   - 次のような仕様を想定します
@@ -13,6 +17,7 @@ Changelog (Japanese)
   - 関連issue: [nyaosorg/nyagos #510](https://github.com/nyaosorg/nyagos/issues/510)
 - go-ttyadapter を v0.7.0 へ更新 (#41)
 - 端末入力がすでにOpen されていない時だけ、Open/Close を実行するようにした (#41)
+
 v1.15.1
 -------
 May 3, 2026
