@@ -97,7 +97,7 @@ func (v *viewResult) LeftOfCursor() _Range {
 
 func (B *Buffer) callOnAfterRender(w WidthT) {
 	if B.Editor.OnAfterRender != nil {
-		B.Editor.OnAfterRender(B, int(w+ScrollMargin))
+		B.Editor.OnAfterRender(B, int(w))
 	}
 }
 
