@@ -2,6 +2,9 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Fixed an issue where the starting position of the edited text could shift slightly to the left in ConEmu when a prediction extended to the right edge of the screen. (#44)
+  (The prediction display was incorrectly counting some unused columns as available space.)
+
 v1.16.0
 -------
 Sep 6, 2026
