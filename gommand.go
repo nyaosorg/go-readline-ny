@@ -115,6 +115,8 @@ func cmdEndOfLine(ctx context.Context, this *Buffer) Result {
 	}
 	this.eraseline()
 	this.callOnAfterRender(w)
+	this.GotoHead()
+	this.puts(this.Buffer[this.ViewStart:])
 	return CONTINUE
 }
 
