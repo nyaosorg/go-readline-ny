@@ -2,6 +2,10 @@ Changelog (English)
 =======================
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- Fix cursor positioning after displaying a prediction when `End` is pressed ([nyagos#513], #46)
+
+[nyagos#513]: https://github.com/nyaosorg/nyagos/issues/513
+
 v1.16.1
 -------
 Sep 6, 2026
