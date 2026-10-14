@@ -2,6 +2,10 @@ Changelog (Japanese)
 ========================
 ( [English](CHANGELOG.md) / **Japanese** )
 
+v1.16.2
+-------
+Oct 14, 2026
+
 - 予想表示されている時に `End` を押下すると、カーソル位置が狂う問題を修正 ([nyagos#513], #46)
 
 [nyagos#513]: https://github.com/nyaosorg/nyagos/issues/513
